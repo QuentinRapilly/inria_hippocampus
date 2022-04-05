@@ -34,7 +34,7 @@ For the vascularization :
 
 ## Structure, function and connections
 
-### $\star$ Structure 
+### $`\star`$ Structure 
 Bilaminar structure (meaning : 2 layers), cornu ammonis (hippocampus proper), gyrus dentatus (fascia dentata). One lamina rolled up inside the other.
 Scientists searching for an explanation of this particularity (the 2 layers arn't rolled up during childhood).
 
