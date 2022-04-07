@@ -34,7 +34,7 @@ For the vascularization :
 
 ## Structure, function and connections
 
-### $\star$ Structure 
+### Structure 
 Bilaminar structure (meaning : 2 layers), cornu ammonis (hippocampus proper), gyrus dentatus (fascia dentata). One lamina rolled up inside the other.
 Scientists searching for an explanation of this particularity (the 2 layers arn't rolled up during childhood).
 
@@ -85,7 +85,7 @@ Severall parts :
 
 ![plot](./Illustrations/duvernoy/hippo_1.png)
 
-### $\star$ Functions 
+### Functions 
 
 *"Some of the results presented here are controversial and may be subject to discussion"*
 
@@ -97,7 +97,7 @@ Critical role in learning and memory :
 * new items (short term memory) : depends on the hippocampus
 * old ones (long term memory) : depends on the isocortex
 
-Path of the information : enthorinal area $\Rightarrow$ hippocampus $\Rightarrow$ (stored) association cortex
+Path of the information : enthorinal area => hippocampus => (stored) association cortex
 
 Implicated in many aspects of the declarative memory :
 * **semantic memory** : facts and concepts
@@ -114,12 +114,12 @@ Intrahippocampal circuitry divided in 2 pathways :
 
 ##### Clinical implications
 
-Ablation or dammage of the hippocampus $\Rightarrow$
+Ablation or dammage of the hippocampus =>
 * short term memory disorders (amnesia)
 * spatial disorders
 * some forms of epilespy (controversial)
 
-CA1 : sensitive to anoxia (**maybe** because feeded in blood by big arteries $\rightarrow$ very sensitives to blood pressure variations ; **maybe** (more credible) CA3 releases toxic molecules during apoxia killing CA1 cells).
+CA1 : sensitive to anoxia (**maybe** because feeded in blood by big arteries -> very sensitives to blood pressure variations ; **maybe** (more credible) CA3 releases toxic molecules during apoxia killing CA1 cells).
 CA2 : controversial/poorly described
 CA3 : resistant
 CA4 : sensitive (but lesser than CA1)
@@ -162,7 +162,7 @@ Can be divided into 3 parts :
 * the tail
 
 Total length of 4/4.5cm.
-Wide $\approx$ 1cm (1.5cm for the head)
+Wide ~ 1cm (1.5cm for the head)
 
 ![plot](./Illustrations/duvernoy/anatomy_1.png)
 
@@ -186,7 +186,7 @@ Two parts :
 
 ## Vascularization 
 
-### $\star$ Superficial (Leptomeningeal) Blood Vessels
+### Superficial (Leptomeningeal) Blood Vessels
 
 #### Superficial Hippocampal Arteries
 
@@ -210,7 +210,7 @@ vein.
 
 ![plot](./Illustrations/duvernoy/vascu_3.png)
 
-### $\star$ Intrahippocampal (deep) blood vessels
+### Intrahippocampal (deep) blood vessels
 
 #### Intrahippocampal Arteries
 
