@@ -100,5 +100,7 @@ Can efficiently process bad resolution MRI.
 
 Compared with HIPS and one other deep learning method for the same task.
 Proposed method is better in term of results.
-Bonus : not time consuming at all (1s for a new MRI vs 2 min for deepHIPS, 20 min for HIPS).
+Bonus : not time consuming at all (1s for a new MRI (2 min with preprocessing), 20 min for HIPS).
+
+
 
