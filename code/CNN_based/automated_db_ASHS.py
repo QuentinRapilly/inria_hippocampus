@@ -54,3 +54,5 @@ if __name__ == "_main__":
     for file in files :
         subject = file.split("_")[0]
         sub_dic[subject] = file
+
+    print(sub_dic)
