@@ -43,16 +43,18 @@ def delete_ticket(ticket_id):
 
 
 
-if __name__ == "_main__":
+if __name__ == "__main__":
     img_dir = sys.argv[1]
     seg_dir = sys.argv[2]
 
     # allows to keep only sub* (that corresponds to subjects files)
     files = [file for file in os.listdir(img_dir) if file.find("sub")==0] 
-    
     sub_dic = {}
     for file in files :
         subject = file.split("_")[0]
-        sub_dic[subject] = file
-
-    print(sub_dic)
+        if sub_dic.get(subject) == None:
+            sub_dic[subject] = [file]
+        else :
+            sub_dic[subject].append(file)
+    for key in sub_dic :
+        print(sorted(sub_dic[key]))
