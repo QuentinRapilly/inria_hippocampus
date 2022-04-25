@@ -1,8 +1,17 @@
+from cProfile import label
+from time import time
 from random import random
+import matplotlib.pyplot as plt
+from os.path import join, isdir
+from os import mkdir
+
 import torch
 from torch.utils.data import random_split, DataLoader
 from torch.optim import Adam
-from torch.optim.lr_scheduler import ExponentialLR
+from torch.optim.lr_scheduler import ExponentialLR #TODO tester l'entrainement avec un LR scheduler
+
+
+
 from DeepHippo import DeepHippo
 from HippoDataset import HippoDataset 
 from Config import Config
@@ -51,7 +60,7 @@ def experiment(config):
 
     model = DeepHippo(in_channel=config["model"]["in_channel"], n0_channel=config["model"]["n0_channel"],
     mult_channels=config["model"]["mult_channel"], nb_layers=config["model"]["nb_layers"], kernel_size=config["model"]["kernel_size"],
-    pool_size=config["model"]["pool_size"], nb_conv_by_layer=config["model"]["nb_conv_layer"], dropout=config["model"]["dropout"],
+    pool_size=config["model"]["pool_size"], nb_conv_by_layer=config["model"]["nb_conv"], dropout=config["model"]["dropout"],
     nb_labels=config["model"]["nb_labels"])
 
     model = model.to(device)
@@ -84,10 +93,29 @@ def experiment(config):
 
     loss = test(model=model, dataloader=val_dataloader, loss_fn=loss_fn)
 
-    #TODO : stocker les résultats dans un fichier 
+    t = [i for i in range(len(train_loss))]
+    plt.plot(t, [train_loss, test_loss], label=["Train loss", "Test loss"])
+    plt.title("Training : lr_{} nb_epoch_{} nb_layer_{} nb_conv_{} batch_{}".format(
+        config["training"]["lr"], config["training"]["nb_epoch"], config["model"]["nb_layers"],
+        config["model"]["nb_conv"], config["training"]["train_batch_size"]
+    ))
+    plt.xlabel("Nb epochs")
+    plt.ylabel("Loss")
+    plt.legend() 
 
-    #TODO : sauvegarder le modele a la fin de l'entrainement
+    name = "model_{}".format(time)
+    current_dir = join(config["model"]["save_dir"],name)
+    if not isdir(current_dir):
+        mkdir(current_dir)
+    plt.savefig(join(current_dir,"loss_plot.png"))
+
+    if device != "cpu":
+        model.to("cpu")
+    torch.save(model.state_dict(), join(current_dir,"model_param.h5"))    
 
 
 if __name__ == "__init__":
+    
     config = Config().config
+
+    experiment(config)
