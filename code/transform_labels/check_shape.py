@@ -2,16 +2,15 @@ from os import listdir
 from os.path import join
 import sys
 from nibabel import load
-from sklearn import naive_bayes
 
 def compare_shapes(imgs_path, labels_path):
     
-    for file in listdir(imgs_path):
+    for file in sorted(listdir(imgs_path)):
         name = file.split("_")[0]
-        img = load(join(imgs_path, file)).dataobj
-        label = load(join(labels_path, name+"_label_final.nii.gz")).dataobj
+        img = load(join(imgs_path, file)).dataobj.shape
+        label = load(join(labels_path, name+"_label_final.nii.gz")).dataobj.shape
 
-        print("Image {}, shape : {}, label_shape {}".format(name, img.shape, label.shape))
+        print("Image {}, shape : {}, label_shape {} (same shape ? : {})".format(name, img, label, img==label))
 
 
 if __name__ == "__main__":
