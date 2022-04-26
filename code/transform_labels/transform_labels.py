@@ -2,7 +2,7 @@ from os import system, listdir
 from os.path import isdir, join, splitext
 import sys
 
-def transform_labels(path_in, path_out, space_ref):
+def transform_labels(path_in, path_out, orientation):
     """
     Using the cmd animaConvertImage -i <input image> -o <output image> -R <orientation>
     """
