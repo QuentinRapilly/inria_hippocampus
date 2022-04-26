@@ -48,8 +48,14 @@ def test(model, dataloader, loss_fn):
 
 
 def GJL(target, pred):
-    #TODO : definir la loss
-    return 
+    # dimension of both tensors are (batch, channel, height, width, depth)
+    wc = 1/torch.sum(target, dim=[2, 3, 4])
+    prod = torch.sum(target*pred, dim=[2, 3, 4])
+    num = torch.sum(wc*prod, dim=1)
+    sum = torch.sum(target + pred, dim=[2, 3, 4])
+    den = torch.sum(wc*(sum - prod), dim=1)
+    res = 1 - num/den
+    return res
 
 
 def experiment(config):
