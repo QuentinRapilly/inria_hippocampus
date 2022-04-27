@@ -55,15 +55,12 @@ def get_tickets_id():
 
     return job_idx
 
-def is_job_finished(ticket_id):
-    print("Ticket : {}".format(ticket_id))
-    cmd = 'itksnap-wt dss-tickets-progress {}'.format(ticket_id)
+def job_state(ticket_id):
+    cmd = 'itksnap-wt -dss-tickets-progress {}'.format(ticket_id)
     info = os.popen(cmd)
-
     info = info.read()
-    print(info)
     value = float(info.split()[-1])
-    return (value == 1.0)
+    return value
 
 if __name__ == "__main__":
     img_dir = sys.argv[1]
@@ -100,8 +97,11 @@ if __name__ == "__main__":
     while already_processed < nb_files:
 
         current_tickets = get_tickets_id()
+        print("Nouvelle iteration :")
         for ticket in current_tickets :
-            if is_job_finished(ticket) :
+            state = job_state(ticket)
+            print("Etat du job {} : {}".format(ticket, state))
+            if state == 1.0 :
                 download_ticket(ticket, seg_dir)
                 print("Segmentation de {} terminee".format(job_dic[ticket]))
                 delete_ticket(ticket)
@@ -113,6 +113,7 @@ if __name__ == "__main__":
             workspace = opj(workspace_dir,idx_sub+".itksnap")
             create_workspace(opj(img_dir,current),workspace)
             job_id = create_ticket_cloud(workspace, ASHS_T1_KEY)
+            print(job_id)
             job_dic[job_id] = idx_sub
             print("Lancement de la segmentation de {}".format(idx_sub))
 
