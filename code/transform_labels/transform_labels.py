@@ -1,12 +1,13 @@
 from os import system, listdir
 from os.path import isdir, join, splitext
 import sys
+import nibabel
 
-def transform_labels(path_in, path_out, model_space):
+def transform_labels(path_in, path_out):
     """
-    Using the cmd animaConvertImage -i <input image> -o <output image> -s <space to use as model>
+    Using the cmd animaConvertImage -i <input image> -o <output image> 
     """
-    system("animaConvertImage -i {} -o {} -s {}".format(path_in,path_out,model_space))
+    system("animaConvertImage -i {} -o {}".format(path_in,path_out))
 
 def sort_model_by_name(model_path):
     model_list = listdir(model_path)
@@ -31,9 +32,19 @@ if __name__ == "__main__":
         model_dic = sort_model_by_name(model_path)
         for file in listdir(in_path):
             name = splitext(file)[0]
-            transform_labels(join(in_path,file),join(out_path,name+".nii.gz"), \
-            join(model_path,find_corresponding_model(model_dic,name)))
+            transform_labels(join(in_path,file),join(out_path,name+".nii.gz"))
+
+            img = nibabel.load(join(model_path,find_corresponding_model(model_dic,name)))
+            ornt = img.get_sform()
+            label = nibabel.load(join(out_path,name+".nii.gz"))
+            label = label.as_reoriented(ornt)
+            nibabel.save(label,join(out_path,name+".nii.gz"))
 
     # to process a single file
     else :
-        transform_labels(in_path, out_path, model_path)
+        transform_labels(in_path, out_path)
+        img = nibabel.load(model_path)
+        ornt = img.get_sform()
+        label = nibabel.load(out_path)
+        label = label.as_reoriented(ornt)
+        nibabel.save(label, out_path)
