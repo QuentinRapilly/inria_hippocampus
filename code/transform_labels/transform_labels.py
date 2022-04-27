@@ -31,7 +31,7 @@ if __name__ == "__main__":
     if isdir(in_path):
         model_dic = sort_model_by_name(model_path)
         for file in listdir(in_path):
-            name = splitext(file)[0]
+            name = file.split("_")[0]
             transform_labels(join(in_path,file),join(out_path,name+".nii.gz"))
 
             img = nibabel.load(join(model_path,find_corresponding_model(model_dic,name)))
