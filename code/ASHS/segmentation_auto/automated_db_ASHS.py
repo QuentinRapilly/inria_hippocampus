@@ -31,8 +31,7 @@ def create_ticket_cloud(itk_workspace_file, service_code):
     cmd = 'itksnap-wt -i {} -dss-tickets-create {}'.format(itk_workspace_file, service_code)
     infos = os.popen(cmd)
     job_info = infos.read()
-    job_id = job_info.split(" ")[-1]
-    print("job id is : {}".format(job_id))
+    job_id = job_info.replace("\n","").split(" ")[-1]
     return job_id
 
 
@@ -115,7 +114,6 @@ if __name__ == "__main__":
             workspace = opj(workspace_dir,idx_sub+".itksnap")
             create_workspace(opj(img_dir,current),workspace)
             job_id = create_ticket_cloud(workspace, ASHS_T1_KEY)
-            print(job_id)
             job_dic[job_id] = idx_sub
             print("Lancement de la segmentation de {}".format(idx_sub))
 
