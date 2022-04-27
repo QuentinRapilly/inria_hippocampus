@@ -55,6 +55,7 @@ def get_tickets_id():
 
     return job_idx
 
+
 def job_state(ticket_id):
     cmd = 'itksnap-wt -dss-tickets-progress {}'.format(ticket_id)
     info = os.popen(cmd)
