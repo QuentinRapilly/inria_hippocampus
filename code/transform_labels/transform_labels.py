@@ -59,6 +59,7 @@ if __name__ == "__main__":
             if METHOD == USING_ANIMA:
                 cmd = transform_labels_with_model_space(join(in_path,file), join(out_path,name+"nii.gz"),\
                     join(model_path,find_corresponding_model(model_dic,name)))
+                print(cmd)
                 process_cmd(cmd)
 
 

@@ -50,9 +50,12 @@ def get_tickets_id():
     info = os.popen(cmd)
 
     info = info.read()
-    info = info.split("\n")
-    job_idx = [line.split()[1] for line in info]
-
+    print("inside get_ticket_id : {}".format(info))
+    if len(info)>0:
+        info = info.split("\n")
+        job_idx = [line.split()[1] for line in info]
+    else :
+        job_idx = []
     return job_idx
 
 def is_job_finished(ticket_id):
@@ -92,8 +95,8 @@ if __name__ == "__main__":
     job_dic = {}
     workspace_dir = create_dir(opj(seg_dir,"workspace"))
 
-    print("Nombre de segmentations à effectuer : {}".format(len(file_list)))
-    print("Début des segmentations ...")
+    print("Nombre de segmentations a effectuer : {}".format(len(file_list)))
+    print("Debut des segmentations ...")
 
     while already_processed < nb_files:
 
@@ -101,7 +104,7 @@ if __name__ == "__main__":
         for ticket in current_tickets :
             if is_job_finished(ticket) :
                 download_ticket(ticket, seg_dir)
-                print("Segmentation de {} terminée".format(job_dic[ticket]))
+                print("Segmentation de {} terminee".format(job_dic[ticket]))
                 delete_ticket(ticket)
                 already_processed += 1
 
