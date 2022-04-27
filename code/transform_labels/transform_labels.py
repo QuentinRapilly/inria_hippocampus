@@ -35,7 +35,7 @@ if __name__ == "__main__":
             transform_labels(join(in_path,file),join(out_path,name+".nii.gz"))
 
             img = nibabel.load(join(model_path,find_corresponding_model(model_dic,name)))
-            ornt = img.get_sform()
+            ornt = img.get_sform()[:3,:3]
             label = nibabel.load(join(out_path,name+".nii.gz"))
             label = label.as_reoriented(ornt)
             nibabel.save(label,join(out_path,name+".nii.gz"))
@@ -44,7 +44,7 @@ if __name__ == "__main__":
     else :
         transform_labels(in_path, out_path)
         img = nibabel.load(model_path)
-        ornt = img.get_sform()
+        ornt = img.get_sform()[:3,:3]
         label = nibabel.load(out_path)
         label = label.as_reoriented(ornt)
         nibabel.save(label, out_path)
