@@ -1,3 +1,4 @@
+from ntpath import join
 import os
 import sys
 from os.path import join as opj, exists as ope, basename as opb
@@ -83,6 +84,9 @@ if __name__ == "__main__":
     file_list = list()
     for key in sub_dic :
         file_list.append(sorted(sub_dic[key])[-1])
+    
+    nb_files = len(file_list)
+    already_processed = 0
 
     ##### Starting the segmentations #####
     job_dic = {}
@@ -91,17 +95,17 @@ if __name__ == "__main__":
     print("Nombre de segmentations à effectuer : {}".format(len(file_list)))
     print("Début des segmentations ...")
 
-    while len(file_list)>0:
+    while already_processed < nb_files:
 
         current_tickets = get_tickets_id()
         for ticket in current_tickets :
             if is_job_finished(ticket) :
                 download_ticket(ticket, seg_dir)
-                
                 print("Segmentation de {} terminée".format(job_dic[ticket]))
                 delete_ticket(ticket)
+                already_processed += 1
 
-        if len(get_tickets_id()) < TICKETS_LIMIT:
+        if len(get_tickets_id()) < TICKETS_LIMIT and len(file_list) > 0:
             current = file_list.pop()
             idx_sub = current.split("_")[0]
             workspace = opj(workspace_dir,idx_sub+".itksnap")
@@ -112,5 +116,8 @@ if __name__ == "__main__":
 
         else :
             sleep(30)
+
+    with open(join(seg_dir,"info.txt"),"w") as f_out :
+        print(job_dic, file=f_out)
 
     
