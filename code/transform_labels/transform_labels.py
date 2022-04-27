@@ -15,7 +15,7 @@ def sort_model_by_name(model_path):
     for elem in model_list :
         name = elem.split("_")[0]
         if model_dic.get(name) == None :
-            model_dic[name] = elem
+            model_dic[name] = [elem]
         else :
             model_dic[name].append(elem)
 
