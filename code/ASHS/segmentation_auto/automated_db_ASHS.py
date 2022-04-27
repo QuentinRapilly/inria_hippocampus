@@ -50,12 +50,9 @@ def get_tickets_id():
     info = os.popen(cmd)
 
     info = info.read()
-    print("inside get_ticket_id : {}".format(info))
-    if len(info)>0:
-        info = info.split("\n")
-        job_idx = [line.split()[1] for line in info]
-    else :
-        job_idx = []
+    info = info.split("\n")
+    job_idx = [line.split()[1] for line in info if len(line)>0]
+
     return job_idx
 
 def is_job_finished(ticket_id):
@@ -122,5 +119,3 @@ if __name__ == "__main__":
 
     with open(join(seg_dir,"info.txt"),"w") as f_out :
         print(job_dic, file=f_out)
-
-    
