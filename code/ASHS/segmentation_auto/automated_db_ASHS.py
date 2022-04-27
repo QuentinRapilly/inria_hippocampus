@@ -56,10 +56,12 @@ def get_tickets_id():
     return job_idx
 
 def is_job_finished(ticket_id):
+    print("Ticket : {}".format(ticket_id))
     cmd = 'itksnap-wt dss-tickets-progress {}'.format(ticket_id)
     info = os.popen(cmd)
 
     info = info.read()
+    print(info)
     value = float(info.split()[-1])
     return (value == 1.0)
 
