@@ -49,7 +49,6 @@ def delete_ticket(ticket_id):
 def get_tickets_id():
     cmd = 'itksnap-wt -dss-tickets-list'
     info = os.popen(cmd)
-
     info = info.read()
     info = info.split("\n")
     job_idx = [line.split()[1] for line in info if len(line)>0]
@@ -63,6 +62,12 @@ def job_state(ticket_id):
     info = info.read()
     value = float(info.split()[-1])
     return value
+
+def print_all_tickets():
+    cmd = 'itksnap-wt -dss-tickets-list'
+    info = os.popen(cmd)
+    info = info.read()
+    print(info)
 
 if __name__ == "__main__":
     img_dir = sys.argv[1]
@@ -104,8 +109,9 @@ if __name__ == "__main__":
             state = job_state(ticket)
             print("Etat du job {} : {}".format(ticket, state))
             if state == 1.0 :
-                download_ticket(ticket, seg_dir)
                 print("Segmentation de {} terminee".format(job_dic[ticket]))
+                print_all_tickets()
+                download_ticket(ticket, seg_dir)
                 delete_ticket(ticket)
                 already_processed += 1
 
