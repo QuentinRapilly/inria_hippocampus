@@ -101,32 +101,34 @@ if __name__ == "__main__":
     print("Nombre de segmentations a effectuer : {}".format(len(file_list)))
     print("Debut des segmentations ...")
 
-    while already_processed < nb_files:
+    with open(join(seg_dir,"info.csv"),"w") as f_out :
 
-        current_tickets = get_tickets_id()
-        print("Nouvelle iteration :")
-        for ticket in current_tickets :
-            state = job_state(ticket)
-            print("Etat du job {} : {}".format(ticket, state))
-            if state == 1.0 :
-                print("Segmentation de {} terminee".format(job_dic[ticket]))
-                print_all_tickets()
-                download_ticket(ticket, seg_dir)
-                delete_ticket(ticket)
-                already_processed += 1
+        while already_processed < nb_files:
 
-        if len(get_tickets_id()) < TICKETS_LIMIT and len(file_list) > 0:
-            current = file_list.pop()
-            idx_sub = current.split("_")[0]
-            workspace = opj(workspace_dir,idx_sub+".itksnap")
-            create_workspace(opj(img_dir,current),workspace)
-            job_id = create_ticket_cloud(workspace, ASHS_T1_KEY)
-            print(job_id)
-            job_dic[job_id] = idx_sub
-            print("Lancement de la segmentation de {}".format(idx_sub))
+            current_tickets = get_tickets_id()
+            print("Nouvelle iteration :")
+            for ticket in current_tickets :
+                state = job_state(ticket)
+                print("Etat du job {} : {}".format(ticket, state))
+                if state == 1.0 :
+                    print("Segmentation de {} terminee".format(job_dic[ticket]))
+                    print(job_dic[ticket]+","+ticket, file=f_out)
+                    print_all_tickets()
+                    download_ticket(ticket, seg_dir)
+                    delete_ticket(ticket)
+                    already_processed += 1
 
-        else :
-            sleep(30)
+            if len(get_tickets_id()) < TICKETS_LIMIT and len(file_list) > 0:
+                current = file_list.pop()
+                idx_sub = current.split("_")[0]
+                workspace = opj(workspace_dir,idx_sub+".itksnap")
+                create_workspace(opj(img_dir,current),workspace)
+                job_id = create_ticket_cloud(workspace, ASHS_T1_KEY)
+                print(job_id)
+                job_dic[job_id] = idx_sub
+                print("Lancement de la segmentation de {}".format(idx_sub))
 
-    with open(join(seg_dir,"info.txt"),"w") as f_out :
-        print(job_dic, file=f_out)
+            else :
+                sleep(30)
+
+    
