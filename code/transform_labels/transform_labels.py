@@ -11,20 +11,32 @@ METHOD = USING_ANIMA
 
 def transform_labels(path_in, path_out):
     """
-    Using the cmd animaConvertImage -i <input image> -o <output image> 
+        Convert a label image from .mnc to .nii.gz using anima functions.
+        cmd : animaConvertImage -i <input image> -o <output image> 
     """
     cmd = "animaConvertImage -i {} -o {}".format(path_in,path_out)
     return cmd
 
 def transform_labels_with_model_space(path_in, path_out, path_model):
+    """
+        Convert a label image from .mnc to .nii.gz using anima functions.
+        Set a reference space adjust output's orientation according to model's orientation.
+        cmd : animaConvertImage -i <input image> -o <output image> -s <model image>
+    """
     cmd = transform_labels(path_in, path_out) + " -s {}".format(path_model)
     return cmd
 
 def process_cmd(cmd):
+    """
+        Process the bash command given as argument.
+    """
     system(cmd)
 
 def sort_model_by_name(model_path):
-    model_list = listdir(model_path)
+    """
+        Create a dictionnary containing for each subject a list of every of its MRIs. 
+    """
+    model_list = [file for file in listdir(model_path) if file.find("sub")==0]
     model_dic = {}
     for elem in model_list :
         name = elem.split("_")[0]
@@ -36,6 +48,9 @@ def sort_model_by_name(model_path):
     return model_dic
 
 def find_corresponding_model(model_dic, name):
+    """
+        Return the last taken MRI stored in model_dic for a given subject. 
+    """
     return sorted(model_dic[name])[-1]
 
 if __name__ == "__main__":
@@ -43,24 +58,20 @@ if __name__ == "__main__":
 
     # to process every file in a directory
     if isdir(in_path):
+
+        # stores MRIs by subjects
         model_dic = sort_model_by_name(model_path)
+
+        # gets every labels files
         files = [file for file in listdir(in_path) if file.find("sub")==0]
+
         for file in files:
             name = file.split("_")[0]
-
-            if METHOD == USING_NIBABEL:
-                cmd = transform_labels(join(in_path,file),join(out_path,name+".nii.gz"))
-                process_cmd(cmd)
-                img = nibabel.load(join(model_path,find_corresponding_model(model_dic,name)))
-                ornt = img.get_sform()[:3,:3]
-                label = nibabel.load(join(out_path,name+".nii.gz"))
-                label = label.as_reoriented(ornt)
-                nibabel.save(label,join(out_path,name+".nii.gz"))
             
             if METHOD == USING_ANIMA:
+                # calls anima function
                 cmd = transform_labels_with_model_space(join(in_path,file), join(out_path,name+".nii.gz"),\
                     join(model_path,find_corresponding_model(model_dic,name)))
-                print(cmd)
                 process_cmd(cmd)
 
 
