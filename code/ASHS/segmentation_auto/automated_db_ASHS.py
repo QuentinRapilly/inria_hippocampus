@@ -2,7 +2,7 @@ from ntpath import join
 import os
 import sys
 from os.path import join as opj, exists as ope, basename as opb
-from time import sleep
+from time import sleep, time
 
 
 ASHS_T1_KEY = "455103a0295cbf85b267d40b0350d12784b198cc"
@@ -42,7 +42,7 @@ def download_ticket(ticket_id, out_dir):
 
 
 def delete_ticket(ticket_id):
-    cmd = 'itksnap -dss-tickets-delete {}'.format(ticket_id)
+    cmd = 'itksnap-wt -dss-tickets-delete {}'.format(ticket_id)
     os.system(cmd)
 
 def get_tickets_id():
@@ -100,6 +100,8 @@ if __name__ == "__main__":
     print("Nombre de segmentations a effectuer : {}".format(len(file_list)))
     print("Debut des segmentations ...")
 
+    start = time()
+
     with open(join(seg_dir,"info.csv"),"w") as f_out :
 
         it = 0
@@ -107,7 +109,7 @@ if __name__ == "__main__":
         while already_processed < nb_files:
 
             current_tickets = get_tickets_id()
-            print("Temps ecoule : {} min".format(it))
+            print("Temps ecoule : {} min".format((time()-start)//60))
             for ticket in current_tickets :
                 ticket, state = ticket
                 progress = job_state(ticket)
