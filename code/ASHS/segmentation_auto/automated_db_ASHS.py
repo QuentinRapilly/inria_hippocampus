@@ -50,7 +50,7 @@ def get_tickets_id():
     info = os.popen(cmd)
     info = info.read()
     info = info.split("\n")
-    job_idx = [line.split()[1] for line in info if len(line)>0]
+    job_idx = [(line.split()[1],line.split()[3]) for line in info if len(line)>0]
 
     return job_idx
 
@@ -102,18 +102,23 @@ if __name__ == "__main__":
 
     with open(join(seg_dir,"info.csv"),"w") as f_out :
 
+        it = 0
+
         while already_processed < nb_files:
 
             current_tickets = get_tickets_id()
-            print("Nouvelle iteration :")
+            print("Temps ecoule : {} min".format(it))
             for ticket in current_tickets :
-                state = job_state(ticket)
-                print("Etat du job {} : {}".format(ticket, state))
-                if state == 1.0 :
+                ticket, state = ticket
+                progress = job_state(ticket)
+                print("Etat du job {} : {} ({}%)".format(ticket, state, round(progress*100,ndigits=2)))
+                if state == "success" :
                     print("Segmentation de {} terminee".format(job_dic[ticket]))
                     print(job_dic[ticket]+","+ticket, file=f_out)
                     print_all_tickets()
-                    download_ticket(ticket, seg_dir)
+                    dwnl_dir = join(seg_dir,job_dic[ticket])
+                    os.mkdir(dwnl_dir)
+                    download_ticket(ticket, dwnl_dir)
                     delete_ticket(ticket)
                     already_processed += 1
 
@@ -123,11 +128,11 @@ if __name__ == "__main__":
                 workspace = opj(workspace_dir,idx_sub+".itksnap")
                 create_workspace(opj(img_dir,current),workspace)
                 job_id = create_ticket_cloud(workspace, ASHS_T1_KEY)
-                print(job_id)
                 job_dic[job_id] = idx_sub
                 print("Lancement de la segmentation de {}".format(idx_sub))
 
             else :
-                sleep(30)
+                sleep(60)
+                it += 1
 
     
