@@ -31,8 +31,7 @@ def create_ticket_cloud(itk_workspace_file, service_code):
     cmd = 'itksnap-wt -i {} -dss-tickets-create {}'.format(itk_workspace_file, service_code)
     infos = os.popen(cmd)
     job_info = infos.read()
-    job_id = job_info.split(" ")[-1]
-    print("job id is : {}".format(job_id))
+    job_id = job_info.replace("\n","").split(" ")[-1]
     return job_id
 
 
