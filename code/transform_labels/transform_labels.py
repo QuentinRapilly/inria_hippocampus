@@ -44,7 +44,8 @@ if __name__ == "__main__":
     # to process every file in a directory
     if isdir(in_path):
         model_dic = sort_model_by_name(model_path)
-        for file in listdir(in_path):
+        files = [file for file in listdir(img_dir) if file.find("sub")==0]
+        for file in files:
             name = file.split("_")[0]
 
             if METHOD == USING_NIBABEL:
