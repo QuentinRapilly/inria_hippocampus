@@ -34,9 +34,9 @@ Left right flip for data augmentation.
 
 > **Labeling** : 
 MOPAL (Multi-contrast optimized PatchMatch) technic : non local patch-based fusion technique. Patches of the subject to be segmented are compared with patches of the training library to look for similar paterns.
-The label of voxel $i$ is given by $v(x_i) = \frac{\sum_{i=1}^N\sum_{j\in V_i} w(x_i,x_{s,j}).y_{s,j}}{\sum_{i=1}^N\sum_{j\in V_i} w(x_i,x_{s,j})}$
+The "probability" (not really a proba before a softmax is done over labels) for voxel $i$ to have label $l$ is given by $v_l(x_i) = \frac{\sum_{i=1}^N\sum_{j\in V_i} w(x_i,x_{s,j}).y_{s,j}^{(l)}}{\sum_{i=1}^N\sum_{j\in V_i} w(x_i,x_{s,j})}$
 Where $w(x_i,x_{s,j})$ is the patch similarity between the patch centered in $x_i$ in the processed subject and the patch centered in $x_j$ in the reference atlas $s$ (more details in paper).
-$y_{s,j}$ is the label given by the expert in the ref atlas $s$ at position $j$ (**Etrange si $y \notin \{0,1\}$, demander des explications**).
+$y_{s,j}^{(l)} = 1$ if the expert gave label $l$ to voxel $j$ the ref atlas $s$ ($y_{s,j}^{(l)}=0$ instead).
 
 BUT : Computing patch comparision $w(x_i,x_{s,j}) = e^{-||P(x_i)-P(x_{s,j})||_2^2/h^2}$ is time consuming.
 
