@@ -4,8 +4,8 @@
 ### How to use ASHS ?
 
 Two methods exists :
-* 1) An easy one : using ITK-SNAP and cloud computing.
-* 2) A more developped one : downloading ASHS codes and running it on your own device.
+* 1) An easy one : using ITK-SNAP GUI and cloud computing.
+* 2) A more developped one : using ITK-SNAP in command line and calling cloud computing service.
 
 #### Easy method : ITK-SNAP Cloud and GUI
 
@@ -26,7 +26,15 @@ close the terminal to update the path
 `itksnap-wt -dss-auth https://dss.itksnap.org`
 3. you can now use ITK-SNAP cloud services in command line
 
+To know every itksnap command just type :
+`itksnap-wt`
+
 I made a script (inspired from Quentin Duche's one) to process every segmentation of the MRI in our database available at `\code\ASHS\segmentation_auto`.
+
+To use it :
+`python3 \code\ASHS\segmentation_auto\automated_db_ASHS.py <path to img dir> <path to output storing>`
+
+The output corresponding to labels is generally in file `\sub-*\layer-002*.nii.gz`
 
 
 
@@ -44,9 +52,15 @@ https://anima.irisa.fr/downloads/
 3) Add Anima directory to your PATH
 `export PATH=$PATH:/path_to_anima`
 
-4) You can use any function from Anima using anima\<Fct_name\> (help with "anima\<Fct_name\> -h")
+4) You can use any function from Anima using `anima<Fct_name>` (help with "`anima<Fct_name> -h`")
+
+
+Our labels are in format `label.mnc` and we need to convert them in `label.nii.gz`, to do it, we can use the following command from anima :
+`animaConvertImage -i <mnc file> -o <output path> -s <reference space (an image given to set orientation, generally the image corresponding to labels)>`
 
 ### How to use MedINRIA (visualization) ?
 
 Download it here :
 https://med.inria.fr/
+
+On computers using Fedora, MedINRIA can be hard to install, ITKSNAP can also be used for visualisation.
