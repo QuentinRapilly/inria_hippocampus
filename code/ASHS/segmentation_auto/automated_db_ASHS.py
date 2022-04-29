@@ -109,6 +109,10 @@ if __name__ == "__main__":
     # allows to keep only sub* files (that corresponds to subjects files) in the image directory
     files = [file for file in os.listdir(img_dir) if file.find("sub")==0] 
     
+    file_list = files
+
+    # Uncomment to process only one segmentation by subject :
+    """
     # the following lines group the files/MRI referencing to the same subject
     sub_dic = {}
     for file in files :
@@ -121,7 +125,8 @@ if __name__ == "__main__":
     # for each subject we keep only the last MRI that was made
     file_list = list()
     for key in sub_dic :
-        file_list.append(sorted(sub_dic[key])[-1])
+        file_list.append(sorted(sub_dic[key])[0]) # 0 for first MRI captured, -1 for last MRI captured
+    """
     
     nb_files = len(file_list)
     already_processed = 0
