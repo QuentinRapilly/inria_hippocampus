@@ -142,7 +142,6 @@ if __name__ == "__main__":
 
     with open(join(seg_dir,"info.csv"),"w") as f_out :
 
-        it = 0
 
         while already_processed < nb_files:
 
@@ -169,7 +168,8 @@ if __name__ == "__main__":
             # we submit a new one.
             if len(get_tickets_id()) < TICKETS_LIMIT and len(file_list) > 0:
                 current = file_list.pop()
-                idx_sub = current.split("_")[0]
+                crt_splitted = current.split("_")
+                idx_sub = crt_splitted[0] + "_" + crt_splitted[1]
                 workspace = opj(workspace_dir,idx_sub+".itksnap")
                 create_workspace(opj(img_dir,current),workspace)
                 job_id = create_ticket_cloud(workspace, ASHS_T1_KEY)
@@ -180,6 +180,5 @@ if __name__ == "__main__":
             # (segmentation in progress), we wait for them to finish.
             else :
                 sleep(60)
-                it += 1
 
     
