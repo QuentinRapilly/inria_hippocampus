@@ -55,12 +55,32 @@ https://anima.irisa.fr/downloads/
 4) You can use any function from Anima using `anima<Fct_name>` (help with "`anima<Fct_name> -h`")
 
 
+#### Change label extension
 Our labels are in format `label.mnc` and we need to convert them in `label.nii.gz`, to do it, we can use the following command from anima :
 `animaConvertImage -i <mnc file> -o <output path> -s <reference space (an image given to set orientation, generally the image corresponding to labels)>`
+
+#### Change ASHS segmentation resolution 
+Once ASHS segmentations are downloaded they are not in the good resolution for 2 of the 3 dimension (they are up sampled during ASHS pipeline).
+
+To down sample the labels :
+`animaImageResolutionChanger -n <method to use [nearest, linear, bspline, sinc]> -i <input path> -o <output path>`
+
+#### Select only some labels in a segmentation file
+To keep only some labels on nifti images, one can use the following command to keep only the labels included between the two precised bounds.
+`animaThrImage -u <Upper threshold value> -t <Threshold value> -i <Input image> -o <Output image>`
+
+#### Create the .vtk from labels binaries
+Create 3D meshes from labels binary files.
+
+`animaIsoSurface -i <input binary image> -o <output surface>`
 
 ### How to use MedINRIA (visualization) ?
 
 Download it here :
 https://med.inria.fr/
 
-On computers using Fedora, MedINRIA can be hard to install, ITKSNAP can also be used for visualisation.
+For MedInria to work on Fedora distribution, replace this line in `bin/medInria_launcher.sh` :
+* `export LD_LIBRARY_PATH=${MEDINRIA_DIR}/lib:${MEDINRIA_DIR}/plugins_legacy:$LD_LIBRARY_PATH`
+
+by this one :
+* `export LD_LIBRARY_PATH=${MEDINRIA_DIR}/lib:${MEDINRIA_DIR}/lib64:${MEDINRIA_DIR}/plugins_legacy:$LD_LIBRARY_PATH`
