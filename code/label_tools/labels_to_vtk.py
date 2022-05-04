@@ -30,6 +30,3 @@ if __name__ == "__main__":
         create_vtk(out, join(out_dir, name+".vtk"))
 
     remove(join(out_dir, "tmp.nii.gz"))
-
-
-    pass

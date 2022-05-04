@@ -22,8 +22,8 @@ When ITK-SNAP is downloaded, in ITK-SNAP directory you will find to files :
 1. add itksnap to your path : 
 `export PATH=$PATH:/path_to_itksnap_directory`
 close the terminal to update the path
-2. connect to a google account :
-`itksnap-wt -dss-auth https://dss.itksnap.org`
+2. connect to a google account using command :
+`itksnap-wt -dss-auth https://dss.itksnap.org` and following the returned link
 3. you can now use ITK-SNAP cloud services in command line
 
 To know every itksnap command just type :
@@ -62,20 +62,26 @@ https://anima.irisa.fr/downloads/
 Our labels are in format `label.mnc` and we need to convert them in `label.nii.gz`, to do it, we can use the following command from anima :
 `animaConvertImage -i <mnc file> -o <output path> -s <reference space (an image given to set orientation, generally the image corresponding to labels)>`
 
+A **script** does it for every files in a dir :
+`python3 /code/label_tools/mnc_to_nifti.py -i <path to mnc files> -o <path to where to store nifti files>`
+
 #### Change ASHS segmentation resolution 
 Once ASHS segmentations are downloaded they are not in the good resolution for 2 of the 3 dimension (they are up sampled during ASHS pipeline).
 
 To down sample the labels :
 `animaImageResolutionChanger -n <method to use [nearest, linear, bspline, sinc]> -i <input path> -o <output path>`
 
-#### Select only some labels in a segmentation file
+#### Select only some labels in a segmentation file (a)
 To keep only some labels on nifti images, one can use the following command to keep only the labels included between the two precised bounds.
 `animaThrImage -u <Upper threshold value> -t <Threshold value> -i <Input image> -o <Output image>`
 
-#### Create the .vtk from labels binaries
+#### Create the .vtk from labels binaries (b)
 Create 3D meshes from labels binary files.
 
 `animaIsoSurface -i <input binary image> -o <output surface>`
+
+A script creates temporary binaries (step (a)) and uses them to create .vtk files from labels mask (step (b)) :
+`python3 code/label_tools/labels_to_vtk.py -i <input files> -o <out files dir> -m <lower bound to select labels> -M <upper bound to select labels>`
 
 ### How to use MedINRIA (visualization) ?
 
