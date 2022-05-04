@@ -29,12 +29,15 @@ close the terminal to update the path
 To know every itksnap command just type :
 `itksnap-wt`
 
-I made a script (inspired from Quentin Duche's one) to process every segmentation of the MRI in our database available at `\code\ASHS\segmentation_auto`.
+I made a script (inspired from Quentin Duche's one) to process every segmentation of the MRI in our database available at `/code/ASHS/segmentation_auto`.
 
 To use it :
-`python3 \code\ASHS\segmentation_auto\automated_db_ASHS.py <path to img dir> <path to output storing>`
+`python3 /code/ASHS/segmentation_auto/automated_db_ASHS.py -i <path to img dir> -o <path to output storing>`
 
-The output corresponding to labels is generally in file `\sub-*\layer-002*.nii.gz`
+The output corresponding to labels is generally in file `/choosen_dir/sub-*/layer-002*.nii.gz`
+
+To group every segmentation in files in the same dir, one can use the script `code/ASHS/segmentation_auto/group_seg_labels.py` that do this job :
+`python3 code/ASHS/segmentation_auto/group_seg_labels.py -i <path to ASHS results> -o <path to where to store segs>`
 
 
 

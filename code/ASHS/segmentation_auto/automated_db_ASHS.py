@@ -3,6 +3,7 @@ import os
 import sys
 from os.path import join as opj, exists as ope, basename as opb
 from time import sleep, time
+import argparse
 
 
 ASHS_T1_KEY = "455103a0295cbf85b267d40b0350d12784b198cc"
@@ -102,8 +103,15 @@ def print_all_tickets():
     print(info)
 
 if __name__ == "__main__":
-    img_dir = sys.argv[1]
-    seg_dir = sys.argv[2]
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i","--in_path", help="Path to MRIs to segment", required=True)
+    parser.add_argument("-o", "--out_path", help="Path to dir where to store segmetations", required=True)
+    
+    args = parser.parse_args()
+
+    img_dir = args.in_path
+    seg_dir = args.out_path
 
     ##### Pre-processing input files#####
     # allows to keep only sub* files (that corresponds to subjects files) in the image directory

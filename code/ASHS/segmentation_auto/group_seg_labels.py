@@ -1,14 +1,20 @@
 from os import popen, listdir
 from os.path import join, isdir
-import sys 
+import argparse
 
 def cp(input_file, output_file):
     cmd = "cp {} {}".format(input_file, output_file)
     popen(cmd)
 
 if __name__ == "__main__":
-    assert(len(sys.argv) > 2)
-    in_dir, out_dir = sys.argv[1], sys.argv[2]
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i","--in_path", help="Path to where ASHS outputs where stored", required=True)
+    parser.add_argument("-o", "--out_path", help="Path to dir where to store all the labels", required=True)
+    
+    args = parser.parse_args()
+
+    in_dir, out_dir = args.in_path, args.out_path
     for dir in listdir(in_dir):
         current_dir = join(in_dir, dir)
         if isdir(current_dir) and dir!="workspace" :
