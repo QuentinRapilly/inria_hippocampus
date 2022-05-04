@@ -15,8 +15,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-i","--in_path", help="Path to input label files", required=True)
     parser.add_argument("-o", "--out_path", help="Path to dir where to store .vtk files", required=True)
-    parser.add_argument("-m", "--min", help="Lower bound to select labels", type=float, required=True)
-    parser.add_argument("-M", "--max", help="Upper bound to select labels", type=float, required=True)
+    parser.add_argument("-m", "--min", help="Lower bound to select labels", type=int, required=True)
+    parser.add_argument("-M", "--max", help="Upper bound to select labels", type=int, required=True)
     
     args = parser.parse_args()
     m, M = args.min, args.max
