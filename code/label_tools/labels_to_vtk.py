@@ -1,14 +1,18 @@
 import argparse
-from os import popen, listdir, mkdir, remove
+from os import popen, listdir, mkdir, remove 
 from os.path import join, isdir
 
 def create_binary_file(input_file, output_file, upper, lower):
     cmd = "animaThrImage -u {} -t {} -i {} -o {}".format(upper, lower, input_file, output_file)
-    popen(cmd)
+    infos = popen(cmd)
+    infos = infos.read()
+    return infos
 
 def create_vtk(input_file, output_file):
     cmd = "animaIsosurface -i {} -o {}".format(input_file, output_file)
-    popen(cmd)
+    infos = popen(cmd)
+    infos = infos.read()
+    return infos
 
 
 if __name__ == "__main__":
@@ -26,8 +30,9 @@ if __name__ == "__main__":
         mkdir(out_dir)
     for file in listdir(in_dir):
         out = join(out_dir, "tmp.nii.gz")
-        create_binary_file(join(in_dir, file), out, args.max, args.min)
+        infos = create_binary_file(join(in_dir, file), out, args.max, args.min)
+        #print("Contenu du dossier avant de creer le vtk : {}".format(listdir(out_dir)))
         name = file.split(".")[0]
-        create_vtk(out, join(out_dir, name+".vtk"))
+        infos = create_vtk(out, join(out_dir, name+".vtk"))
 
     remove(join(out_dir, "tmp.nii.gz"))
