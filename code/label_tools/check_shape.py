@@ -32,7 +32,7 @@ def compare_shapes(imgs_path, labels_path):
     imgs_dic = sort_model_by_name(imgs_path)
     
     for file in sorted(listdir(labels_path)):
-        name = file.split("_")[0]
+        name = file.split(".")[0]
         img_path = join(imgs_path, find_corresponding_model(imgs_dic, name))
         img = load(img_path).dataobj.shape
         label = load(join(labels_path, file)).dataobj.shape
