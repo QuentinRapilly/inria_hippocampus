@@ -1,7 +1,7 @@
 from os import system, listdir
 from os.path import isdir, join, splitext
 import sys
-import nibabel
+import argparse
 
 
 USING_ANIMA = 0
@@ -51,10 +51,20 @@ def find_corresponding_model(model_dic, name):
     """
         Return the last taken MRI stored in model_dic for a given subject. 
     """
-    return sorted(model_dic[name])[-1]
+    return sorted(model_dic[name])[0]
 
 if __name__ == "__main__":
-    in_path, out_path, model_path = sys.argv[1], sys.argv[2], sys.argv[3]
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i","--in_path", help="Path to MRIs to segment", required=True)
+    parser.add_argument("-o", "--out_path", help="Path to dir where to store segmetations", required=True)
+    parser.add_argument("-m", "--model_path", help = "Path to the location of the images corresponding to the labels", required=True)
+    
+    args = parser.parse_args()
+
+    in_path = args.in_path
+    out_path = args.out_path
+    model_path = args.model_path
 
     # to process every file in a directory
     if isdir(in_path):
