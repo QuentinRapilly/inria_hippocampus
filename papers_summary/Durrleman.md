@@ -50,4 +50,21 @@ $\Delta(x)$ can be interpreted as the vector field maximising the distance betwe
 
 ### Diffeomorphic deformation of currents 
 
+Simply consist in a change of variable (which can be quite complex if one dives into the details).
+_Cf p29 of the paper_
+
+
+### The space of currents as a RKHS 
+
+> The mass norm previously defined isn't a good way to model shape dissimilarities. 
+Discontinuous : if to shapes are the same but one is translated then their distance is constant and become zero only when they match.
+
+New test space that prevents this issue to happen : we want that $\forall\omega, \quad {||\omega||}_{\infty} + {||\Delta \omega||}_{\infty} < \infty$
+(Sobolev space)
+
+
+![plot](./Illustrations/Durrleman/norm_table.png)
+
 -----------------------------------------------
+
+*p77*
