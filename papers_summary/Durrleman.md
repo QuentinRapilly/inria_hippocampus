@@ -67,4 +67,20 @@ New test space that prevents this issue to happen : we want that $\forall\omega,
 
 -----------------------------------------------
 
+### Finite dimensionnal approximation of the RKHS
+
+Discretization of the space of vector fields.
+One selects only a few points from the vector fields space denoted $\Lambda = \{x_i^{\Lambda}\}_{i\in \Lambda}$.
+Let :
+* $\bm{\alpha}$ be the concatenation of the $N$ current vector $(\alpha_i)_{i\in \Lambda}$ of dim $p$ 
+* $\bm{\gamma}$ be the concatenation of the $N$ vector field values $(\mathcal{L}_W^{-1}(T)(x_i))_{i \in \Lambda}$
+
+A block matrix is then defined : $K_{\Lambda}$, such that block $(i,j)$ correspond to $K(x_i,x_j)$
+
+That transforms every formula obtained previously into a matrix multiplication formula :
+$\bm{\gamma} = K_W \bm{\alpha}$
+$\bm{\alpha} = K_W^{-1} \bm{\gamma}$
+
+![plot](./Illustrations/Durrleman/norm_table_finite_dim.png)
+
 *p77*

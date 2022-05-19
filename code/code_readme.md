@@ -92,8 +92,9 @@ Create 3D meshes from labels binary files.
 `animaIsoSurface -i <input binary image> -o <output surface>`
 
 A script creates temporary binaries (step (a)) and uses them to create .vtk files from labels mask (step (b)) :
-`python3 code/label_tools/labels_to_vtk.py -i <input files> -o <out files dir> -m <lower bound to select labels> -M <upper bound to select labels>`
+`python3 code/label_tools/labels_to_vtk.py -i <input files> -o <out files dir> -l <list of labels to keep for the mesh (ex : 1,6,7,12)> -s <smoothing parameter for animaIsosurface> -I <nb of smoothing iterations>`
 
+To compute the mesh, we call severall times `animaThrImage`, once by label in the list (as they are not necessarily consecutiv). We then sum the obtained masks and create the mesh with `animaIsosurface`.
 
 --------------------------------------------------
 
@@ -154,8 +155,8 @@ import deformetrica as dfca
 
 df = dfca.Deformetrica(output_dir='output', verbosity='INFO')
 
-df.estimate_registration(self, template_specifications,\ 
-    dataset_specifications, model_options={}, estimator_options={}, write_output=True)
+df.estimate_registration(template_specifications, dataset_specifications,\
+    model_options={}, estimator_options={}, write_output=True)
 ```
 _Estimates the best possible deformation between two sets of objects.
 Note: A registration is a particular case of the deterministic atlas application, with a fixed template object._

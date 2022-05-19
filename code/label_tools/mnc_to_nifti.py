@@ -1,6 +1,5 @@
 from os import system, listdir
 from os.path import isdir, join, splitext
-import sys
 import argparse
 
 
@@ -53,19 +52,7 @@ def find_corresponding_model(model_dic, name):
     """
     return sorted(model_dic[name])[0]
 
-if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-i","--in_path", help="Path to MRIs to segment", required=True)
-    parser.add_argument("-o", "--out_path", help="Path to dir where to store segmetations", required=True)
-    parser.add_argument("-m", "--model_path", help = "Path to the location of the images corresponding to the labels", required=True)
-    
-    args = parser.parse_args()
-
-    in_path = args.in_path
-    out_path = args.out_path
-    model_path = args.model_path
-
+def mnc_to_nifti(in_path, out_path, model_path):
     # to process every file in a directory
     if isdir(in_path):
 
@@ -85,13 +72,19 @@ if __name__ == "__main__":
                 process_cmd(cmd)
 
 
-    # to process a single file
-    """
-    else :
-        transform_labels(in_path, out_path)
-        img = nibabel.load(model_path)
-        ornt = img.get_sform()[:3,:3]
-        label = nibabel.load(out_path)
-        label = label.as_reoriented(ornt)
-        nibabel.save(label, out_path)
-    """
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i","--in_path", help="Path to MRIs to segment", required=True)
+    parser.add_argument("-o", "--out_path", help="Path to dir where to store segmetations", required=True)
+    parser.add_argument("-m", "--model_path", help = "Path to the location of the images corresponding to the labels", required=True)
+    
+    args = parser.parse_args()
+
+    in_path = args.in_path
+    out_path = args.out_path
+    model_path = args.model_path
+
+    mnc_to_nifti(in_path, out_path, model_path)
+
+

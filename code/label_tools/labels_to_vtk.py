@@ -20,6 +20,26 @@ def create_vtk(input_file, output_file, smoothing = 0, it = 5):
     infos = infos.read()
     return infos
 
+def labels_to_vtk(in_path, out_path, labels, smoothing, iterations):
+    if not isdir(out_dir):
+        mkdir(out_dir)
+    
+    for file in listdir(in_dir):
+        print("Processing file : {}".format(file))
+        final_label = join(out_dir, "final_tmp.nii.gz")
+        infos = create_binary_file(join(in_dir, file), final_label, labels[0], labels[0])
+        step_label = join(out_dir, "step_tmp.nii.gz")
+        for label in labels[1:]:
+            infos = create_binary_file(join(in_dir, file), step_label, label, label)
+            infos = add_mask(final_label, step_label, final_label)
+
+        name = file.split(".")[0]
+        infos = create_vtk(final_label, join(out_dir, name+".vtk"), smoothing, iterations)
+
+    remove(final_label)
+    remove(step_label)
+    return infos
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -40,20 +60,5 @@ if __name__ == "__main__":
     
     in_dir = args.in_path
     out_dir = join(args.out_path, "label_{}_it_{}_smooth_{}".format(args.labels,iterations,smoothing))
-    
-    if not isdir(out_dir):
-        mkdir(out_dir)
-    
-    for file in listdir(in_dir):
-        final_label = join(out_dir, "final_tmp.nii.gz")
-        infos = create_binary_file(join(in_dir, file), final_label, labels[0], labels[0])
-        step_label = join(out_dir, "step_tmp.nii.gz")
-        for label in labels[1:]:
-            infos = create_binary_file(join(in_dir, file), step_label, label, label)
-            infos = add_mask(final_label, step_label, final_label)
 
-        name = file.split(".")[0]
-        infos = create_vtk(final_label, join(out_dir, name+".vtk"), smoothing, iterations)
-
-    remove(final_label)
-    remove(step_label)
+    infos = labels_to_vtk(in_dir, out_dir, labels, smoothing, iterations)
