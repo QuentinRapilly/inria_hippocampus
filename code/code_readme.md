@@ -115,6 +115,10 @@ animaApplyTransformSerie -i <input mask> -g <MNI template>\
 -t <transformation (obtained at the previous step)> -o <output file> -n nearest
 ```
 
+I created a script that do this for every file in a dataset. One can find it located at `/code/MNI_registration/move_to_mni.py`. One can use it with the following command :
+
+`python3 code/MNI_registration/move_to_mni.py -i <input MRI dir> -l <labels dir> -o <output dir> -t <transformation dir (if they have already been processed)> -m <path to the MNI space model> -M <the method choosen ('compute' to create the transformation, 'use' to use already processed transformation>`
+
 --------------------------------------------------
 
 ## Shape analysis
