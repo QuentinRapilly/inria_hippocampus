@@ -20,7 +20,7 @@ def create_vtk(input_file, output_file, smoothing = 0, it = 5):
     infos = infos.read()
     return infos
 
-def labels_to_vtk(in_path, out_path, labels, smoothing, iterations):
+def labels_to_vtk(in_dir, out_dir, labels, smoothing, iterations):
     if not isdir(out_dir):
         mkdir(out_dir)
     

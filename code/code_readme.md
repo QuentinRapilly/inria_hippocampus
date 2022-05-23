@@ -96,6 +96,25 @@ A script creates temporary binaries (step (a)) and uses them to create .vtk file
 
 To compute the mesh, we call severall times `animaThrImage`, once by label in the list (as they are not necessarily consecutiv). We then sum the obtained masks and create the mesh with `animaIsosurface`.
 
+### Set the images in the MNI space
+
+The MNI space correspond to a normalized space (of a mean mind) in which MRIs are relocated to be compared more easily.
+
+To do so, we need a MNI space model that is provided in the `data` directory.
+
+We will also use the following `anima` functions :
+```
+# Find the transformation to move the input MRI in the MNI space.
+
+animaPyramidalBMRegistration -r <MNI_template> -m <input MRI file> -o <output file>\
+-O <transformation output (to be applied on the corresponding labels)> --ot 2`
+
+# Apply the transformation to the brain mask.
+
+animaApplyTransformSerie -i <input mask> -g <MNI template>\
+-t <transformation (obtained at the previous step)> -o <output file> -n nearest
+```
+
 --------------------------------------------------
 
 ## Shape analysis
