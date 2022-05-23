@@ -15,6 +15,12 @@ def transformation(input, mni, transform, output):
     infos = infos.read()
     return infos
 
+def create_xml_transformation(input, output):
+    cmd = "animaTransformSerieXmlGenerator -i {} -o {}".format(input, output)
+    infos = popen(cmd)
+    infos = infos.read()
+    return infos
+
 def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."):
     # We check if there is not already a dir containing relocated images and then create it
     images_out = join(output_path, "images")
@@ -30,8 +36,15 @@ def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."
     labels_out = join(output_path, "labels")
     assert not isdir(labels_out)
     mkdir(labels_out)
+
+    transform_txt = join(transform_out, "txt_files")
+    mkdir(transform_txt)
+    transform_xml = join(transform_out, "xml_files")
+    mkdir(transform_xml)
     
     sub_dic = {}
+
+    print("Step 0 : Sorting files")
 
     # as we have severall runs for each subject, we sort them by subject and keep only one
     for filename in listdir(images_path):
@@ -44,16 +57,23 @@ def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."
     images = [join(images_path, sorted(sub_dic[sub])[0]) for sub in sub_dic]
 
     transform_dic = {}
+
+    print("Step 1 : Creating transformation for images")
     for image in images :
         sub = basename(image).split("_")[0]
         img_out = join(images_out, sub+".nii.gz")
-        tsf_out = join(transform_out, sub+".txt")
-        
-        transform_dic[sub] = tsf_out
+        tsf_out = join(transform_txt, sub+".txt")
 
         registration(mni_path, image, img_out, tsf_out)
 
+        tsf_xml = join(transform_xml, sub+".xml")
+        create_xml_transformation(tsf_out, tsf_xml)
+
+        transform_dic[sub] = tsf_xml
+
     labels = [join(labels_path, filename) for filename in listdir(labels_path)]
+
+    print("Step 2 : Applying obtained transfomration on labels")
 
     for label in labels:
         sub = basename(label).split(split_label_at)[0] 
