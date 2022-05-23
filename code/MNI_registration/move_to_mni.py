@@ -27,7 +27,7 @@ def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."
     mkdir(transform_out)
 
     # Same for labels 
-    labels_out = join(output_path, "images")
+    labels_out = join(output_path, "labels")
     assert not isdir(labels_out)
     mkdir(labels_out)
     

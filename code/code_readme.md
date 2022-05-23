@@ -235,3 +235,4 @@ For MedInria to work on Fedora distribution, replace this line in `bin/medInria_
 
 by this one :
 * `export LD_LIBRARY_PATH=${MEDINRIA_DIR}/lib:${MEDINRIA_DIR}/lib64:${MEDINRIA_DIR}/plugins_legacy:$LD_LIBRARY_PATH`
+
