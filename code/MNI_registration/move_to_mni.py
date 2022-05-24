@@ -83,8 +83,8 @@ def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."
         transformation(label, mni_path, tsf, lab_out)
 
 
-def to_mni_with_transformation(transformation_path, labels_path, mni_path, output_path, split_label_at = "."):
-    labels_out = join(output_path, "images")
+def to_mni_with_transformation(transformation_path, labels_path, mni_path, output_path, split_label_at = "_"):
+    labels_out = join(output_path, "labels")
     assert not isdir(labels_out)
     mkdir(labels_out)
 
