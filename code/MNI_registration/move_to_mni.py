@@ -84,9 +84,7 @@ def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."
 
 
 def to_mni_with_transformation(transformation_path, labels_path, mni_path, output_path, split_label_at = "_"):
-    labels_out = join(output_path, "labels")
-    assert not isdir(labels_out)
-    mkdir(labels_out)
+    assert isdir(output_path)
 
     transform_dic = {}
 
@@ -99,7 +97,7 @@ def to_mni_with_transformation(transformation_path, labels_path, mni_path, outpu
 
         tsf = transform_dic[sub]
 
-        lab_out = join(lab_out, sub+".nii.gz")
+        lab_out = join(output_path, sub+".nii.gz")
 
         transformation(join(labels_path, label), mni_path, tsf, lab_out)
 
