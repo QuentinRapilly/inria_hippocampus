@@ -4,7 +4,7 @@ from stat import filemode
 import argparse
 
 def change_resolution(input, output, res = [1,1,1]):
-    cmd = "animaImageResolutionChanger -n nearest -z {} -y {} -x {} -o {} -i {}".format(res[0],\
+    cmd = "animaImageResolutionChanger -n nearest -z {} -y {} -x {} -i {} -o {}".format(res[0],\
         res[1], res[2], input, output)
     infos = popen(cmd)
     infos = infos.read()
