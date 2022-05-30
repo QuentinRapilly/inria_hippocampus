@@ -15,6 +15,9 @@ def change_dir_res(input_dir, output_dir, res):
     for filename in listdir(input_dir):
         
         input = join(input_dir, filename)
+
+        print("En train de traiter : {}".format(input))
+
         output = join(output_dir, filename)
 
         infos = change_resolution(input=input, output=output, res=res)
