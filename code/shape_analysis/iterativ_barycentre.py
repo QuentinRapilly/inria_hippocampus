@@ -110,7 +110,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.config != None:
-        config = json.load(args.config)
+        with open(args.config,"r") as f:
+            config = json.load(f)
     else :
         config = None
 
