@@ -68,7 +68,7 @@ class IterativBarycentre():
     def iterativ_barycentre(self):
 
         shape1 = self.shapes.pop()
-        shape2 = self.shape.pop()
+        shape2 = self.shapes.pop()
         self.registration(shape1, shape2)
         i = 2
         start = join(self.registration_dir, "DeterministicAtlas__flow__test__subject_target__tp_0.png")
@@ -77,7 +77,7 @@ class IterativBarycentre():
         self.shooting(1/i, start=start, momenta=momenta, control_points=control_points)
 
         while len(self.shape) > 0:
-            shape = self.shape.pop()
+            shape = self.shapes.pop()
 
             mean_tab = [filename for filename in listdir(self.shooting_dir) if filename.find("stop")>=0]
             idx = [float(splitext(filename).split("_")[-1]) for filename in mean]
