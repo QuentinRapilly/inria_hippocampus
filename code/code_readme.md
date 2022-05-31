@@ -48,6 +48,13 @@ The output corresponding to labels is generally in file `/choosen_dir/sub-*/laye
 To group every segmentation files in the same dir, one can use the script `code/segmentation/ASHS/group_seg_labels.py` that do this job :
 `python3 code/segmentation/ASHS/group_seg_labels.py -i <path to ASHS results> -o <path to where to store segs>`
 
+#### Downsampling
+
+Input MRI are up-sampled by the algorithm pipeline and so the ASHS segmentation are.
+To downsample them to the original resolution one can either use the anima method `animaImageResolutionChanger -n nearest -z <z resolution> -y <y resolution> -x <x resolution> -i <input file> -o <output file>` or use the script I wrote that process every resolution change for the files in a directory :
+
+`python3 /code/label_tools/change_resolution.py -i <input dir> -o <output dir> -r <resolution for z,y,x (ex : 1,1,1)>`
+
 ### How to use the CNN-Based Method
 
 TODO : terminer l'implémentation et décrire son fonctionnement.

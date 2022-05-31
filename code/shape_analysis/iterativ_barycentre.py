@@ -118,4 +118,6 @@ if __name__ == "__main__":
 
     mean = algo.iterativ_barycentre()
 
+    print("Mean shape stored at : {}".format(mean))
+
     
