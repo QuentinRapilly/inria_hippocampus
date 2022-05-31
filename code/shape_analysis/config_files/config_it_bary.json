@@ -15,7 +15,8 @@
                 "deformable_object_type" : "surfacemesh",
                 "kernel_type"  : "torch",
                 "noise_std" : 0.1,
-                "attachment_type": "varifold"
+                "attachment_type": "varifold",
+                "kernel_width" : 30.0
             }
         },
         
