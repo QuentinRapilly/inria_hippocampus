@@ -69,11 +69,13 @@ class IterativBarycentre():
 
         shape1 = self.shapes.pop()
         shape2 = self.shapes.pop()
+        print("Etape de registration initiale, fichiers utilises :\n{}\n{}".format(shape1,shape2))
         self.registration(shape1, shape2)
         i = 2
         start = join(self.registration_dir, "DeterministicAtlas__flow__test__subject_target__tp_0.png")
         momenta = join(self.registration_dir, "DeterministicAtlas__EstimatedParameters__Momenta.txt")
         control_points = join(self.registration_dir, "DeterministicAtlas__EstimatedParameters__ControlPoints.txt")
+        print("Etape de shooting initiale, fichiers utilises :\nStart : {}\nMomenta : {}".format(start, momenta))
         self.shooting(1/i, start=start, momenta=momenta, control_points=control_points)
 
         while len(self.shape) > 0:
@@ -83,10 +85,11 @@ class IterativBarycentre():
             idx = [float(splitext(filename).split("_")[-1]) for filename in mean]
             indexes = np.argmax(idx)
             mean = join(self.shooting_dir, mean_tab[indexes])
-
+            print("Etape de registration initiale, fichiers utilises :\n{}\n{}".format(shape,mean))
             self.registration(mean, shape)
             i += 1
-
+            
+            print("Etape de shooting initiale, fichiers utilises :\nStart : {}\nMomenta : {}".format(start, momenta))
             self.shooting(1/i, start=start, momenta=momenta, control_points=control_points)
             # Same start, momenta and control_points (path are the same but they have been updated)
 
