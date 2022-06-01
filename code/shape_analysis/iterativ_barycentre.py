@@ -72,7 +72,7 @@ class IterativBarycentre():
         print("Etape de registration initiale, fichiers utilises :\n{}\n{}".format(shape1,shape2))
         self.registration(shape1, shape2)
         i = 2
-        start = join(self.registration_dir, "DeterministicAtlas__flow__shape__subject_target__tp_0.png")
+        start = join(self.registration_dir, "DeterministicAtlas__flow__shape__subject_target__tp_0.vtk")
         momenta = join(self.registration_dir, "DeterministicAtlas__EstimatedParameters__Momenta.txt")
         control_points = join(self.registration_dir, "DeterministicAtlas__EstimatedParameters__ControlPoints.txt")
         print("Etape de shooting initiale, fichiers utilises :\nStart : {}\nMomenta : {}".format(start, momenta))
