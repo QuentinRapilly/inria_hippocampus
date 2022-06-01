@@ -83,7 +83,7 @@ class IterativBarycentre():
             shape = self.shapes.pop()
 
             mean_tab = [filename for filename in listdir(self.shooting_dir) if filename.find("start")>=0]
-            idx = [float(splitext(filename).split("_")[-1]) for filename in mean_tab]
+            idx = [float(splitext(filename)[0].split("_")[-1]) for filename in mean_tab]
             indexes = np.argmax(idx)
             mean = join(self.shooting_dir, mean_tab[indexes])
             print("Etape de registration initiale, fichiers utilises :\n{}\n{}".format(shape,mean))
