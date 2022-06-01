@@ -75,10 +75,11 @@ class IterativBarycentre():
         start = join(self.registration_dir, "DeterministicAtlas__flow__shape__subject_target__tp_0.vtk")
         momenta = join(self.registration_dir, "DeterministicAtlas__EstimatedParameters__Momenta.txt")
         control_points = join(self.registration_dir, "DeterministicAtlas__EstimatedParameters__ControlPoints.txt")
-        print("Etape de shooting initiale, fichiers utilises :\nStart : {}\nMomenta : {}".format(start, momenta))
+        print("Etape de shooting initiale, fichiers utilises :\nStart : {}\nMomenta : {}\nControl Points : {}"\
+                .format(start, momenta, control_points))
         self.shooting(1/i, start=start, momenta=momenta, control_points=control_points)
 
-        while len(self.shape) > 0:
+        while len(self.shapes) > 0:
             shape = self.shapes.pop()
 
             mean_tab = [filename for filename in listdir(self.shooting_dir) if filename.find("stop")>=0]
