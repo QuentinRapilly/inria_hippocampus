@@ -3,6 +3,12 @@ from os import popen, listdir, mkdir, remove
 from os.path import join, isdir
 
 def create_binary_file(input_file, output_file, upper, lower):
+    """
+        Create a binary mask with 1 where the choosen (between upper and lower) labels are and 0 anywhere else.
+        inputs :
+            - input_file : the input MRI
+            - output_file : where to store the post 
+    """
     cmd = "animaThrImage -u {} -t {} -i {} -o {}".format(upper, lower, input_file, output_file)
     infos = popen(cmd)
     infos = infos.read()

@@ -48,11 +48,12 @@ def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."
 
     # as we have severall runs for each subject, we sort them by subject and keep only one
     for filename in listdir(images_path):
-        sub = filename.split("_")[0]
-        if sub_dic.get(sub) == None:
-            sub_dic[sub] = [filename]
-        else :
-            sub_dic[sub].append(filename)
+        if filename.find("sub")==0:
+            sub = filename.split("_")[0]
+            if sub_dic.get(sub) == None:
+                sub_dic[sub] = [filename]
+            else :
+                sub_dic[sub].append(filename)
 
     images = [join(images_path, sorted(sub_dic[sub])[0]) for sub in sub_dic]
 

@@ -79,19 +79,21 @@ class IterativBarycentre():
                 .format(start, momenta, control_points))
         self.shooting(1/i, start=start, momenta=momenta, control_points=control_points)
 
+        cpt = 0
         while len(self.shapes) > 0:
+            cpt += 1
             shape = self.shapes.pop()
 
             mean_tab = [filename for filename in listdir(self.shooting_dir) if filename.find("start")>=0]
             idx = [float(splitext(filename)[0].split("_")[-1]) for filename in mean_tab]
             indexes = np.argmax(idx)
             mean = join(self.shooting_dir, mean_tab[indexes])
-            print("Etape de registration initiale, fichiers utilises :\n{}\n{}".format(shape,mean))
+            print("Etape de registration {}, fichiers utilises :\n{}\n{}".format(cpt,shape,mean))
             self.registration(mean, shape)
             i += 1
             
-            print("Etape de shooting initiale, fichiers utilises :\nStart : {}\nMomenta : {}\nControl Points : {}"\
-                .format(start, momenta, control_points))
+            print("Etape de shooting {}, fichiers utilises :\nStart : {}\nMomenta : {}\nControl Points : {}"\
+                .format(cpt, start, momenta, control_points))
             self.shooting(1/i, start=start, momenta=momenta, control_points=control_points)
             # Same start, momenta and control_points (path are the same but they have been updated)
 
