@@ -84,7 +84,7 @@ def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."
         transformation(label, mni_path, tsf, lab_out)
 
 
-def to_mni_with_transformation(transformation_path, labels_path, mni_path, output_path, split_label_at = "."):
+def to_mni_with_transformation(transformation_path, labels_path, mni_path, output_path, split_label_at = "_"):
     assert isdir(output_path)
     
     #print("mni path : {}".format(mni_path))
