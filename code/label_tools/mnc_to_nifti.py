@@ -80,6 +80,7 @@ def mnc_to_nifti(in_path, out_path, model_path, using_model = True, verbose = Tr
                 else :
                     cmd = transform_labels(join(in_path,file), join(out_path,name+".nii.gz"))
                 
+                print("Using cmd :\n{}".format(cmd))
                 process_cmd(cmd)
 
 
