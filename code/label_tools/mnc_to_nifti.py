@@ -52,7 +52,7 @@ def find_corresponding_model(model_dic, name):
     """
     return sorted(model_dic[name])[0]
 
-def mnc_to_nifti(in_path, out_path, model_path):
+def mnc_to_nifti(in_path, out_path, model_path, using_model = True, verbose = True):
     # to process every file in a directory
     if isdir(in_path):
 
@@ -63,12 +63,23 @@ def mnc_to_nifti(in_path, out_path, model_path):
         files = [file for file in listdir(in_path) if file.find("sub")==0]
 
         for file in files:
+            
+            if verbose : print("Processing file : {}".format(file))
+
+            model_space = find_corresponding_model(model_dic,name)
+
+            if verbose : print("Using model : {}".format(model_space))
+            
             name = file.split("_")[0]
             
             if METHOD == USING_ANIMA:
                 # calls anima function
-                cmd = transform_labels_with_model_space(join(in_path,file), join(out_path,name+".nii.gz"),\
-                    join(model_path,find_corresponding_model(model_dic,name)))
+                if using_model :
+                    cmd = transform_labels_with_model_space(join(in_path,file), join(out_path,name+".nii.gz"),\
+                        join(model_path,model_space))
+                else :
+                    cmd = transform_labels(join(in_path,file), join(out_path,name+".nii.gz"))
+                
                 process_cmd(cmd)
 
 
@@ -78,13 +89,16 @@ if __name__ == "__main__":
     parser.add_argument("-i","--in_path", help="Path to MRIs to segment", required=True)
     parser.add_argument("-o", "--out_path", help="Path to dir where to store segmetations", required=True)
     parser.add_argument("-m", "--model_path", help = "Path to the location of the images corresponding to the labels", required=True)
-    
+    parser.add_argument("-M", "--using_model", default=True, help="Boolean : True = using the corresponding MRI as reference space\
+        False = not using it.")
+
     args = parser.parse_args()
 
     in_path = args.in_path
     out_path = args.out_path
     model_path = args.model_path
+    using_model = args.using_model
 
-    mnc_to_nifti(in_path, out_path, model_path)
+    mnc_to_nifti(in_path, out_path, model_path, using_model)
 
 
