@@ -90,7 +90,7 @@ if __name__ == "__main__":
     parser.add_argument("-i","--in_path", help="Path to MRIs to segment", required=True)
     parser.add_argument("-o", "--out_path", help="Path to dir where to store segmetations", required=True)
     parser.add_argument("-m", "--model_path", help = "Path to the location of the images corresponding to the labels", required=True)
-    parser.add_argument("-M", "--using_model", default=True, help="Boolean : True = using the corresponding MRI as reference space\
+    parser.add_argument("-M", "--using_model", type=bool, default=True, help="Boolean : True = using the corresponding MRI as reference space\
         False = not using it.")
 
     args = parser.parse_args()
