@@ -1,6 +1,7 @@
 from os import system, listdir
 from os.path import isdir, join, splitext
 import argparse
+from xmlrpc.client import boolean
 
 
 USING_ANIMA = 0
@@ -90,7 +91,7 @@ if __name__ == "__main__":
     parser.add_argument("-i","--in_path", help="Path to MRIs to segment", required=True)
     parser.add_argument("-o", "--out_path", help="Path to dir where to store segmetations", required=True)
     parser.add_argument("-m", "--model_path", help = "Path to the location of the images corresponding to the labels", required=True)
-    parser.add_argument("-M", "--using_model", type=bool, default=True, help="Boolean : True = using the corresponding MRI as reference space\
+    parser.add_argument("-M", "--using_model", choices=["yes", "no"], default="yes", help="Boolean : True = using the corresponding MRI as reference space\
         False = not using it.")
 
     args = parser.parse_args()
@@ -98,7 +99,7 @@ if __name__ == "__main__":
     in_path = args.in_path
     out_path = args.out_path
     model_path = args.model_path
-    using_model = args.using_model
+    using_model = (args.using_model == "yes")
 
     mnc_to_nifti(in_path, out_path, model_path, using_model)
 
