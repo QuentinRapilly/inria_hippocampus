@@ -65,12 +65,12 @@ def mnc_to_nifti(in_path, out_path, model_path, using_model = True, verbose = Tr
         for file in files:
             
             if verbose : print("Processing file : {}".format(file))
+            
+            name = file.split("_")[0]
 
             model_space = find_corresponding_model(model_dic,name)
 
             if verbose : print("Using model : {}".format(model_space))
-            
-            name = file.split("_")[0]
             
             if METHOD == USING_ANIMA:
                 # calls anima function
