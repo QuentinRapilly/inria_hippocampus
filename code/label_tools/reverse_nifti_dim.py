@@ -16,16 +16,24 @@ def reverse_file(input_file, output_file, dims = (0,1), using_header = False, ve
         print("Values in data : {}".format(np.unique(data)))
     #TODO modifier le header pour changer l'orientation
     sform = nii.get_sform()
+    if verbose : 
+        print("sform before : {}".format(sform))
     mat = np.eye(4)
     for d in dims:
         mat[d,d] = -mat[d,d]
     sform = sform @ mat
+
+    if verbose : 
+        print("sform after : {}".format(sform))
     
     if using_header:
         nii.set_sform(sform)
         new_img = nibabel.nifti1.Nifti1Image(new_data, sform, nii.header)
     else :
         new_img = nibabel.nifti1.Nifti1Image(new_data, sform)
+
+    if verbose : 
+        print("Values after creating new image : {}".format(np.unique(new_img.get_fdata())))
 
     new_img.to_filename(output_file)
 
