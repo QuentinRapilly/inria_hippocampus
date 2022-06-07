@@ -5,11 +5,15 @@ from os.path import join
 
 import argparse
 
-def reverse_file(input_file, output_file, dims = (0,1), using_header = False):
+def reverse_file(input_file, output_file, dims = (0,1), using_header = False, verbose = True):
 
+    if verbose :
+        print("Processing file : {}".format(input_file))
     nii = nibabel.load(input_file)
     data = nii.get_fdata()
     new_data = np.flip(data, dims)
+    if verbose : 
+        print("Values in data : {}".format(np.unique(data)))
     #TODO modifier le header pour changer l'orientation
     sform = nii.get_sform()
     mat = np.eye(4)
