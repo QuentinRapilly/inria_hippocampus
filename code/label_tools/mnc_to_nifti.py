@@ -1,13 +1,12 @@
-from os import system, listdir
+from os import system, listdir, popen, mkdir
 from os.path import isdir, join, splitext
 import argparse
-from xmlrpc.client import boolean
 
 
 USING_ANIMA = 0
-USING_NIBABEL = 1
+USING_MINC = 1
 
-METHOD = USING_ANIMA
+METHOD = USING_MINC
 
 def transform_labels(path_in, path_out):
     """
@@ -25,6 +24,21 @@ def transform_labels_with_model_space(path_in, path_out, path_model):
     """
     cmd = transform_labels(path_in, path_out) + " -s {}".format(path_model)
     return cmd
+
+def create_float_file(path_in, path_out):
+
+    cmd = "mincreshape -float {} {}".format(path_in, path_out)
+    infos = popen(cmd)
+    infos = infos.read()
+
+    return infos
+
+def minc_mnc2nii(path_in, path_out):
+    cmd = "mnc2nii -nii {} {}".format(path_in, path_out)
+    infos = popen(cmd)
+    infos = infos.read()
+
+    return infos
 
 def process_cmd(cmd):
     """
@@ -68,21 +82,35 @@ def mnc_to_nifti(in_path, out_path, model_path, using_model = True, verbose = Tr
             if verbose : print("Processing file : {}".format(file))
             
             name = file.split("_")[0]
-
-            model_space = find_corresponding_model(model_dic,name)
-
-            if verbose : print("Using model : {}".format(model_space))
             
             if METHOD == USING_ANIMA:
                 # calls anima function
                 if using_model :
+                    model_space = find_corresponding_model(model_dic,name)
+                    if verbose : print("Using model : {}".format(model_space))
                     cmd = transform_labels_with_model_space(join(in_path,file), join(out_path,name+".nii.gz"),\
                         join(model_path,model_space))
                 else :
-                    cmd = transform_labels(join(in_path,file), join(out_path,name+".nii.gz"))
-                
-                print("Using cmd :\n{}".format(cmd))
+                    cmd = transform_labels(join(in_path,file), join(out_path,name+".nii.gz"))                
                 process_cmd(cmd)
+
+
+def mnc2nii_dir(path_in, path_out):
+    float_dir = join(path_out, "float_files")
+    out_dir = join(path_out, "nii_files")
+    if not isdir(float_dir) : mkdir(float_dir)
+    if not isdir(out_dir) : mkdir(out_dir)
+
+    files = [file for file in listdir(in_path) if file.find("sub")==0]
+    for filename in listdir(files):
+        name = filename.split(".")
+        
+        float_file = join(float_dir, filename)
+        nii_file = join(out_dir, name+".nii")
+
+        create_float_file(join(path_in, filename), float_file)
+        minc_mnc2nii(float_file, nii_file)
+
 
 
 if __name__ == "__main__":
@@ -90,8 +118,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-i","--in_path", help="Path to MRIs to segment", required=True)
     parser.add_argument("-o", "--out_path", help="Path to dir where to store segmetations", required=True)
-    parser.add_argument("-m", "--model_path", help = "Path to the location of the images corresponding to the labels", required=True)
-    parser.add_argument("-M", "--using_model", choices=["yes", "no"], default="yes", help="Boolean : True = using the corresponding MRI as reference space\
+    parser.add_argument("-m", "--model_path", help = "Path to the location of the images corresponding to the labels")
+    parser.add_argument("-M", "--using_model", choices=["yes", "no"], default="no", help="Boolean : True = using the corresponding MRI as reference space\
         False = not using it.")
 
     args = parser.parse_args()
@@ -101,6 +129,8 @@ if __name__ == "__main__":
     model_path = args.model_path
     using_model = (args.using_model == "yes")
 
-    mnc_to_nifti(in_path, out_path, model_path, using_model)
+    #mnc_to_nifti(in_path, out_path, model_path, using_model)
+
+    mnc2nii_dir(in_path, out_path)
 
 
