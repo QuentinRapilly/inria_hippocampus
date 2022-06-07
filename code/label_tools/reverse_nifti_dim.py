@@ -5,7 +5,7 @@ from os.path import join
 
 import argparse
 
-def reverse_file(input_file, output_file, dims = (0,1), using_header = False, verbose = True):
+def reverse_file(input_file, output_file, dims = (0,1), using_header = False, verbose = False):
 
     if verbose :
         print("Processing file : {}".format(input_file))
@@ -17,7 +17,7 @@ def reverse_file(input_file, output_file, dims = (0,1), using_header = False, ve
     #TODO modifier le header pour changer l'orientation
     sform = nii.get_sform()
     if verbose : 
-        print("sform before : {}".format(sform))
+        print("sform before : {}".format(sform)) 
     mat = np.eye(4)
     for d in dims:
         mat[d,d] = -mat[d,d]
