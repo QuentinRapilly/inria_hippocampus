@@ -21,7 +21,7 @@ def reverse_file(input_file, output_file, dims = (0,1), using_header = False, ve
     mat = np.eye(4)
     for d in dims:
         mat[d,d] = -mat[d,d]
-    sform = sform @ mat
+    sform = mat @ sform 
 
     if verbose : 
         print("sform after : {}".format(sform))
