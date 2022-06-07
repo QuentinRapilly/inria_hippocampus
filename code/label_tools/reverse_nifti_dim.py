@@ -44,6 +44,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    dims = [int(d) for d in args.dimensions]
+    dims = [int(d) for d in args.dimensions.flip(',')]
 
     reverse_dir(args.input, args.output, dims)
