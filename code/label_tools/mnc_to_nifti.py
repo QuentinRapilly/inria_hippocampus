@@ -103,7 +103,7 @@ def mnc2nii_dir(path_in, path_out):
 
     files = [file for file in listdir(in_path) if file.find("sub")==0]
     for filename in files:
-        name = filename.split(".")
+        name = filename.split(".")[0]
         
         float_file = join(float_dir, filename)
         nii_file = join(out_dir, name+".nii")
