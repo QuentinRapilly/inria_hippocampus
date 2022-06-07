@@ -8,7 +8,7 @@ import argparse
 def reverse_file(input_file, output_file, dims = (0,1), using_header = False):
 
     nii = nibabel.load(input_file)
-    data = nii.dataobj
+    data = nii.get_fdata()
     new_data = np.flip(data, dims)
     #TODO modifier le header pour changer l'orientation
     sform = nii.get_sform()
@@ -44,6 +44,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    dims = [int(d) for d in args.dimensions.flip(',')]
+    dims = [int(d) for d in args.dimensions.split(',')]
 
     reverse_dir(args.input, args.output, dims)
