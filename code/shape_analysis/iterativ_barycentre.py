@@ -1,8 +1,9 @@
 import argparse
 from deformetrica import Deformetrica
 import json
-from os import listdir, mkdir
-from os.path import join, isdir, splitext
+from os import listdir, mkdir, unlink
+from os.path import join, isdir, splitext, isfile, islink
+from shutil import rmtree
 import numpy as np
 from datetime import datetime
 from time import time
@@ -33,6 +34,17 @@ class IterativBarycentre():
         with open(self.config_file,"r") as f:
             self.config = json.load(f)
 
+    def clean_dir(self, path_to_dir):
+        for filename in listdir(path_to_dir):
+            file_path = join(path_to_dir, filename)
+            try :
+                if isfile(file_path) or islink(file_path):
+                    unlink(file_path)
+                elif isdir(file_path):
+                    rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+
 
     def registration(self, shape1, shape2):
         self.reload_config()
@@ -60,6 +72,9 @@ class IterativBarycentre():
                 print("## Estimator options :\{}".format(json.dumps(estimator_spec, indent=4)), file=f_out)
         self.register.estimate_registration(template_spec, dataset_spec, model_spec, estimator_spec)
 
+        # Clean the other dir
+        self.clean_dir(self.shooting_dir)
+
 
     def shooting(self, weight, start, momenta, control_points):
         self.reload_config()
@@ -85,6 +100,8 @@ class IterativBarycentre():
                 print("## Model options :\{}".format(json.dumps(model_spec, indent=4)), file=f_out)
         # shooting 
         self.shooter.compute_shooting(template_spec, model_spec)
+
+        self.clean_dir(self.registration_dir)
 
 
     def iterativ_barycentre(self):
