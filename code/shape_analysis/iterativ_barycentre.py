@@ -49,10 +49,10 @@ class IterativBarycentre():
         # registration
         if self.verbose :
             with open(join(self.logdir, "registration_{}.txt".format(datetime.fromtimestamp(time()))),"w") as f_out :
-                print("## Template spec :\{}".format(json.dump(template_spec, indent=4)), file=f_out)
-                print("## Dataset spec :\{}".format(json.dump(dataset_spec, indent=4)), file=f_out)
-                print("## Model options :\{}".format(json.dump(model_options, indent=4)), file=f_out)
-                print("## Estimator options :\{}".format(json.dump(estimator_options, indent=4)), file=f_out)
+                print("## Template spec :\{}".format(json.dumps(template_spec, indent=4)), file=f_out)
+                print("## Dataset spec :\{}".format(json.dumps(dataset_spec, indent=4)), file=f_out)
+                print("## Model options :\{}".format(json.dumps(model_options, indent=4)), file=f_out)
+                print("## Estimator options :\{}".format(json.dumps(estimator_options, indent=4)), file=f_out)
         self.register.estimate_registration(template_spec, dataset_spec, model_options, estimator_options)
 
 
@@ -75,8 +75,8 @@ class IterativBarycentre():
 
         if self.verbose :
             with open(join(self.logdir, "shooting_{}.txt".format(datetime.fromtimestamp(time()))),"w") as f_out :
-                print("## Template spec :\{}".format(json.dump(template_spec, indent=4)), file=f_out)
-                print("## Model options :\{}".format(json.dump(model_spec, indent=4)), file=f_out)
+                print("## Template spec :\{}".format(json.dumps(template_spec, indent=4)), file=f_out)
+                print("## Model options :\{}".format(json.dumps(model_spec, indent=4)), file=f_out)
         # shooting 
         self.shooter.compute_shooting(template_spec, model_spec)
 
