@@ -119,8 +119,8 @@ class IterativBarycentre():
             self.shooting(1/i, start=start, momenta=momenta, control_points=control_points)
             # Same start, momenta and control_points (path are the same but they have been updated)
 
-        mean_tab = [filename for filename in listdir(self.shooting_dir) if filename.find("stop")>=0]
-        idx = [float(splitext(filename)[0].split("_")[-1]) for filename in mean]
+        mean_tab = [filename for filename in listdir(self.shooting_dir) if filename.find("start")>=0]
+        idx = [float(splitext(filename)[0].split("_")[-1]) for filename in mean_tab]
         indexes = np.argmax(idx)
         mean = join(self.shooting_dir, mean_tab[indexes])
 
