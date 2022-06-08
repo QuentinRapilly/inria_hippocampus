@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<TransformationList>
+<Transformation>
+<Type>linear</Type>
+<Inversion>0</Inversion>
+<Path>/data/ccury/Rajah_data/MNI/transform/txt_files/sub-5102.txt</Path>
+</Transformation>
+</TransformationList>
