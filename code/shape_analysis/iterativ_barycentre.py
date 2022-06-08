@@ -9,7 +9,7 @@ from time import time
 
 class IterativBarycentre():
 
-    def __init__(self, input_path, output_path, config=None, verbose = False,  logdir = './logdir') -> None:
+    def __init__(self, input_path, output_path, config_file=None, verbose = False,  logdir = './logdir') -> None:
         self.registration_dir = join(output_path, "registration")
         if not isdir(self.registration_dir) :
             mkdir(self.registration_dir)
@@ -23,14 +23,19 @@ class IterativBarycentre():
         self.shapes = [join(self.input_path, filename) for filename in listdir(input_path)]
         assert len(self.shapes) > 1
         self.output_path = output_path
-        self.config = config
+        self.config_file = config_file
         self.logdir = logdir
         self.verbose = verbose
         if self.verbose :
             if not isdir(self.logdir) : mkdir(self.logdir)
 
+    def reload_config(self):
+        with open(self.config_file,"r") as f:
+            self.config = json.load(f)
+
 
     def registration(self, shape1, shape2):
+        self.reload_config()
         cfg = self.config["registration"].copy()
 
         # template_specification dic modifications
@@ -42,21 +47,22 @@ class IterativBarycentre():
         dataset_spec["dataset_filenames"].append([{"shape" : shape2}])
         dataset_spec["subject_ids"].append("target")
 
-        model_options = cfg["model_options"]
+        model_spec = cfg["model_options"]
 
-        estimator_options = cfg["estimator_options"]
+        estimator_spec = cfg["estimator_options"]
         
         # registration
         if self.verbose :
             with open(join(self.logdir, "registration_{}.txt".format(datetime.fromtimestamp(time()))),"w") as f_out :
                 print("## Template spec :\{}".format(json.dumps(template_spec, indent=4)), file=f_out)
                 print("## Dataset spec :\{}".format(json.dumps(dataset_spec, indent=4)), file=f_out)
-                print("## Model options :\{}".format(json.dumps(model_options, indent=4)), file=f_out)
-                print("## Estimator options :\{}".format(json.dumps(estimator_options, indent=4)), file=f_out)
-        self.register.estimate_registration(template_spec, dataset_spec, model_options, estimator_options)
+                print("## Model options :\{}".format(json.dumps(model_spec, indent=4)), file=f_out)
+                print("## Estimator options :\{}".format(json.dumps(estimator_spec, indent=4)), file=f_out)
+        self.register.estimate_registration(template_spec, dataset_spec, model_spec, estimator_spec)
 
 
     def shooting(self, weight, start, momenta, control_points):
+        self.reload_config()
         cfg = self.config["shooting"].copy()
 
         # template_specification dic modifications
@@ -133,15 +139,9 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
 
-    if args.config != None:
-        with open(args.config,"r") as f:
-            config = json.load(f)
-    else :
-        config = None
-
     verbose = (args.verbose == "yes")
 
-    algo = IterativBarycentre(args.in_path, args.out_path, config, verbose=verbose)
+    algo = IterativBarycentre(args.in_path, args.out_path, args.config, verbose=verbose)
 
     mean = algo.iterativ_barycentre()
 
