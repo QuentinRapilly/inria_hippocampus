@@ -1,14 +1,18 @@
 import argparse
 from re import template
+
+from importlib_metadata import version
 from deformetrica import Deformetrica
 import json
 from os import listdir, mkdir
 from os.path import join, isdir, splitext
 import numpy as np
+from datetime import datetime
+from time import time
 
 class IterativBarycentre():
 
-    def __init__(self, input_path, output_path, config=None) -> None:
+    def __init__(self, input_path, output_path, config=None, verbose = False,  logdir = './logdir') -> None:
         self.registration_dir = join(output_path, "registration")
         if not isdir(self.registration_dir) :
             mkdir(self.registration_dir)
@@ -23,6 +27,10 @@ class IterativBarycentre():
         assert len(self.shapes) > 1
         self.output_path = output_path
         self.config = config
+        self.logdir = logdir
+        self.verbose = verbose
+        if self.verbose :
+            if not isdir(self.logdir) : mkdir(self.logdir)
 
 
     def registration(self, shape1, shape2):
@@ -42,6 +50,12 @@ class IterativBarycentre():
         estimator_options = cfg["estimator_options"]
         
         # registration
+        if self.verbose :
+            with open(join(self.logdir, "registration_{}.txt".format(datetime.fromtimestamp(time()))),"w") as f_out :
+                print("## Template spec :\{}".format(json.dump(template_spec, indent=4)), file=f_out)
+                print("## Dataset spec :\{}".format(json.dump(dataset_spec, indent=4)), file=f_out)
+                print("## Model options :\{}".format(json.dump(model_options, indent=4)), file=f_out)
+                print("## Estimator options :\{}".format(json.dump(estimator_options, indent=4)), file=f_out)
         self.register.estimate_registration(template_spec, dataset_spec, model_options, estimator_options)
 
 
@@ -61,6 +75,11 @@ class IterativBarycentre():
         model_spec["initial_momenta"] = join(self.registration_dir,\
             momenta) # "DeterministicAtlas__EstimatedParameters__Momenta.txt"
 
+
+        if self.verbose :
+            with open(join(self.logdir, "shooting_{}.txt".format(datetime.fromtimestamp(time()))),"w") as f_out :
+                print("## Template spec :\{}".format(json.dump(template_spec, indent=4)), file=f_out)
+                print("## Model options :\{}".format(json.dump(model_spec, indent=4)), file=f_out)
         # shooting 
         self.shooter.compute_shooting(template_spec, model_spec)
 
@@ -113,6 +132,7 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--out_path", help="Dir where to store the log relative to the algorithm and the result",\
         required=True)
     parser.add_argument("-c", "--config", help="Path to the config file", default=None)
+    parser.add_argument("-v", "--verbose", choices=["yes", "no"], default="no")
     
     args = parser.parse_args()
 
@@ -122,7 +142,9 @@ if __name__ == "__main__":
     else :
         config = None
 
-    algo = IterativBarycentre(args.in_path, args.out_path, config)
+    verbose = (args.verbose == "yes")
+
+    algo = IterativBarycentre(args.in_path, args.out_path, config, verbose=verbose)
 
     mean = algo.iterativ_barycentre()
 
