@@ -1,7 +1,4 @@
 import argparse
-from re import template
-
-from importlib_metadata import version
 from deformetrica import Deformetrica
 import json
 from os import listdir, mkdir
