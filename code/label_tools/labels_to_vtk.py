@@ -43,7 +43,7 @@ def labels_to_vtk(in_dir, out_dir, labels, smoothing, iterations):
         infos = create_vtk(final_label, join(out_dir, name+".vtk"), smoothing, iterations)
 
     remove(final_label)
-    remove(step_label)
+    if len(labels)>1: remove(step_label)
     return infos
 
 
