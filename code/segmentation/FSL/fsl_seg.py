@@ -23,12 +23,13 @@ def fsl_seg(input_file, output_dir, label="L_Hipp"):
 def all_fsl_seg(input_dir, output_dir):
     print("## Starting segmentation process")
     for filename in listdir(input_dir):
-        name = filename.split(".")[0]
-        tmp_dir = join(output_dir, name)
-        if not isdir(tmp_dir):
-            mkdir(tmp_dir)
-        
-        fsl_seg(join(input_dir,filename), tmp_dir)
+        if filename.find("sub")==0:
+            name = filename.split(".")[0]
+            tmp_dir = join(output_dir, name)
+            if not isdir(tmp_dir):
+                mkdir(tmp_dir)
+            
+            fsl_seg(join(input_dir,filename), tmp_dir)
     
     seg_only = join(output_dir,"seg_only")
     mkdir(seg_only)
