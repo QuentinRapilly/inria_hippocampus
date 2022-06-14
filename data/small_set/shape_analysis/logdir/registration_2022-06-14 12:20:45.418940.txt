@@ -1,0 +1,32 @@
+## Template spec :\{
+    "shape": {
+        "deformable_object_type": "surfacemesh",
+        "kernel_type": "torch",
+        "noise_std": 0.001,
+        "attachment_type": "varifold",
+        "kernel_width": 4.0,
+        "filename": "/local/qrapilly/inria_hippocampus/data/small_set/vtk_shapes/left/test/subjects/sub-5104.vtk"
+    }
+}
+## Dataset spec :\{
+    "dataset_filenames": [
+        [
+            {
+                "shape": "/local/qrapilly/inria_hippocampus/data/small_set/vtk_shapes/left/test/subjects/sub-5108.vtk"
+            }
+        ]
+    ],
+    "subject_ids": [
+        "target"
+    ]
+}
+## Model options :\{
+    "deformation_kernel_type": "torch",
+    "deformation_kernel_width": 10.0,
+    "dimension": 3,
+    "deformable_object_type": "surfacemesh"
+}
+## Estimator options :\{
+    "optimization_method_type": "ScipyLBFGS",
+    "max_iterations": 50
+}

@@ -1,0 +1,16 @@
+## Template spec :\{
+    "start": {
+        "deformable_object_type": "surfacemesh",
+        "noise_std": -1,
+        "filename": "/local/qrapilly/inria_hippocampus/data/small_set/vtk_shapes/left/test/subjects/sub-5104.vtk"
+    }
+}
+## Model options :\{
+    "deformation_kernel_type": "torch",
+    "deformation_kernel_size": 10.0,
+    "dimension": 3,
+    "deformable_object_type": "surfacemesh",
+    "tmax": 0.5,
+    "initial_control_points": "/local/qrapilly/inria_hippocampus/data/small_set/shape_analysis/registration/DeterministicAtlas__EstimatedParameters__ControlPoints.txt",
+    "initial_momenta": "/local/qrapilly/inria_hippocampus/data/small_set/shape_analysis/registration/DeterministicAtlas__EstimatedParameters__Momenta.txt"
+}
