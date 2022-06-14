@@ -2,4 +2,8 @@
 TODO.md
 *.tar.gz
 */logdir
+<<<<<<< HEAD
 **/shape_analysis/
+=======
+/data/small_set/shape_analysis/
+>>>>>>> 2b6eea2566b6f117aa38ec91fb8f4552c1c7953b
