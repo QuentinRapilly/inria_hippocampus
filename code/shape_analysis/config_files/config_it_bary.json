@@ -49,7 +49,7 @@
         "model_options" :
         {
             "deformation_kernel_type" : "torch",
-            "deformation_kernel_size" : 10.0,
+            "deformation_kernel_width" : 10.0,
             "dimension": 3,
             "deformable_object_type" : "surfacemesh"
         }
