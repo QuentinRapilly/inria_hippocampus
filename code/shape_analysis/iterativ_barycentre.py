@@ -10,7 +10,7 @@ from time import time
 
 class IterativBarycentre():
 
-    def __init__(self, input_path, output_path, config_file=None, verbose = False,  logdir = './logdir') -> None:
+    def __init__(self, input_path, output_path, config_file=None, verbose = False,  logdir = './logdir', rm_at_each_step = True) -> None:
         self.registration_dir = join(output_path, "registration")
         if not isdir(self.registration_dir) :
             mkdir(self.registration_dir)
@@ -29,6 +29,8 @@ class IterativBarycentre():
         self.verbose = verbose
         if self.verbose :
             if not isdir(self.logdir) : mkdir(self.logdir)
+
+        self.rm_at_each_step = rm_at_each_step
 
     def reload_config(self):
         with open(self.config_file,"r") as f:
@@ -73,7 +75,7 @@ class IterativBarycentre():
         self.register.estimate_registration(template_spec, dataset_spec, model_spec, estimator_spec)
 
         # Clean the other dir
-        self.clean_dir(self.shooting_dir)
+        if self.rm_at_each_step : self.clean_dir(self.shooting_dir)
 
 
     def shooting(self, weight, start, momenta, control_points):
@@ -101,7 +103,7 @@ class IterativBarycentre():
         # shooting 
         self.shooter.compute_shooting(template_spec, model_spec)
 
-        self.clean_dir(self.registration_dir)
+        if self.rm_at_each_step : self.clean_dir(self.registration_dir)
 
 
     def iterativ_barycentre(self):

@@ -14,9 +14,9 @@
             {
                 "deformable_object_type" : "surfacemesh",
                 "kernel_type"  : "torch",
-                "noise_std" : 0.1,
+                "noise_std" : 0.001,
                 "attachment_type": "varifold",
-                "kernel_width" : 30.0
+                "kernel_width" : 4.0
             }
         },
         
@@ -29,7 +29,7 @@
         "model_options" :
         {
             "deformation_kernel_type": "torch",
-            "deformation_kernel_width": 30.0,
+            "deformation_kernel_width": 10.0,
             "dimension" : 3,
             "deformable_object_type" : "surfacemesh"
         }
@@ -49,7 +49,7 @@
         "model_options" :
         {
             "deformation_kernel_type" : "torch",
-            "deformation_kernel_size" : 40.0,
+            "deformation_kernel_size" : 10.0,
             "dimension": 3,
             "deformable_object_type" : "surfacemesh"
         }
