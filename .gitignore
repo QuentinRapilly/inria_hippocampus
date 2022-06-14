@@ -2,4 +2,4 @@
 TODO.md
 *.tar.gz
 */logdir
-*/shape_analysis/
+**/shape_analysis/
