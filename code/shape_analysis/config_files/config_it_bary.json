@@ -22,7 +22,7 @@
         
         "estimator_options" :
         {
-            "optimization_method_type" : "ScipyLBFGS",
+            "optimization_method_type" : "GradientAscent",
             "max_iterations" : 50
         },
         
