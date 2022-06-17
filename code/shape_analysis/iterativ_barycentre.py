@@ -10,7 +10,7 @@ from time import time
 
 class IterativBarycentre():
 
-    def __init__(self, input_path, output_path, config_file=None, verbose = False,  logdir = './logdir', rm_at_each_step = True) -> None:
+    def __init__(self, input_path, output_path, config_file=None, verbose = False,  logdir = './logdir', rm_at_each_step = True, starting_point = None) -> None:
         self.registration_dir = join(output_path, "registration")
         if not isdir(self.registration_dir) :
             mkdir(self.registration_dir)
@@ -31,6 +31,9 @@ class IterativBarycentre():
             if not isdir(self.logdir) : mkdir(self.logdir)
 
         self.rm_at_each_step = rm_at_each_step
+        self.starting_point = starting_point
+        if starting_point != None :
+            self.shapes.remove(starting_point)
 
     def reload_config(self):
         with open(self.config_file,"r") as f:
@@ -108,7 +111,10 @@ class IterativBarycentre():
 
     def iterativ_barycentre(self):
 
-        shape1 = self.shapes.pop()
+        if self.starting_point == None :
+            shape1 = self.shapes.pop()
+        else :
+            shape1 = self.starting_point
         shape2 = self.shapes.pop()
         print("Etape de registration initiale, fichiers utilises :\n{}\n{}".format(shape1,shape2))
         self.registration(shape1, shape2)
@@ -155,12 +161,15 @@ if __name__ == "__main__":
         required=True)
     parser.add_argument("-c", "--config", help="Path to the config file", default=None)
     parser.add_argument("-v", "--verbose", choices=["yes", "no"], default="no")
+    parser.add_argument("-s", "--start", default = None, help="Use this argument to precise a given file to start the algorithm")
     
     args = parser.parse_args()
 
     verbose = (args.verbose == "yes")
 
-    algo = IterativBarycentre(args.in_path, args.out_path, args.config, verbose=verbose)
+    start = args.start
+
+    algo = IterativBarycentre(args.in_path, args.out_path, args.config, verbose=verbose, starting_point = start)
 
     mean = algo.iterativ_barycentre()
 
