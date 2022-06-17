@@ -11,13 +11,41 @@ class MeanSpaceRegister():
         if not isdir(self.registration_dir) :
             mkdir(self.registration_dir)
         
-        self.register = Deformetrica(output_dir=self.registration_dir, verbosity='ERROR')
 
         self.input_path = input_path
         self.shapes = [join(self.input_path, filename) for filename in listdir(input_path)]
 
-    def register(self):
-        pass
+        self.config_file = config_file
+
+    
+    def reload_config(self):
+        with open(self.config_file,"r") as f:
+            self.config = json.load(f)
+
+    def init_register(self, dir):
+        self.register = Deformetrica(output_dir=dir, verbosity='ERROR')
+
+    def register(self, shape1, shape2, dir):
+        self.reload_config()
+        cfg = self.config["registration"].copy()
+
+        # template_specification dic modifications
+        template_spec = cfg["template_specification"]
+        template_spec["shape"]["filename"] = shape1
+
+        # dataset_options dic modifications
+        dataset_spec = cfg["dataset_specification"]
+        dataset_spec["dataset_filenames"].append([{"shape" : shape2}])
+        dataset_spec["subject_ids"].append("target")
+
+        model_spec = cfg["model_options"]
+
+        estimator_spec = cfg["estimator_options"]
+
+        self.init_register(dir)
+
+        self.register.estimate_registration(template_spec, dataset_spec, model_spec, estimator_spec)
+        
     
     def register_db(self):
         pass

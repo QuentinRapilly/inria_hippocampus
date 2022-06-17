@@ -14,7 +14,7 @@
             {
                 "deformable_object_type" : "surfacemesh",
                 "kernel_type"  : "torch",
-                "noise_std" : 0.0001,
+                "noise_std" : 0.001,
                 "attachment_type": "varifold",
                 "kernel_width" : 4.0
             }
@@ -42,7 +42,7 @@
             "start" :
             {
                 "deformable_object_type" : "surfacemesh",
-                "noise_std" : 0.0001
+                "noise_std" : 0.001
             }
         },
         
