@@ -1,11 +1,12 @@
 import argparse
+from atexit import register
 from deformetrica import Deformetrica
 import json
 from os import listdir, mkdir
-from os.path import join, isdir, splitext
+from os.path import join, isdir, splitext, basename
 
 class MeanSpaceRegister():
-    def __init__(self, input_path, output_path, config_file=None, verbose = False,  logdir = './logdir') -> None:
+    def __init__(self, input_path, output_path, mean_shape, config_file=None, verbose = False,  logdir = './logdir') -> None:
         
         self.registration_dir = join(output_path, "registration")
         if not isdir(self.registration_dir) :
@@ -15,7 +16,10 @@ class MeanSpaceRegister():
         self.input_path = input_path
         self.shapes = [join(self.input_path, filename) for filename in listdir(input_path)]
 
+        self.output_path = output_path
         self.config_file = config_file
+
+        self.mean_shape = mean_shape
 
     
     def reload_config(self):
@@ -48,8 +52,31 @@ class MeanSpaceRegister():
         
     
     def register_db(self):
-        pass
+        
+        for filename in self.shapes:
+
+            short_name = basename(filename)
+            
+            tmp_dir_name = splitext(short_name)[0]
+            dir_name = join(self.output_path, tmp_dir_name)
+
+            if not isdir(dir_name) :
+                mkdir(dir_name)
+            
+            self.register(self.mean_shape, filename, dir_name)
+            
 
 
 if __name__ == "__main__":
-    pass
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-i", "--input", help="")
+    parser.add_argument("-o", "--output", help="")
+    parser.add_argument("-m", "--mean_shape", help="")
+    parser.add_argument("-c", "--config", help="")
+
+    args = parser.parse_args()
+
+    algo = MeanSpaceRegister(args.input, args.output, args.mean_shape, args.config)
+
+    algo.register_db()
