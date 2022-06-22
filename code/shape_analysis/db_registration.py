@@ -27,7 +27,7 @@ class MeanSpaceRegister():
             self.config = json.load(f)
 
     def init_register(self, dir):
-        self.register = Deformetrica(output_dir=dir, verbosity='ERROR')
+        self.dfca = Deformetrica(output_dir=dir, verbosity='ERROR')
 
     def register(self, shape1, shape2, dir):
         self.reload_config()
@@ -48,7 +48,7 @@ class MeanSpaceRegister():
 
         self.init_register(dir)
 
-        self.register.estimate_registration(template_spec, dataset_spec, model_spec, estimator_spec)
+        self.dfca.estimate_registration(template_spec, dataset_spec, model_spec, estimator_spec)
         
     
     def register_db(self):
