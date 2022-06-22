@@ -56,7 +56,7 @@ class MeanSpaceRegister():
         for filename in self.shapes:
 
             short_name = basename(filename)
-            
+            print("Processing file : {}".format(filename))
             tmp_dir_name = splitext(short_name)[0]
             dir_name = join(self.output_path, tmp_dir_name)
 
