@@ -29,6 +29,7 @@ def all_fsl_seg(input_dir, output_dir):
             if not isdir(tmp_dir):
                 mkdir(tmp_dir)
             
+            print("Processing file : {}".format(filename))
             fsl_seg(join(input_dir,filename), tmp_dir)
     
     seg_only = join(output_dir,"seg_only")
