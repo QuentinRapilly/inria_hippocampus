@@ -225,7 +225,47 @@ Then we take the shape at the middle of the trajectory using method _shooting_. 
 
 
 This algorithm is available in the script `shape_analysis/iterativ_barycentre.py` and can be called using the following command (keep in mind that you should be in an conda env where Deformetrica has been installed) :
-`python3 code/shape_analysis\iterativ_barycentre.py -i <dir containing the .vtk shapes> -o <dir to write the output file> -c [optionnal] <config file for the config dict>` 
+`python3 code/shape_analysis\iterativ_barycentre.py -i <dir containing the .vtk shapes> -o <dir to write the output file> -c [optionnal] <config file for the config dict> -v <'yes'/'no' for verbose> -s <to precise a file which will be the starting point of the algorithm>`
+
+A config file is available at `/code/shape_analysis/config_files/config.json`. It contains every recquired argument to launch the previous code correctly and the parameters can be fine tuned in it.
+
+
+### Registration in the mean shape space
+
+Once the mean shape is computed using the previously described algorithm, one can registrate every shapes in the database in the mean shape space. It will be necessary to study them afterwards.
+This step just consist in a registration from the mean shape to every shape in the database.
+The result consist in initial momenta for every registration process.
+The script doing this step is `/code/shape_analysis/db_registration.py`
+
+One can use it with the following command :
+`python3 /code/shape_analysis/db_registration.py -i <Input dir containing the shapes> -o <Output dir where to store the results of the registration steps (momenta)> -m <Path to the mean shape> -c <Config file config dict (same as precedent)>`
+
+
+### Kernel-PCA 
+
+Once the momenta are obtained one may want to analyse them. To do so, one can use a usefull tool : kernel PCA.
+
+The main steps of this method are summed up below.
+
+Classic PCA consist in diagonalizing the covariance matrix obtained from our data $(X_j)_{1\leq j\leq n}$.
+$C = \frac{1}{n}\sum_{j=1}^n X_jX_j^T$
+To do so, the space in which our data lives need to be euclidian. This is not our case. To deal with this we will use the initial momenta of our registration and the scalar product associated to this space defined by :
+
+> Let $T$ and $T'$ be 2 shapes described by the initial momenta $\alpha$ and $\alpha'$ at the selected control points $\Lambda = \{x_i\}_{1\leq i\leq m}$,  $\langle T, T' \rangle = \sum_{i,j\in\{1,...,m\}^2} \alpha_i^T K_{i,j}{\alpha'}_j = \alpha^T K \alpha'$
+Where $K$ is the gaussian kernel matrix : $\forall i,j, ~ K_{i,j} = e^{-\frac{{||x_i-x_j||}^2}{\sigma^2}}I_d$ (with $\sigma$ the size of the deformation kernel and $I_d$ the identity matrix in dimension $d$, 3 in our case).
+
+The new covariance matrix is now $\hat{C} = \frac{1}{n}\sum_{j=1}^n \phi(X_j)\phi(X_j)^T$ with $\phi$ the transformation used on the data to bring them back in the Euclidian Space (RKHS).
+We then want to solve the equation : 
+$\hat{C}V=\lambda V$
+
+After some mathematics tricks (Cf _Kernel Principal Component Analysis_ from B. Schölkopt), we can consider solving the following system :
+$Mv = n\lambda v$
+with $M_{i,j}=\langle\phi(X_j),\phi(X_j) \rangle = \langle T_i, T_j \rangle = \alpha_i^T K \alpha_j$
+
+We can then build the eigen vectors $V$ of the first equation according to the following formula :
+$V = \sum_{j=1}^n v_j\phi(X_j)$
+
+
 
 
 --------------------------------------------------
