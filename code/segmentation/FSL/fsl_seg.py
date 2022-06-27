@@ -6,7 +6,7 @@ import argparse
 from pkg_resources import require
 
 
-def fsl_seg(input_file, output_dir, label="Hipp"):
+def fsl_seg(input_file, output_dir, label="L_Hipp,R_Hipp"):
     if label == None :
         label_cmd = ""
     else :
