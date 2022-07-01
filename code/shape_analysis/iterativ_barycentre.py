@@ -44,6 +44,10 @@ class IterativBarycentre():
             self.config = json.load(f)
 
     def clean_dir(self, path_to_dir):
+        """
+            Remove everything in a directory. This method is called to clean the registration and shooting
+            directories between steps to be sure there are no conflicts between files.
+        """
         for filename in listdir(path_to_dir):
             file_path = join(path_to_dir, filename)
             try :
@@ -56,8 +60,13 @@ class IterativBarycentre():
 
 
     def registration(self, shape1, shape2):
+
+        # Loads the config dict refering to "registration"
         self.reload_config()
         cfg = self.config["registration"].copy()
+
+        # Adds some specific parameters depending to the current call of the method (such as 
+        # the name of the files to use for the)
 
         # template_specification dic modifications
         template_spec = cfg["template_specification"]
@@ -72,13 +81,15 @@ class IterativBarycentre():
 
         estimator_spec = cfg["estimator_options"]
         
-        # registration
+        # Writes the parameters in logs files 
         if self.verbose :
             with open(join(self.logdir, "registration_{}.txt".format(datetime.fromtimestamp(time()))),"w") as f_out :
                 print("## Template spec :\{}".format(json.dumps(template_spec, indent=4)), file=f_out)
                 print("## Dataset spec :\{}".format(json.dumps(dataset_spec, indent=4)), file=f_out)
                 print("## Model options :\{}".format(json.dumps(model_spec, indent=4)), file=f_out)
                 print("## Estimator options :\{}".format(json.dumps(estimator_spec, indent=4)), file=f_out)
+        
+        # Registration step
         self.register.estimate_registration(template_spec, dataset_spec, model_spec, estimator_spec)
 
         # Clean the other dir
@@ -86,8 +97,12 @@ class IterativBarycentre():
 
 
     def shooting(self, weight, start, momenta, control_points):
+        # Loads the config dict refering to "shooting"
         self.reload_config()
         cfg = self.config["shooting"].copy()
+
+        # Adds some specific parameters depending to the current call of the method (such as 
+        # the name of the files to use for the)
 
         # template_specification dic modifications
         template_spec = cfg["template_specification"]
@@ -102,19 +117,27 @@ class IterativBarycentre():
         model_spec["initial_momenta"] = join(self.registration_dir,\
             momenta) # "DeterministicAtlas__EstimatedParameters__Momenta.txt"
 
-
+        # Writes the parameters in logs files 
         if self.verbose :
             with open(join(self.logdir, "shooting_{}.txt".format(datetime.fromtimestamp(time()))),"w") as f_out :
                 print("## Template spec :\{}".format(json.dumps(template_spec, indent=4)), file=f_out)
                 print("## Model options :\{}".format(json.dumps(model_spec, indent=4)), file=f_out)
-        # shooting 
+        
+        # Shooting step 
         self.shooter.compute_shooting(template_spec, model_spec)
 
         if self.rm_at_each_step : self.clean_dir(self.registration_dir)
 
 
     def iterativ_barycentre(self):
+        """
+            This methods computes the whole algorithm of iterativ barycentre :
+                - iterates on every shape of the dataset
+                - compute the trajectory from the mean shape to the new one
+                - shoot along the trajectory to the new mean shape
+        """
 
+        # Select two initial shapes to compute a first mean between them
         if self.starting_point == None :
             shape1 = self.shapes.pop()
         else :
@@ -130,14 +153,18 @@ class IterativBarycentre():
                 .format(start, momenta, control_points))
         self.shooting(1/i, start=start, momenta=momenta, control_points=control_points)
 
+        # Then apply the process for the whole dataset
         cpt = 0
         while len(self.shapes) > 0:
             cpt += 1
             shape = self.shapes.pop()
 
+            # The file to consider is always the one with the highest time in the shooting dir as we
+            # precise the max time. 
             mean_tab = [filename for filename in listdir(self.shooting_dir) if filename.find("start")>=0]
             idx = [float(splitext(filename)[0].split("_")[-1]) for filename in mean_tab]
             indexes = np.argmax(idx)
+            
             mean = join(self.shooting_dir, mean_tab[indexes])
             print("Etape de registration {}, fichiers utilises :\n{}\n{}".format(cpt,shape,mean))
             self.registration(mean, shape)
