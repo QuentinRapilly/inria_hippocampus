@@ -56,7 +56,7 @@ def all_fsl_seg(input_dir, output_dir):
 
     print("## Copying the segmentation in a dedicated dir")
     for dirname in listdir(output_dir):
-        if dirname.find("seg_only") != -1 :
+        if dirname.find("seg_only") == -1 :
             current_dir = join(output_dir, dirname)
 
             for filename in listdir(current_dir):
