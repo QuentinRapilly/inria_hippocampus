@@ -99,7 +99,7 @@ def kernel_PCA(data_files, control_points, std):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", help="Directory where the momentum are stored")
-    parser.add_argument("-o", "--output", help"Npz file where the results of the K-PCA are stored")
+    parser.add_argument("-o", "--output", help="Npz file where the results of the K-PCA are stored")
     parser.add_argument("-c", "--control_points", help="File containing the control points")
     parser.add_argument("-s", "--std", help="Value of std for the deformation kernel")
 
