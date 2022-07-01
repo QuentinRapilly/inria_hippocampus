@@ -4,24 +4,44 @@ import argparse
 from ntpath import basename
 
 def registration(mni, input, output, transform):
+    """
+        This function is used to find the transformation one need to apply to convert the input image in the 
+        MNI space given as argument.
+            - output : is where the input is stored once the transformation is applied.
+            - transform : is where the corresponding transformation is stored
+    """
     cmd = "animaPyramidalBMRegistration -r {} -m {} -o {} -O {} --ot 2".format(mni, input, output, transform)
     infos = popen(cmd)
     infos = infos.read()
     return infos
 
 def transformation(input, mni, transform, output):
+    """
+        This functions applies the transformation given as argument to the input image.
+        It is usefull to move some label files in the MNI space once the transformation has already been computed
+        for the corresponding MRI.
+    """
     cmd = "animaApplyTransformSerie -i {} -g {} -t {} -o {} -n nearest".format(input, mni, transform, output)
     infos = popen(cmd)
     infos = infos.read()
     return infos
 
 def create_xml_transformation(input, output):
+    """
+        Modifies the way the input transformation is stored to match the "transformation" method
+        requirements (txt=>xml)
+    """
     cmd = "animaTransformSerieXmlGenerator -i {} -o {}".format(input, output)
     infos = popen(cmd)
     infos = infos.read()
     return infos
 
 def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."):
+    """
+    For every image in the given directory, computes the transformation necessary to register it into the
+    MNI space. Then apply this transformation to the corresponding label file.
+    """
+
     # We check if there is not already a dir containing relocated images and then create it
     images_out = join(output_path, "images")
     assert not isdir(images_out)
@@ -61,6 +81,7 @@ def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."
 
     print("Step 1 : Creating transformation for images")
     for image in images :
+        # For each image, find the transformation and apply it to the image
         sub = basename(image).split("_")[0]
         img_out = join(images_out, sub+".nii.gz")
         tsf_out = join(transform_txt, sub+".txt")
@@ -77,6 +98,7 @@ def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."
     print("Step 2 : Applying obtained transfomration on labels")
 
     for label in labels:
+        # For each label file, finds the corresponding transformation and applies it
         sub = basename(label).split(split_label_at)[0] 
         lab_out = join(labels_out, sub+".nii.gz")
         tsf = transform_dic[sub]
@@ -85,10 +107,11 @@ def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."
 
 
 def to_mni_with_transformation(transformation_path, labels_path, mni_path, output_path, split_label_at = "_"):
-    assert isdir(output_path)
+    """
+        Apply the transformation to the label files if the have all already been computed.
+    """
     
-    #print("mni path : {}".format(mni_path))
-
+    assert isdir(output_path)
     transform_dic = {}
 
     for tsf in listdir(transformation_path):

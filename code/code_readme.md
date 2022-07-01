@@ -55,9 +55,24 @@ To downsample them to the original resolution one can either use the anima metho
 
 `python3 /code/label_tools/change_resolution.py -i <input dir> -o <output dir> -r <resolution for z,y,x (ex : 1,1,1)>`
 
-### How to use the CNN-Based Method
+### How to use the CNN-Based Method ?
+
 
 TODO : terminer l'implémentation et décrire son fonctionnement.
+
+
+### How to use FSL ?
+
+FSL is already installed on Calcarine and is up to be used once you are connected on the remote machine.
+
+The command we need to use is the following :
+`run_first_all -s <coma separated list describing the desired labels> -d -i <input MRI> -o <output dir>`
+Some precisions :
+* The interesting labels in our case are : "L_Hipp" for left hippocampus and "R_Hipp" for right one.
+* This command add some files in the input directory, be sure to copy your data in a dedicated dir in which adding data won't lead to any trouble.
+
+A script allows to use FSL segmentation on all our database :
+`/code/segmentation/FSL/fsl_seg.py -i <input dir> -o <output dir>`
 
 --------------------------
 
@@ -266,6 +281,9 @@ We can then build the eigen vectors $V$ of the first equation according to the f
 $V = \sum_{j=1}^n v_j\phi(X_j)$
 
 
+
+A script allows to process the kernel PCA :
+`python3 /code/shape_analysis/kernel-PCA.py -i <input momenta coming from the registration in mean space> -c <control points file> -s <value of the deformation kernel size (std) for the Deformetrica part> -o <output file storing results>`
 
 
 --------------------------------------------------

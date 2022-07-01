@@ -7,6 +7,11 @@ from pkg_resources import require
 
 
 def fsl_seg(input_file, output_dir, label="L_Hipp,R_Hipp"):
+    """
+        Launches the segmentation process of FSL on the input_file.
+        One can select the labels one want to extract with the argument "label" (ex : L_Hipp,R_Hipp 
+        for left and right hippocampus parts)
+    """
     if label == None :
         label_cmd = ""
     else :
@@ -21,17 +26,28 @@ def fsl_seg(input_file, output_dir, label="L_Hipp,R_Hipp"):
     return infos
 
 def all_fsl_seg(input_dir, output_dir):
+    """
+        Computes the FSL segmentation of every file in the given input directory.
+    """
+
     print("## Starting segmentation process")
+
+    # Iterates on every file in the input directory
     for filename in listdir(input_dir):
         if filename.find("sub")==0:
             name = filename.split(".")[0]
             tmp_dir = join(output_dir, name)
+
+            # Creates the dir where the result will be stored
             if not isdir(tmp_dir):
                 mkdir(tmp_dir)
             
             print("Processing file : {}".format(filename))
+            # Launches the segmentation
             fsl_seg(join(input_dir,filename), tmp_dir)
     
+    # Two files will be created (one for the left hippocampus, one for the right), we will store them in
+    # appropriate dir
     seg_only_left = join(output_dir,"seg_only_left")
     mkdir(seg_only_left)
 
@@ -40,10 +56,11 @@ def all_fsl_seg(input_dir, output_dir):
 
     print("## Copying the segmentation in a dedicated dir")
     for dirname in listdir(output_dir):
-        if dirname.find("seg_only") >=0 :
+        if dirname.find("seg_only") != -1 :
             current_dir = join(output_dir, dirname)
 
             for filename in listdir(current_dir):
+                # Moves the files in the corresponding dir.
                 if filename.find("L_Hipp_first.nii.gz") > -1:
                     to_copy = join(current_dir, filename)
                     destination = join(seg_only_left, dirname+".nii.gz")

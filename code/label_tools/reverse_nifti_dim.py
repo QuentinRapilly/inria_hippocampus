@@ -5,6 +5,12 @@ from os.path import join
 
 import argparse
 
+
+"""
+This file isn't used anymore, it was an attempt to correct the shift after the conversion from mnc to nifti.
+This isn't an issue anymore with minctoolkit.
+"""
+
 def reverse_file(input_file, output_file, dims = (0,1), using_header = False, verbose = False):
 
     if verbose :

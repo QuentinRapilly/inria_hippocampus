@@ -36,6 +36,10 @@ class IterativBarycentre():
             self.shapes.remove(starting_point)
 
     def reload_config(self):
+        """
+            The config dict is reloaded after every internal modification to avoid any mistake
+            caused by a saved modification that shoudn't be.
+        """
         with open(self.config_file,"r") as f:
             self.config = json.load(f)
 
