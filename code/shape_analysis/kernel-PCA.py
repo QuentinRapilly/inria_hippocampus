@@ -19,7 +19,7 @@ from os.path import join
 ## Reading of the momenta files
 def manage_momenta(data_files):
     vect_list = list()
-    n = len(filename)
+    n = len(data_files)
     for filename in data_files :
         with open(filename,"r") as f:
             data = f.readlines()
