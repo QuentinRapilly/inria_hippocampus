@@ -1,25 +1,29 @@
 from meshzoo import icosa_sphere
-import vtk
+import pyvista as pv
+import numpy as np
 import argparse
 
 
 if __name__ == "__main__" : 
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", "--nb_div")
+    parser.add_argument("-o", "--output")
+    parser.add_argument("-s", "--space")
 
     args = parser.parse_args()
-    n = args.nb_div
-    points, vertices = icosa_sphere(n)
+    output = args.output
+    n = int(args.nb_div)
+    points, edges = icosa_sphere(n)
 
-    v_points = vtk.vtkPoints()
-    v_vertices = vtk.vtkCellArray()
-    v_pd = vtk.vtkPolyData()
-    
-    n = points.shape[0]
+    space = pv.read(args.space)
+    x, X, y, Y, z, Z = space.GetBounds()
+    bounds = np.array([[x,X],[y,Y],[z,Z]])
+    gamma = np.max(bounds)
+    middle = (bounds[:,0]+bounds[:,1])/2
+    points = gamma*points + middle
 
-    v_points.SetNumberOfPoints(n)
-    for i in range(n):
-        v_points.SetPoint(i, points[i])
-        v_vertices.Set
-        v_vertices.InsertNextCell(1)
-        v_vertices.InsertCellPoint(i)
+    edges_modified = np.hstack((3*np.ones((edges.shape[0],1),dtype=int),edges)) 
+
+    mesh = pv.PolyData(points, edges_modified)
+
+    mesh.save(output)
