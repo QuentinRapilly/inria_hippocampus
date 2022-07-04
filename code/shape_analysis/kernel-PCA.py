@@ -26,8 +26,9 @@ def manage_momenta(data_files):
         _, m, d = [int(x) for x in data[0].split(" ")]
 
         data_tab = np.zeros((m*d))
-        for i in range(n):
-            data_tab[i*d:(i+1)*d] = [float(x) for x in data[i+2].split(" ")]
+        for i in range(m):
+            #print(data[i+2].split(" "))
+            data_tab[i*d:(i+1)*d] = [float(x) for x in data[i+2].split(" ")[:-1]]
         vect_list.append(data_tab)
     
     alpha = np.vstack(vect_list)
@@ -53,36 +54,50 @@ def compute_kernel(points, std):
 
     return K
 
-def compute_PCA(alpha, K, dimensions, exp_var=0.9):
+def compute_PCA(alpha, K, dimensions, exp_var=0.95, verbose=False):
     """
         Computes the Kernel PCA algorithm
     """
     n, m, d = dimensions
 
+    if verbose : print("Shape alpha : {}".format(alpha.shape))
+
     # Expands the kernel matrix according to the dim of our data space (here 3) : 
     # block K_expanded(i,j) = K(i,j)Id_d
     K_expanded = np.zeros((m*d, m*d))
-
+    
     for i in range(m):
         for j in range(m):
             K_expanded[i*d:(i+1)*d,j*d:(j+1)*d] = K[i,j]*np.eye(d)
-    
+    #print(K_expanded[0:9,0:9])    
+
+    if verbose : print("K_expanded shape : {}".format(K_expanded.shape))
+
     # Computes the matrix to diagonalize
     M = alpha @ K_expanded @ alpha.T
+    if verbose : print("M shape : {}".format(M.shape))
 
     # Diagonalization process
     w, v = np.linalg.eig(M)
+    w = np.real(w)
+    v = np.real(v)
+    
     vp = w/np.sum(w)
     order = np.flip(np.argsort(vp))
     sorted_vp = vp[order]
+    if verbose : print("Vp sorted : {}".format(sorted_vp))
     tot_variance = np.cumsum(sorted_vp)
-
+    
     ind_var = np.argmax(tot_variance>exp_var)
 
     sorted_v = [v[:,order[i]] for i in range(ind_var)]
     sorted_v = np.vstack(sorted_v)
 
-    V = alpha.T @ sorted_v
+    if verbose : print("Vect : {}".format(sorted_v))
+
+    if verbose : print("Sorted_v : {}".format(sorted_v.shape))
+
+    V = alpha.T @ sorted_v.T
 
     return sorted_vp, sorted_v
 
@@ -109,7 +124,7 @@ if __name__ == "__main__":
     data_files = [join(input, filename) for filename in listdir(input)]
 
     control_points = args.control_points
-    std = args.std
+    std = float(args.std)
 
     sorted_vp, sorted_v = kernel_PCA(data_files, control_points, std)
 
