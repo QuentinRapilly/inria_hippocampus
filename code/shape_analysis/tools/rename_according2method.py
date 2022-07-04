@@ -4,7 +4,7 @@ from shutil import copy
 import argparse
 
 
-
+methods = ["fsl", "ashs", "g_truth"]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -17,7 +17,7 @@ if __name__ == "__main__":
     mkdir(all_files)
 
     for method in listdir(input_dir):
-        if method != "all_files":
+        if method in methods:
             for i, dir_name  in enumerate(listdir(join(input_dir,method))):
                 dir = join(input_dir, method, dir_name)
                 for filename in listdir(dir):
