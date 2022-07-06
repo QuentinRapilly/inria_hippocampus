@@ -14,7 +14,7 @@
             {
                 "deformable_object_type" : "surfacemesh",
                 "kernel_type"  : "torch",
-                "noise_std" : 0.00001,
+                "noise_std" : 0.000001,
                 "attachment_type": "varifold",
                 "kernel_width" : 4.0
             }
@@ -23,13 +23,13 @@
         "estimator_options" :
         {
             "optimization_method_type" : "GradientAscent",
-            "max_iterations" : 50
+            "max_iterations" : 100
         },
         
         "model_options" :
         {
             "deformation_kernel_type": "torch",
-            "deformation_kernel_width": 10.0,
+            "deformation_kernel_width": 5.0,
             "dimension" : 3,
             "deformable_object_type" : "surfacemesh"
         }

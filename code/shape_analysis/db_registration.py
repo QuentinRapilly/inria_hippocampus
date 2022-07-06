@@ -1,5 +1,4 @@
 import argparse
-from atexit import register
 from deformetrica import Deformetrica
 import json
 from os import listdir, mkdir
