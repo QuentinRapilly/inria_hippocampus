@@ -1,0 +1,57 @@
+{
+    "registration" :
+    {
+        "dataset_specification" :
+        {
+            "dataset_filenames" : [],
+                
+            "subject_ids" : []
+        },
+        
+        "template_specification" :
+        {
+            "shape" :
+            {
+                "deformable_object_type" : "surfacemesh",
+                "kernel_type"  : "torch",
+                "noise_std" : 0.00001,
+                "attachment_type": "varifold",
+                "kernel_width" : 4.0
+            }
+        },
+        
+        "estimator_options" :
+        {
+            "optimization_method_type" : "GradientAscent",
+            "max_iterations" : 50
+        },
+        
+        "model_options" :
+        {
+            "deformation_kernel_type": "torch",
+            "deformation_kernel_width": 10.0,
+            "dimension" : 3,
+            "deformable_object_type" : "surfacemesh"
+        }
+    },
+    
+    "shooting" :
+    {
+        "template_specification" :
+        {
+            "start" :
+            {
+                "deformable_object_type" : "surfacemesh",
+                "noise_std" : 0.001
+            }
+        },
+        
+        "model_options" :
+        {
+            "deformation_kernel_type" : "torch",
+            "deformation_kernel_width" : 10.0,
+            "dimension": 3,
+            "deformable_object_type" : "surfacemesh"
+        }
+    }
+}
