@@ -115,7 +115,7 @@ if __name__ == "__main__":
 
     ##### Pre-processing input files#####
     # allows to keep only sub* files (that corresponds to subjects files) in the image directory
-    files = [file for file in os.listdir(img_dir) if file.find("sub")==0] 
+    files = [file for file in os.listdir(img_dir)] # if file.find("sub")==0] 
     
     file_list = files
 
