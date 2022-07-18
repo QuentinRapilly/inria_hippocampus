@@ -68,8 +68,8 @@ def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."
 
     # as we have severall runs for each subject, we sort them by subject and keep only one
     for filename in listdir(images_path):
-        if filename.find("sub")==0:
-            sub = filename.split("_")[0]
+        if True : # filename.find("sub")==0: # Modifs pour ADNI (et plus Rajah)
+            sub = filename.split(".")[0] # filename.split("_")[0] # Modifs pour ADNI (et plus Rajah)
             if sub_dic.get(sub) == None:
                 sub_dic[sub] = [filename]
             else :
@@ -82,7 +82,7 @@ def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."
     print("Step 1 : Creating transformation for images")
     for image in images :
         # For each image, find the transformation and apply it to the image
-        sub = basename(image).split("_")[0]
+        sub = basename(image).split(".")[0] # basename(image).split("_")[0]  # Modifs pour ADNI (et plus Rajah)
         img_out = join(images_out, sub+".nii.gz")
         tsf_out = join(transform_txt, sub+".txt")
 
