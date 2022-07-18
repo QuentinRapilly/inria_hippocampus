@@ -34,7 +34,7 @@ def all_fsl_seg(input_dir, output_dir):
 
     # Iterates on every file in the input directory
     for filename in listdir(input_dir):
-        if filename.find("sub")==0:
+        if True : # filename.find("sub")==0: # the second option is for ASHS bc there are files in imgs dir that arn't imgs
             name = filename.split(".")[0]
             tmp_dir = join(output_dir, name)
 
