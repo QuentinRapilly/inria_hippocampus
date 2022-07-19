@@ -106,7 +106,7 @@ def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."
         transformation(label, mni_path, tsf, lab_out)
 
 
-def to_mni_with_transformation(transformation_path, labels_path, mni_path, output_path, split_label_at = "_"):
+def to_mni_with_transformation(transformation_path, labels_path, mni_path, output_path, split_label_at = "."):
     """
         Apply the transformation to the label files if the have all already been computed.
     """
