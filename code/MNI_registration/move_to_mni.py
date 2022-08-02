@@ -106,7 +106,7 @@ def to_mni(images_path, labels_path, mni_path, output_path, split_label_at = "."
         transformation(label, mni_path, tsf, lab_out)
 
 
-def to_mni_with_transformation(transformation_path, labels_path, mni_path, output_path, split_label_at = "."):
+def to_mni_with_transformation(transformation_path, labels_path, mni_path, output_path, split_label_at = ".", use_ext = ".nii.gz"):
     """
         Apply the transformation to the label files if the have all already been computed.
     """
@@ -123,7 +123,7 @@ def to_mni_with_transformation(transformation_path, labels_path, mni_path, outpu
 
         tsf = transform_dic[sub]
         #print("transformation path : {}".format(tsf))
-        lab_out = join(output_path, sub+".nii.gz")
+        lab_out = join(output_path, sub+use_ext)
         lab_in = join(labels_path, label)
         #print("lab_in path : {}".format(lab_in))
         transformation(lab_in, mni_path, tsf, lab_out)
@@ -142,7 +142,7 @@ if __name__ == "__main__" :
 
     parser.add_argument("-M", "--method", default="random", choices=["compute", "use"], help="Choosing the method :\
         'compute' - computing transform from images, 'use' - using existing ")
-    
+    parser.add_argument("-e", "--extension", help = "Extension to use for output files (.nii or .nii.gz)")
     args = parser.parse_args()
 
     method = args.method
@@ -151,4 +151,4 @@ if __name__ == "__main__" :
     if method == "compute":
         to_mni(args.images, args.labels, args.mni, args.output)
     if method == "use":
-        to_mni_with_transformation(args.transform, args.labels, args.mni, args.output)
+        to_mni_with_transformation(args.transform, args.labels, args.mni, args.output, use_ext = args.extension)
