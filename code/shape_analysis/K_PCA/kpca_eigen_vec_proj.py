@@ -1,5 +1,4 @@
 import argparse
-from matplotlib.lines import _LineStyle
 import numpy as np
 from os import listdir
 from os.path import join
