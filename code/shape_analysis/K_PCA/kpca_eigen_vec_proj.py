@@ -41,7 +41,9 @@ def compute_proj(momenta_files, control_points, eigen, std, nb_proj=2, output = 
     ashs_idx, fsl_idx, g_truth_idx = [], [], []
 
     for i, filename in enumerate(momenta_files):
+        
         real_name = basename(filename)
+        if verbose : print(real_name)
 
         if real_name.find("ashs")>0:
             ashs_idx.append(i)
@@ -53,6 +55,8 @@ def compute_proj(momenta_files, control_points, eigen, std, nb_proj=2, output = 
         colors_list.append(get_subject_color(real_name))
 
     colors = np.array(colors_list)
+
+    if verbose: print("ashs idx : {}".format(ashs_idx))
 
 
     # Scatter pour ASHS
