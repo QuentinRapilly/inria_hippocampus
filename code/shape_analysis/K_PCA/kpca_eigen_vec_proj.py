@@ -87,7 +87,7 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
     # Scatter pour FSL
     plt.scatter(x=x[fsl_idx], y=y[fsl_idx], c=colors[fsl_idx], marker='v')
     # Scatter pour G_TRUTH
-    plt.scatter(x=x[g_truth_idx], y=y[g_truth_idx], c=colors[g_truth_idx], marker='+')        
+    plt.scatter(x=x[g_truth_idx], y=y[g_truth_idx], c=colors[g_truth_idx], marker='s')        
 
     for key in print_dic:
         res = print_dic[key]
