@@ -11,7 +11,7 @@ from kpca_tools import manage_momenta, manage_control_points, compute_kernel, ex
 def get_subject_color(filename):
     splitted = filename.split("_")
     id = splitted[-4]+splitted[-2]
-    r,g,b = (int(id[:3])/140)*0.6+0.2, (int(id[3:5])/100)*0.6+0.2, (int(id[5:])/100)*0.6+0.2
+    r,g,b = (int(id[:3])/140)*0.6+0.4, (int(id[3:5])/100)*0.6+0.4, (int(id[5:])/100)*0.6+0.4
 
     return np.array([r,g,b])
 
