@@ -97,14 +97,14 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
 
         res = print_dic.get(id)
         if res == None:
-            print_dic[id] = {"x":[x[i]], "y":[y[i]], "c":[COLORS[method]], "linestyle":"--"}
+            print_dic[id] = {"x":[x[i]], "y":[y[i]], "c":[COLORS[method]]}
         else:
             res["x"].append(x[i])
             res["y"].append(y[i])
             res["c"].append(COLORS[method])
 
     for key in print_dic:
-        plt.plot("x", "y", color="c", linestyle="linestyle", data=print_dic[key])
+        plt.plot("x", "y", c="c", linestyle="--", data=print_dic[key])
 
     plt.savefig(output)
 
