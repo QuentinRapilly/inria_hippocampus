@@ -1,4 +1,5 @@
 import argparse
+from matplotlib.lines import _LineStyle
 import numpy as np
 from os import listdir
 from os.path import join
@@ -104,7 +105,7 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
             res["c"].append(COLORS[method])
 
     for key in print_dic:
-        plt.plot(x="x", y="y", c="c", linestyle="linestyle", data=print_dic[key])
+        plt.plot("x", "y", color="c", linestyle="linestyle", data=print_dic[key])
 
     plt.savefig(output)
 
