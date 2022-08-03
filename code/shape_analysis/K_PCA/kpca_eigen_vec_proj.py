@@ -7,7 +7,6 @@ from ntpath import basename
 
 from kpca_tools import manage_momenta, manage_control_points, compute_kernel, expand_kernel
 
-COLORS = {"ashs":"blue", "fsl":"res", "g_truth":"green"}
 
 def get_subject_id(filename):
     splitted = filename.split("_")
@@ -48,30 +47,38 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
     x = proj[:,0]
     y = proj[:,1]
 
-    ## METHOD DE PRINT 1
-    """
+    ## PRINT (non definitif)
+    
     colors_list = list()
 
-    ashs_idx, fsl_idx, g_truth_idx = [], [], []
+    idx_method = {"ashs":[], "fsl":[], "g_truth":[]}
+
+    print_dic = {}
 
     for i, filename in enumerate(momenta_files):
         
         real_name = basename(filename)
         if verbose : print(real_name)
+        
+        method = get_used_method(real_name)
+        idx_method[method].append(i)
 
-        if real_name.find("ashs")>=0:
-            ashs_idx.append(i)
-        elif real_name.find("fsl")>=0:
-            fsl_idx.append(i)
-        elif real_name.find("g_truth")>=0:
-            g_truth_idx.append(i)
+        crt_color = get_subject_color(real_name)
 
-        colors_list.append(get_subject_color(real_name))
+        colors_list.append(crt_color)
+
+        id = get_subject_id(real_name)
+
+        res = print_dic.get(id)
+        if res == None:
+            print_dic[id] = {"x":[x[i]], "y":[y[i]], "c":crt_color}
+        else:
+            res["x"].append(x[i])
+            res["y"].append(y[i])
 
     colors = np.array(colors_list)
 
-    if verbose: print("ashs idx : {}".format(ashs_idx))
-
+    ashs_idx, fsl_idx, g_truth_idx = idx_method["ashs"], idx_method["fsl"], idx_method["g_truth"]
 
     # Scatter pour ASHS
     if verbose :
@@ -80,31 +87,11 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
     # Scatter pour FSL
     plt.scatter(x=x[fsl_idx], y=y[fsl_idx], c=colors[fsl_idx], marker='v')
     # Scatter pour G_TRUTH
-    plt.scatter(x=x[g_truth_idx], y=y[g_truth_idx], c=colors[g_truth_idx], marker='+')
-
-    """
-
-    ## FIN DE LA METHODE DE PRINT 1
-
-    ## METHODE DE PRINT 2
-
-    print_dic = {}
-
-    for i,filename in enumerate(momenta_files) :
-        real_name = basename(filename)
-        id = get_subject_id(real_name)
-        method = get_used_method(real_name)
-
-        res = print_dic.get(id)
-        if res == None:
-            print_dic[id] = {"x":[x[i]], "y":[y[i]], "c":[COLORS[method]]}
-        else:
-            res["x"].append(x[i])
-            res["y"].append(y[i])
-            res["c"].append(COLORS[method])
+    plt.scatter(x=x[g_truth_idx], y=y[g_truth_idx], c=colors[g_truth_idx], marker='+')        
 
     for key in print_dic:
-        plt.plot("x", "y", c="c", linestyle="--", data=print_dic[key])
+        res = print_dic[key]
+        plt.plot(res["x"], res["y"], c=res["c"], linestyle="--")
 
     plt.savefig(output)
 
