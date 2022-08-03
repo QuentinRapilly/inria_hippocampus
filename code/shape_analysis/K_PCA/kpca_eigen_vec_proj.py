@@ -15,7 +15,7 @@ def get_subject_color(filename):
 
     return np.array([r,g,b])
 
-def compute_proj(momenta_files, control_points, eigen, std, nb_proj=2, output = "out.png"):
+def compute_proj(momenta_files, control_points, eigen, std, nb_proj=2, output = "out.png", verbose = True):
     eigen_dic = np.load(eigen)
     eigen_vectors = eigen_dic["eigen_vectors"]
 
@@ -56,6 +56,8 @@ def compute_proj(momenta_files, control_points, eigen, std, nb_proj=2, output = 
 
 
     # Scatter pour ASHS
+    if verbose :
+        print("x : {}\ny : {}\ncolors:{}".format(x[ashs_idx], y[ashs_idx], colors[ashs_idx]))
     plt.scatter(x=x[ashs_idx], y=y[ashs_idx], c=colors[ashs_idx], marker='o')
     # Scatter pour FSL
     plt.scatter(x=x[fsl_idx], y=y[fsl_idx], c=colors[fsl_idx], marker='v')
