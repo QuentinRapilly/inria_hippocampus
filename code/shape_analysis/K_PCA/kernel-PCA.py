@@ -3,6 +3,8 @@ import numpy as np
 from os import listdir
 from os.path import join
 
+from kpca_tools import manage_momenta, manage_control_points, compute_kernel, expand_kernel
+
 
 # Rappel des notations 
 # alpha : momenta (n, m*d)
@@ -14,45 +16,6 @@ from os.path import join
 # K_expanded : (m*d, m*d) 
 # M : (n*n) matrix containing scalar products between shapes
 
-### READING ###
-
-## Reading of the momenta files
-def manage_momenta(data_files):
-    vect_list = list()
-    n = len(data_files)
-    for filename in data_files :
-        with open(filename,"r") as f:
-            data = f.readlines()
-        _, m, d = [int(x) for x in data[0].split(" ")]
-
-        data_tab = np.zeros((m*d))
-        for i in range(m):
-            #print(data[i+2].split(" "))
-            data_tab[i*d:(i+1)*d] = [float(x) for x in data[i+2].split(" ")[:-1]]
-        vect_list.append(data_tab)
-    
-    alpha = np.vstack(vect_list)
-
-    return alpha, (n, m, d)
-
-## Reading the control points file
-def manage_control_points(control_points_file):
-    with open(control_points_file, "r") as f:
-        lines = f.readlines()
-    points = np.array([[float(x) for x in line.split(" ")] for line in lines])
-    
-    return points
-
-### EXPLOITING ###
-def compute_kernel(points, std):
-    """
-        Computes the value of K(x_i, x_j) for every pair of control points
-    """
-    pairwise_dist = np.linalg.norm(points[:,None,:] - points[None,:,:], axis=-1)
-    in_exp = -np.power(pairwise_dist, 2)/std**2
-    K = np.exp(in_exp)
-
-    return K
 
 def compute_PCA(alpha, K, dimensions, exp_var=0.95, verbose=False):
     """
@@ -64,12 +27,8 @@ def compute_PCA(alpha, K, dimensions, exp_var=0.95, verbose=False):
 
     # Expands the kernel matrix according to the dim of our data space (here 3) : 
     # block K_expanded(i,j) = K(i,j)Id_d
-    K_expanded = np.zeros((m*d, m*d))
-    
-    for i in range(m):
-        for j in range(m):
-            K_expanded[i*d:(i+1)*d,j*d:(j+1)*d] = K[i,j]*np.eye(d)
-    #print(K_expanded[0:9,0:9])    
+    K_expanded = expand_kernel(K, dimensions)
+       
 
     if verbose : print("K_expanded shape : {}".format(K_expanded.shape))
 

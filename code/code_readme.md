@@ -118,6 +118,11 @@ A script creates temporary binaries (step (a)) and uses them to create .vtk file
 
 To compute the mesh, we call severall times `animaThrImage`, once by label in the list (as they are not necessarily consecutiv). We then sum the obtained masks and create the mesh with `animaIsosurface`.
 
+The labels to keep are :
+- for ASHS : 1,2 (left part) ; 111,112 (right part)
+- for FSL : 17,117 (left part) ; 53,153 (right part)
+- for Rajah g_truth : 14,10 (left part) ; 2,12 (right part)
+
 ### Set the images in the MNI space
 
 The MNI space correspond to a normalized space (of a mean mind) in which MRIs are relocated to be compared more easily.
