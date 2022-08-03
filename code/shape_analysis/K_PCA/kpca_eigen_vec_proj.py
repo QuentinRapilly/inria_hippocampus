@@ -91,7 +91,7 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
 
     for key in print_dic:
         res = print_dic[key]
-        plt.plot(res["x"], res["y"], c=res["c"], linestyle="--", linewidth=0.1)
+        plt.plot(res["x"], res["y"], c=res["c"], linestyle="--", linewidth=0.3)
 
     plt.savefig(output)
 
