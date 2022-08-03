@@ -11,11 +11,11 @@ from kpca_tools import manage_momenta, manage_control_points, compute_kernel, ex
 def get_subject_color(filename):
     splitted = filename.split("_")
     id = splitted[-4]+splitted[-2]
-    r,g,b = int(id[:3])/150, int(id[3:5])/100, int(id[5:])/100
+    r,g,b = (int(id[:3])/140)*0.6+0.2, (int(id[3:5])/100)*0.6+0.2, (int(id[5:])/100)*0.6+0.2
 
     return np.array([r,g,b])
 
-def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output = "out.png", verbose = True):
+def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output = "out.png", verbose = False):
     eigen_dic = np.load(eigen)
     eigen_vectors = eigen_dic["eigen_vectors"]
 
