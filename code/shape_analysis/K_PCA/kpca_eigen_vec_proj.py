@@ -62,7 +62,7 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
     # Scatter pour ASHS
     if verbose :
         print("x : {}\ny : {}\ncolors:{}".format(x[ashs_idx], y[ashs_idx], colors[ashs_idx]))
-    plt.scatter(x=x[ashs_idx], y=y[ashs_idx], c=colors[ashs_idx], marker='o')
+    plt.scatter(x=x[ashs_idx], y=y[ashs_idx], c=colors[ashs_idx], marker='o', linestyle = "--")
     # Scatter pour FSL
     plt.scatter(x=x[fsl_idx], y=y[fsl_idx], c=colors[fsl_idx], marker='v')
     # Scatter pour G_TRUTH
