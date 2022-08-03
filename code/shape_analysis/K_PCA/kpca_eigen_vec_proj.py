@@ -15,7 +15,7 @@ def get_subject_color(filename):
 
     return np.array([r,g,b])
 
-def compute_proj(momenta_files, control_points, eigen, std, nb_proj=2, output = "out.png", verbose = True):
+def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output = "out.png", verbose = True):
     eigen_dic = np.load(eigen)
     eigen_vectors = eigen_dic["eigen_vectors"]
 
@@ -31,7 +31,7 @@ def compute_proj(momenta_files, control_points, eigen, std, nb_proj=2, output = 
 
     M = alpha @ K_expanded @ alpha.T
 
-    proj = M @ eigen_vectors[:nb_proj].T
+    proj = M @ eigen_vectors[dims_to_keep].T
 
     x = proj[:,0]
     y = proj[:,1]
@@ -84,13 +84,16 @@ if __name__=="__main__":
     parser.add_argument("-e", "--eigen")
     parser.add_argument("-s", "--std")
     parser.add_argument("-o", "--output")
+    parser.add_argument("-d", "--dims")
 
 
     args = parser.parse_args()
     momenta_dir = args.momenta
 
+    dims_to_keep = [int(d) for d in args.dims.split(",")]
+
     momenta_files = [join(momenta_dir, filename) for filename in listdir(momenta_dir)]
 
     std = float(args.std)
 
-    compute_proj(momenta_files, args.control_points, args.eigen, std, output = args.output)
+    compute_proj(momenta_files, args.control_points, args.eigen, std, dims_to_keep, output = args.output)
