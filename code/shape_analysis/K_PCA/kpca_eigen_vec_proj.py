@@ -45,11 +45,11 @@ def compute_proj(momenta_files, control_points, eigen, std, nb_proj=2, output = 
         real_name = basename(filename)
         if verbose : print(real_name)
 
-        if real_name.find("ashs")>0:
+        if real_name.find("ashs")>=0:
             ashs_idx.append(i)
-        elif real_name.find("fsl")>0:
+        elif real_name.find("fsl")>=0:
             fsl_idx.append(i)
-        elif real_name.find("g_truth")>0:
+        elif real_name.find("g_truth")>=0:
             g_truth_idx.append(i)
 
         colors_list.append(get_subject_color(real_name))
