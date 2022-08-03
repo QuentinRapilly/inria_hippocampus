@@ -85,4 +85,6 @@ if __name__=="__main__":
 
     momenta_files = [join(momenta_dir, filename) for filename in listdir(momenta_dir)]
 
-    compute_proj(momenta_files, args.control_points, args.eigen, args.std, output = args.output)
+    std = float(args.std)
+
+    compute_proj(momenta_files, args.control_points, args.eigen, std, output = args.output)
