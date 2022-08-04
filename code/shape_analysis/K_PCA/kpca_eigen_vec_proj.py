@@ -1,6 +1,4 @@
 import argparse
-from cProfile import label
-from cv2 import mean
 import numpy as np
 from os import listdir
 from os.path import join
