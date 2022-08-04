@@ -56,11 +56,11 @@ def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, output, ve
     plt.savefig(output)
 
 def analyze_variance(proj, idx_method, subject_dic, output):
-    ashs_var = np.var(proj[idx_method["ashs"]], axis=1)
+    ashs_var = np.var(proj[idx_method["ashs"]], axis=0)
     print("ASHS variance on each main direction :\n {}".format(ashs_var))
-    fsl_var = np.var(proj[idx_method["fsl"]], axis=1)
+    fsl_var = np.var(proj[idx_method["fsl"]], axis=0)
     print("FSL variance on each main direction :\n {}".format(fsl_var))
-    g_truth_var = np.var(proj[idx_method["g_truth"]], axis=1)
+    g_truth_var = np.var(proj[idx_method["g_truth"]], axis=0)
     print("G_truth variance on each main direction :\n {}".format(g_truth_var))
 
     var_method = {"ashs":ashs_var, "fsl":fsl_var, "g_truth":g_truth_var}
