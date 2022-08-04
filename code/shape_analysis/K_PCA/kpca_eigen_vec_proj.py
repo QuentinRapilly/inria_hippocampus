@@ -89,7 +89,7 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
 
     M = alpha @ K_expanded @ alpha.T
 
-    proj = M @ eigen_vectors[dims_to_keep].T
+    proj = M @ eigen_vectors.T
 
 
     # Tools for the following steps :
