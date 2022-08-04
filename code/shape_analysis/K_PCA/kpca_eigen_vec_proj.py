@@ -1,4 +1,5 @@
 import argparse
+from cProfile import label
 import numpy as np
 from os import listdir
 from os.path import join
@@ -83,15 +84,17 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
     # Scatter pour ASHS
     if verbose :
         print("x : {}\ny : {}\ncolors:{}".format(x[ashs_idx], y[ashs_idx], colors[ashs_idx]))
-    plt.scatter(x=x[ashs_idx], y=y[ashs_idx], c=colors[ashs_idx], marker='o')
+    plt.scatter(x=x[ashs_idx], y=y[ashs_idx], c=colors[ashs_idx], marker='o', label = "ASHS")
     # Scatter pour FSL
-    plt.scatter(x=x[fsl_idx], y=y[fsl_idx], c=colors[fsl_idx], marker='v')
+    plt.scatter(x=x[fsl_idx], y=y[fsl_idx], c=colors[fsl_idx], marker='v', label = "FSL")
     # Scatter pour G_TRUTH
-    plt.scatter(x=x[g_truth_idx], y=y[g_truth_idx], c=colors[g_truth_idx], marker='s')        
+    plt.scatter(x=x[g_truth_idx], y=y[g_truth_idx], c=colors[g_truth_idx], marker='s', label = "G_truth")        
 
     for key in print_dic:
         res = print_dic[key]
         plt.plot(res["x"], res["y"], c=res["c"], linestyle="--", linewidth=0.3)
+
+    plt.legend()
 
     plt.savefig(output)
 
