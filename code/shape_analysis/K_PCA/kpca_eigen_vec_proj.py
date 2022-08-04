@@ -24,9 +24,10 @@ def get_used_method(filename):
     if filename.find("g_truth")>=0: return "g_truth"
 
 
-def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, output, verbose = False):
+def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, output, verbose = True):
 
     dim0, dim1 = dims_to_keep[0], dims_to_keep[1]
+    if verbose : print("Dim0 : {}".format(dim0))
 
     colors_list = [get_subject_color(get_subject_id(filename)) for filename in filenames]
 
@@ -38,11 +39,11 @@ def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, output, ve
     # Scatter pour ASHS
     if verbose :
         print("x : {}\ny : {}\ncolors:{}".format(x[ashs_idx], y[ashs_idx], colors[ashs_idx]))
-    plt.scatter(x=proj[ashs_idx:dim0], y=proj[ashs_idx:dim1], c=colors[ashs_idx], marker='o', label = "ASHS")
+    plt.scatter(x=proj[ashs_idx,dim0], y=proj[ashs_idx,dim1], c=colors[ashs_idx], marker='o', label = "ASHS")
     # Scatter pour FSL
-    plt.scatter(x=proj[fsl_idx,dim0], y=proj[fsl_idx:dim1], c=colors[fsl_idx], marker='v', label = "FSL")
+    plt.scatter(x=proj[fsl_idx,dim0], y=proj[fsl_idx,dim1], c=colors[fsl_idx], marker='v', label = "FSL")
     # Scatter pour G_TRUTH
-    plt.scatter(x=proj[g_truth_idx:dim0], y=proj[g_truth_idx:dim1], c=colors[g_truth_idx], marker='s', label = "G_truth")        
+    plt.scatter(x=proj[g_truth_idx,dim0], y=proj[g_truth_idx,dim1], c=colors[g_truth_idx], marker='s', label = "G_truth")        
 
     for subject in subject_dic:
         res = subject_dic[subject]
