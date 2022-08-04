@@ -121,6 +121,8 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
     plot_proj(proj, dims_to_keep, idx_method, subject_dic, momenta_files, plot_output, verbose=verbose)
 
     # To analyze variance
+    var_output = join(output, "var.npz")
+    analyze_variance(proj, idx_method, subject_dic, var_output)
 
 
 
