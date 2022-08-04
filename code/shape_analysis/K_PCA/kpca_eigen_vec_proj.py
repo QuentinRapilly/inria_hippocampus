@@ -56,22 +56,22 @@ def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, output, ve
     plt.savefig(output)
 
 def analyze_variance(proj, idx_method, subject_dic, output):
-    ashs_var = np.var(proj[idx_method["ashs"]], axis=0)
-    print("ASHS variance on each main direction :\n {}".format(ashs_var))
-    fsl_var = np.var(proj[idx_method["fsl"]], axis=0)
-    print("FSL variance on each main direction :\n {}".format(fsl_var))
-    g_truth_var = np.var(proj[idx_method["g_truth"]], axis=0)
-    print("G_truth variance on each main direction :\n {}".format(g_truth_var))
+    ashs_std = np.std(proj[idx_method["ashs"]], axis=0)
+    print("ASHS variance on each main direction :\n {}".format(ashs_std))
+    fsl_std = np.std(proj[idx_method["fsl"]], axis=0)
+    print("FSL variance on each main direction :\n {}".format(fsl_std))
+    g_truth_std = np.std(proj[idx_method["g_truth"]], axis=0)
+    print("G_truth variance on each main direction :\n {}".format(g_truth_std))
 
-    var_method = {"ashs":ashs_var, "fsl":fsl_var, "g_truth":g_truth_var}
+    std_method = {"ashs":ashs_std, "fsl":fsl_std, "g_truth":g_truth_std}
 
-    by_subject_var = [np.var(np.vstack(subject_dic[subject]),axis=0) for subject in subject_dic]
-    sub_var = np.vstack(by_subject_var)
-    print(sub_var.shape)
-    var_subject = np.mean(sub_var, axis=0)
-    print("Subject variance :\n {}".format(var_subject))
+    by_subject_std = [np.std(np.vstack(subject_dic[subject]),axis=0) for subject in subject_dic]
+    sub_std = np.vstack(by_subject_std)
+    print(sub_std.shape)
+    std_subject = np.mean(sub_std, axis=0)
+    print("Subject variance :\n {}".format(std_subject))
 
-    np.savez(output, var_method=var_method, var_subject=var_subject)
+    np.savez(output, var_method=std_method, var_subject=std_subject)
 
 def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output = "./output", verbose = False):
     eigen_dic = np.load(eigen)
