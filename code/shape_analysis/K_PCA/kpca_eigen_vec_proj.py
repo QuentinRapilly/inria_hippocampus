@@ -65,10 +65,10 @@ def analyze_variance(proj, idx_method, subject_dic, output):
 
     var_method = {"ashs":ashs_var, "fsl":fsl_var, "g_truth":g_truth_var}
 
-    by_subject_var = [np.var(np.vstack(subject_dic[subject]),axis=1) for subject in subject_dic]
+    by_subject_var = [np.var(np.vstack(subject_dic[subject]),axis=0) for subject in subject_dic]
     sub_var = np.vstack(by_subject_var)
     print(sub_var.shape)
-    var_subject = np.mean(sub_var, axis=1)
+    var_subject = np.mean(sub_var, axis=0)
     print("Subject variance :\n {}".format(var_subject))
 
     np.savez(output, var_method=var_method, var_subject=var_subject)
