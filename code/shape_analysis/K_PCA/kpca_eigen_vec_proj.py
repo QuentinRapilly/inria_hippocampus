@@ -1,5 +1,6 @@
 import argparse
 from cProfile import label
+from cv2 import mean
 import numpy as np
 from os import listdir
 from os.path import join
@@ -15,10 +16,8 @@ def get_subject_id(filename):
 
     return id
 
-def get_subject_color(filename):
-    id = get_subject_id(filename)
+def get_subject_color(id):
     r,g,b = (int(id[:3])/140)*0.6+0.4, (int(id[3:5])/100)*0.6+0.4, (int(id[5:])/100)*0.6+0.4
-
     return np.array([r,g,b])
 
 def get_used_method(filename):
@@ -27,7 +26,55 @@ def get_used_method(filename):
     if filename.find("g_truth")>=0: return "g_truth"
 
 
-def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output = "out.png", verbose = False):
+def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, output, verbose = False):
+
+    dim0, dim1 = dims_to_keep[0], dims_to_keep[1]
+
+    colors_list = [get_subject_color(get_subject_id(filename)) for filename in filenames]
+
+
+    colors = np.array(colors_list)
+
+    ashs_idx, fsl_idx, g_truth_idx = idx_method["ashs"], idx_method["fsl"], idx_method["g_truth"]
+
+    # Scatter pour ASHS
+    if verbose :
+        print("x : {}\ny : {}\ncolors:{}".format(x[ashs_idx], y[ashs_idx], colors[ashs_idx]))
+    plt.scatter(x=proj[ashs_idx:dim0], y=proj[ashs_idx:dim1], c=colors[ashs_idx], marker='o', label = "ASHS")
+    # Scatter pour FSL
+    plt.scatter(x=proj[fsl_idx,dim0], y=proj[fsl_idx:dim1], c=colors[fsl_idx], marker='v', label = "FSL")
+    # Scatter pour G_TRUTH
+    plt.scatter(x=proj[g_truth_idx:dim0], y=proj[g_truth_idx:dim1], c=colors[g_truth_idx], marker='s', label = "G_truth")        
+
+    for subject in subject_dic:
+        res = subject_dic[subject]
+        tab = np.vstack(res)
+        x, y = tab[:,dim0], tab[:,dim1]
+        plt.plot(x, y, c=get_subject_color(subject), linestyle="--", linewidth=0.3)
+
+    plt.legend()
+
+    plt.savefig(output)
+
+def analyze_variance(proj, idx_method, subject_dic, output):
+    ashs_var = np.var(proj[idx_method["ashs"]], axis=1)
+    print("ASHS variance on each main direction :\n {}".format(ashs_var))
+    fsl_var = np.var(proj[idx_method["fsl"]], axis=1)
+    print("FSL variance on each main direction :\n {}".format(fsl_var))
+    g_truth_var = np.var(proj[idx_method["g_truth"]], axis=1)
+    print("G_truth variance on each main direction :\n {}".format(g_truth_var))
+
+    var_method = {"ashs":ashs_var, "fsl":fsl_var, "g_truth":g_truth_var}
+
+    by_subject_var = [np.var(np.vstack(subject_dic[subject]),axis=1) for subject in subject_dic]
+    sub_var = np.vstack(by_subject_var)
+    print(sub_var.shape)
+    var_subject = np.mean(sub_var, axis=1)
+    print("Subject variance :\n {}".format(var_subject))
+
+    np.savez(output, var_method=var_method, var_subject=var_subject)
+
+def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output = "./output", verbose = False):
     eigen_dic = np.load(eigen)
     eigen_vectors = eigen_dic["eigen_vectors"]
 
@@ -45,16 +92,12 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
 
     proj = M @ eigen_vectors[dims_to_keep].T
 
-    x = proj[:,0]
-    y = proj[:,1]
 
-    ## PRINT (non definitif)
-    
-    colors_list = list()
+    # Tools for the following steps :
 
     idx_method = {"ashs":[], "fsl":[], "g_truth":[]}
 
-    print_dic = {}
+    subject_dic = {}
 
     for i, filename in enumerate(momenta_files):
         
@@ -64,40 +107,20 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
         method = get_used_method(real_name)
         idx_method[method].append(i)
 
-        crt_color = get_subject_color(real_name)
-
-        colors_list.append(crt_color)
-
         id = get_subject_id(real_name)
 
-        res = print_dic.get(id)
+        res = subject_dic.get(id)
         if res == None:
-            print_dic[id] = {"x":[x[i]], "y":[y[i]], "c":crt_color}
+            subject_dic[id] = [proj[i]]
         else:
-            res["x"].append(x[i])
-            res["y"].append(y[i])
+            res.append(proj[i])
 
-    colors = np.array(colors_list)
+    
+    # To plot
+    plot_output = join(output, "plot.png")
+    plot_proj(proj, dims_to_keep, idx_method, subject_dic, momenta_files, plot_output, verbose=verbose)
 
-    ashs_idx, fsl_idx, g_truth_idx = idx_method["ashs"], idx_method["fsl"], idx_method["g_truth"]
-
-    # Scatter pour ASHS
-    if verbose :
-        print("x : {}\ny : {}\ncolors:{}".format(x[ashs_idx], y[ashs_idx], colors[ashs_idx]))
-    plt.scatter(x=x[ashs_idx], y=y[ashs_idx], c=colors[ashs_idx], marker='o', label = "ASHS")
-    # Scatter pour FSL
-    plt.scatter(x=x[fsl_idx], y=y[fsl_idx], c=colors[fsl_idx], marker='v', label = "FSL")
-    # Scatter pour G_TRUTH
-    plt.scatter(x=x[g_truth_idx], y=y[g_truth_idx], c=colors[g_truth_idx], marker='s', label = "G_truth")        
-
-    for key in print_dic:
-        res = print_dic[key]
-        plt.plot(res["x"], res["y"], c=res["c"], linestyle="--", linewidth=0.3)
-
-    plt.legend()
-
-    plt.savefig(output)
-
+    # To analyze variance
 
 
 
