@@ -70,6 +70,11 @@ def kernel_PCA(data_files, control_points, std):
 
     return res
 
+def normalize_vectors(eigen_val, eigen_vec):
+    norm = np.linalg.norm(eigen_vec, axis = 0)
+
+    return eigen_vec/(norm*np.math.sqrt(eigen_val))
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", help="Directory where the momentum are stored")
@@ -87,6 +92,12 @@ if __name__ == "__main__":
 
     sorted_vp, sorted_v = kernel_PCA(data_files, control_points, std)
 
-    np.savez(output, eigen_values = sorted_vp, eigen_vectors= sorted_v)
+    print(sorted_v.shape)
+
+    norm_v = normalize_vectors(sorted_vp, sorted_v)
+
+    print(norm_v.shape)
+
+    np.savez(output, eigen_values = sorted_vp, eigen_vectors= norm_v)
 
     
