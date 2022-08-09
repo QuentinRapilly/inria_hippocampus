@@ -17,7 +17,7 @@ from kpca_tools import manage_momenta, manage_control_points, compute_kernel, ex
 # M : (n*n) matrix containing scalar products between shapes
 
 
-def compute_PCA(alpha, K, dimensions, exp_var=0.95, verbose=False):
+def compute_PCA(alpha, K, dimensions, exp_var=0.95, verbose=True):
     """
         Computes the Kernel PCA algorithm
     """
