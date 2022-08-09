@@ -42,9 +42,9 @@ def create_display_mesh(mesh, control_points, momenta, v_norm, output):
     field = np.array([np.sum(dist[i]*v_norm[idx[i]])/np.sum(dist[i]) for i in range(len(points))])
 
     m, M = np.min(field), np.max(field)
-    field_norm = (field - m)/(M-m)
+    #field = (field - m)/(M-m)
 
-    mesh.point_data["deformation"] = field_norm
+    mesh.point_data["deformation"] = field
 
     mesh.save(output)
 
