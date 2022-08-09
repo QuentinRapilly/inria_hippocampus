@@ -37,6 +37,8 @@ def create_display_mesh(mesh, control_points, momenta, v_norm, output):
     print("Finding k-nn")
     dist, idx = tree.kneighbors(points)
 
+    print("Shape dist : {}".format(dist.shape))
+
     field = np.array([np.sum(dist[i]*v_norm[idx[i]])/np.sum(dist[i]) for i in range(len(points))])
 
     mesh.add_field_data(field, name = "deformation")
