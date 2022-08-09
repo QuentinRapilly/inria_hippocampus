@@ -23,7 +23,7 @@ def compute_eigen_vec_norm(kpca_v, momenta, keep_dim=0):
 
 
 def create_tree(control_points, k=3):
-    print("Control points shape : {}".format(control_points.shape))
+    #print("Control points shape : {}".format(control_points.shape))
     knn = NearestNeighbors(n_neighbors=k, algorithm="auto").fit(control_points)
     return knn
 
@@ -37,11 +37,14 @@ def create_display_mesh(mesh, control_points, momenta, v_norm, output):
     print("Finding k-nn")
     dist, idx = tree.kneighbors(points)
 
-    print("Shape dist : {}, v_norm : {}".format(dist.shape, v_norm.shape))
+    #print("Shape dist : {}, v_norm : {}".format(dist.shape, v_norm.shape))
 
     field = np.array([np.sum(dist[i]*v_norm[idx[i]])/np.sum(dist[i]) for i in range(len(points))])
 
-    mesh.point_data["deformation"] = field
+    m, M = np.min(field), np.max(field)
+    field_norm = (field - m)/(M-m)
+
+    mesh.point_data["deformation"] = field_norm
 
     mesh.save(output)
 
