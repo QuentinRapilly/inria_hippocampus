@@ -41,9 +41,8 @@ def compute_PCA(alpha, K, dimensions, exp_var=0.95, verbose=False):
     w = np.real(w)
     v = np.real(v)
     
-    vp = w/np.sum(w)
-    order = np.flip(np.argsort(vp))
-    sorted_vp = vp[order]
+    order = np.flip(np.argsort(w))
+    sorted_vp = w[order]
     if verbose : print("Vp sorted : {}".format(sorted_vp))
     tot_variance = np.cumsum(sorted_vp)
     
@@ -75,6 +74,9 @@ def normalize_vectors(eigen_val, eigen_vec):
 
     return eigen_vec/(norm*np.sqrt(eigen_val))
 
+def normalize_values(eigen_val):
+    return eigen_val/np.sum(eigen_val)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", help="Directory where the momentum are stored")
@@ -96,8 +98,10 @@ if __name__ == "__main__":
 
     norm_v = normalize_vectors(sorted_vp, sorted_v)
 
+    norm_vp = normalize_values(sorted_vp)
+
     print(norm_v.shape)
 
-    np.savez(output, eigen_values = sorted_vp, eigen_vectors= norm_v)
+    np.savez(output, eigen_values = norm_vp, eigen_vectors= norm_v)
 
     
