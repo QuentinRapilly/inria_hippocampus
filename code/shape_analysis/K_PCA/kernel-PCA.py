@@ -46,7 +46,7 @@ def compute_PCA(alpha, K, dimensions, exp_var=0.95, verbose=True):
     if verbose : print("Vp sorted : {}".format(sorted_vp))
     tot_variance = np.cumsum(sorted_vp)
     
-    ind_var = np.argmax(tot_variance>exp_var)
+    ind_var = np.argmax(tot_variance>exp_var*tot_variance[-1])
 
     sorted_v = [v[:,order[i]] for i in range(ind_var)]
     sorted_v = np.vstack(sorted_v)
