@@ -12,6 +12,7 @@ from kpca_tools import manage_control_points, manage_momenta
 
 def compute_eigen_vec_norm(kpca_v, momenta, keep_dim=0):
     V = momenta.T @ kpca_v.T
+    print("shape de V : {}, shape de V['keepp_dim'] : {}".format(V.shape, V[keep_dim].shape))
     v = np.vstack(np.array_split(V[keep_dim], len(V[keep_dim])/3))
     v_norm = np.linalg.norm(v, 2, 0)
     return v_norm
