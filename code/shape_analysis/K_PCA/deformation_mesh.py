@@ -62,6 +62,7 @@ if __name__ == "__main__":
     mesh = pv.read(args.vtk)
 
     kpca_v = np.load(args.kpca)["eigen_vectors"]
-    v_norm = compute_eigen_vec_norm(kpca_v, momenta, args.dimension)
+    keep_dim = int(args.dimension)
+    v_norm = compute_eigen_vec_norm(kpca_v, momenta, keep_dim)
 
     create_display_mesh(mesh, control_points, momenta, v_norm, args.output)
