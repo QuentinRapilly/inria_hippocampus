@@ -37,7 +37,7 @@ def center_momenta(alpha):
     m = np.mean(alpha, axis = 0)
     print("Shape de alpha : {}, shape de la moyenne : {}".format(alpha.shape, m.shape))
     print("abs(moyenne(alpha))/moyenne(abs(alpha)) : {}".format(np.abs(m)/np.mean(np.abs(alpha),axis=0)))
-    return alpha - m
+    return alpha #- m
 
 ## Reading the control points file
 def manage_control_points(control_points_file):
