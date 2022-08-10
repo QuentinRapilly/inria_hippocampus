@@ -14,7 +14,7 @@
             {
                 "deformable_object_type" : "surfacemesh",
                 "kernel_type"  : "torch",
-                "noise_std" : 0.000001, 
+                "noise-std" : 0.000001, 
                 "_description_noise_std" : "A lower value of noise-std gives more importance to the data attachment cost for this object",
                 "attachment_type": "varifold",
                 "kernel_width" : 4.0
@@ -43,7 +43,7 @@
             "start" :
             {
                 "deformable_object_type" : "surfacemesh",
-                "noise_std" : 0.000001
+                "noise-std" : 0.000001
             }
         },
         
