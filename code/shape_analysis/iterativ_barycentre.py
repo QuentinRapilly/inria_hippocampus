@@ -10,7 +10,7 @@ from time import time
 
 class IterativBarycentre():
 
-    def __init__(self, input_path, output_path, config_file=None, verbose = False,  logdir = './logdir', rm_at_each_step = True, starting_point = None) -> None:
+    def __init__(self, input_path, output_path, config_file=None, verbose = False,  logdir = './logdir', rm_at_each_step = False, starting_point = None) -> None:
         self.registration_dir = join(output_path, "registration")
         if not isdir(self.registration_dir) :
             mkdir(self.registration_dir)
