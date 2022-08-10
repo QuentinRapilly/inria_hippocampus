@@ -25,7 +25,8 @@
         {
             "optimization_method_type" : "GradientAscent",
             "max_iterations" : 200,
-            "convergence_tolerance" : 1e-6
+            "convergence_tolerance" : 1e-6,
+            "intial_step_size" : 1e-4
         },
         
         "model_options" :
