@@ -6,18 +6,14 @@ from os.path import join
 
 import argparse
 
-from kpca_tools import manage_control_points, manage_momenta
+from kpca_tools import manage_control_points, manage_momenta, compute_eigen_vec
 
 ## Read data
 
 def compute_eigen_vec_norm(kpca_v, momenta, keep_dim=0):
-    V = momenta.T @ kpca_v.T
-    #print("shape de V : {}, shape de V['keepp_dim'] : {}".format(V.shape, V[keep_dim].shape))
-    v_dim = V[:,keep_dim]
-    v = np.vstack(np.array_split(v_dim, len(v_dim)/3))
-    v_norm = np.linalg.norm(v, 2, 1)
+    v = compute_eigen_vec(kpca_v, momenta, keep_dim)
+    v_norm = np.linalg.norm(v, 2, axis = 1)
     return v_norm
-
 
 ## Process data
 

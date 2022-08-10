@@ -3,7 +3,7 @@ import numpy as np
 from os import listdir
 from os.path import join
 
-from kpca_tools import manage_momenta, manage_control_points, compute_kernel, expand_kernel
+from kpca_tools import manage_momenta, manage_control_points, compute_kernel, expand_kernel, center_momenta
 
 
 # Rappel des notations 
@@ -61,11 +61,14 @@ def compute_PCA(alpha, K, dimensions, exp_var=0.95, verbose=True):
 
 def kernel_PCA(data_files, control_points, std):
     alpha, dims = manage_momenta(data_files)
+
+    centered_alpha = center_momenta(alpha)
+
     points = manage_control_points(control_points)
 
     K = compute_kernel(points, std)
 
-    res = compute_PCA(alpha, K, dims)
+    res = compute_PCA(centered_alpha, K, dims)
 
     return res
 

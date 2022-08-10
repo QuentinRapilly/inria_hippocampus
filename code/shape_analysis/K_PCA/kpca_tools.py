@@ -33,6 +33,12 @@ def manage_momenta(data_files):
 
     return alpha, (n, m, d)
 
+def center_momenta(alpha):
+    m = np.mean(alpha, axis = 0)
+    print("Shape de alpha : {}, shape de la moyenne : {}".format(alpha.shape, m.shape))
+    print("abs(moyenne(alpha))/moyenne(abs(alpha)) : {}".format(np.abs(m)/np.mean(np.abs(alpha),axis=0)))
+    return alpha - m
+
 ## Reading the control points file
 def manage_control_points(control_points_file):
     with open(control_points_file, "r") as f:
@@ -66,3 +72,10 @@ def expand_kernel(K, dimensions):
             K_expanded[i*d:(i+1)*d,j*d:(j+1)*d] = K[i,j]*np.eye(d)
 
     return K_expanded
+
+
+def compute_eigen_vec(kpca_vec, momenta, keep_dim=0):
+    V = momenta.T @ kpca_vec.T
+    v_dim = V[:,keep_dim]
+    v = np.vstack(np.array_split(v_dim, len(v_dim)/3))
+    return v
