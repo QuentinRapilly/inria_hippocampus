@@ -51,7 +51,6 @@ class Shooter:
         # Shooting step 
         self.shooter.compute_shooting(template_spec, model_spec)
 
-        if self.rm_at_each_step : self.clean_dir(self.registration_dir)
 
 
 def create_and_save_momenta(momenta, kpca_v, keep_dim, coef, output):       
