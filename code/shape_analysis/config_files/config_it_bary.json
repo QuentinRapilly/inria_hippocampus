@@ -43,7 +43,7 @@
             "start" :
             {
                 "deformable_object_type" : "surfacemesh",
-                "noise-std" : 10
+                "noise_std" : 10
             }
         },
         
