@@ -39,8 +39,7 @@ class Shooter:
         # template_specification dic modifications
         template_spec = cfg["template_specification"]
 
-        template_spec["start"]["filename"] = join(self.registration_dir,\
-            start)
+        template_spec["start"]["filename"] = start
         # model_options dic modifications
         model_spec = cfg["model_options"]
         model_spec["tmin"] = tmin
