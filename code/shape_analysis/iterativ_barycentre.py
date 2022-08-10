@@ -17,8 +17,8 @@ class IterativBarycentre():
         self.shooting_dir = join(output_path, "shooting")
         if not isdir(self.shooting_dir):
             mkdir(self.shooting_dir)
-        self.register = Deformetrica(output_dir=self.registration_dir, verbosity='ERROR')
-        self.shooter = Deformetrica(output_dir=self.shooting_dir, verbosity='ERROR')
+        self.register = Deformetrica(output_dir=self.registration_dir, verbosity='INFO')
+        self.shooter = Deformetrica(output_dir=self.shooting_dir, verbosity='INFO')
 
         self.input_path = input_path
         self.shapes = [join(self.input_path, filename) for filename in listdir(input_path)]
