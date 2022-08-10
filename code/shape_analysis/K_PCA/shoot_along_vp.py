@@ -68,7 +68,7 @@ def create_and_save_momenta(momenta, kpca_v, keep_dim, coef, output):
         f.write("1 {} {}\n".format(p,q))
         
         for m in v :
-            f.write("{} {} {}".format(m[0]*coef, m[1]*coef, m[2]*coef))
+            f.write("\n{} {} {}".format(m[0]*coef, m[1]*coef, m[2]*coef))
 
     return momenta_file
 
