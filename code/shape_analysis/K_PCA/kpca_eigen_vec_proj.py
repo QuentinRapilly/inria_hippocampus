@@ -4,6 +4,7 @@ from os import listdir
 from os.path import join
 import matplotlib.pyplot as plt
 from ntpath import basename
+from kpca_tools import center_momenta
 
 from kpca_tools import manage_momenta, manage_control_points, compute_kernel, expand_kernel
 
@@ -78,6 +79,8 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
     eigen_vectors = eigen_dic["eigen_vectors"]
 
     alpha, dimensions = manage_momenta(momenta_files)
+
+    centered_momenta = center_momenta(alpha)
 
     n, m, d = dimensions
 
