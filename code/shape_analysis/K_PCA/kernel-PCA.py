@@ -38,7 +38,7 @@ def compute_PCA(alpha, K, dimensions, exp_var=0.95, verbose=True):
 
     # Diagonalization process
     w, v = np.linalg.eig(M)
-    w = np.real(w)
+    w = np.real(w)/n
     v = np.real(v)
     
     order = np.flip(np.argsort(w))
