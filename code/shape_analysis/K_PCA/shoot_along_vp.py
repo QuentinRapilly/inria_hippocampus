@@ -44,10 +44,8 @@ class Shooter:
         model_spec = cfg["model_options"]
         model_spec["tmin"] = tmin
         model_spec["tmax"] = tmax
-        model_spec["initial_control_points"] = join(self.registration_dir,\
-            control_points) # "DeterministicAtlas__EstimatedParameters__ControlPoints.txt"
-        model_spec["initial_momenta"] = join(self.registration_dir,\
-            momenta) # "DeterministicAtlas__EstimatedParameters__Momenta.txt"
+        model_spec["initial_control_points"] = control_points
+        model_spec["initial_momenta"] = momenta
 
         
         # Shooting step 
