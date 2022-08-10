@@ -80,7 +80,7 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
 
     alpha, dimensions = manage_momenta(momenta_files)
 
-    centered_momenta = center_momenta(alpha)
+    c_alpha = center_momenta(alpha)
 
     n, m, d = dimensions
 
@@ -90,7 +90,7 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
 
     K_expanded = expand_kernel(K, dimensions)
 
-    M = alpha @ K_expanded @ alpha.T
+    M = c_alpha @ K_expanded @ c_alpha.T
 
     proj = M @ eigen_vectors.T
 
