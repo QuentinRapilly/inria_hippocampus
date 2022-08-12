@@ -14,10 +14,10 @@
             {
                 "deformable_object_type" : "surfacemesh",
                 "kernel_type"  : "torch",
-                "noise_std" : 0.001, 
+                "noise_std" : 1.0, 
                 "_description_noise_std" : "A lower value of noise-std gives more importance to the data attachment cost for this object",
                 "attachment_type": "varifold",
-                "kernel_width" : 2.0
+                "kernel_width" : 4.0
             }
         },
         
@@ -25,7 +25,7 @@
         {
             "_optimization_method_type" : "GradientAscent",
             "optimization_method_type" : "ScipyLBFGS",
-            "max_iterations" : 200,
+            "max_iterations" : 100,
             "convergence_tolerance" : 1e-6,
             "intial_step_size" : 1e-4
         },
@@ -33,7 +33,7 @@
         "model_options" :
         {
             "deformation_kernel_type": "torch",
-            "deformation_kernel_width": 15.0,
+            "deformation_kernel_width": 10.0,
             "dimension" : 3,
             "deformable_object_type" : "surfacemesh"
         }
@@ -46,14 +46,14 @@
             "start" :
             {
                 "deformable_object_type" : "surfacemesh",
-                "noise_std" : 0.001
+                "noise_std" : 1.0
             }
         },
         
         "model_options" :
         {
             "deformation_kernel_type" : "torch",
-            "deformation_kernel_width" : 15.0,
+            "deformation_kernel_width" : 10.0,
             "dimension": 3,
             "deformable_object_type" : "surfacemesh"
         }
