@@ -68,7 +68,8 @@ def kernel_PCA(data_files, control_points, std):
 
     K = compute_kernel(points, std)
 
-    res = compute_PCA(centered_alpha, K, dims)
+    #res = compute_PCA(centered_alpha, K, dims)   # using the centered eigen vectors
+    res = compute_PCA(alpha, K, dims)            # using the original eigen vectors
 
     return res
 
