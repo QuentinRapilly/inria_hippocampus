@@ -76,10 +76,11 @@ def kernel_PCA(data_files, control_points, std):
     return res
 
 def normalize_vectors(eigen_val, eigen_vec):
-    norm = np.linalg.norm(eigen_vec, axis = 1)
+    norm = np.linalg.norm(eigen_vec, axis = 0)
     eigen_val = np.abs(eigen_val)
 
-    print("eigen_val shape : {}\norm shape : {}".format(eigen_val.shape,norm.shape))
+    #print("eigen_val shape : {}\nnorm shape : {}".format(eigen_val.shape,norm.shape))
+    print("denominateur : {}".format(norm*np.sqrt(eigen_val)))
     return eigen_vec/(norm*np.sqrt(eigen_val))
 
 def normalize_values(eigen_val):
