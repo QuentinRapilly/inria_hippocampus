@@ -79,7 +79,7 @@ def normalize_vectors(eigen_val, eigen_vec):
     norm = np.linalg.norm(eigen_vec, axis = 1)
     eigen_val = np.abs(eigen_val)[:len(norm)]
 
-    #print("eigen_val shape : {}\nnorm shape : {}".format(eigen_val.shape,norm.shape))
+    print("eigen_val shape : {}\nnorm shape : {}".format(eigen_val.shape,norm.shape))
     print("denominateur : {}".format(norm*np.sqrt(eigen_val)))
     return eigen_vec/(norm*np.sqrt(eigen_val))
 
