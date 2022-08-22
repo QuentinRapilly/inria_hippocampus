@@ -78,6 +78,7 @@ def normalize_vectors(eigen_val, eigen_vec):
     return eigen_vec/(norm*np.sqrt(eigen_val))
 
 def normalize_values(eigen_val):
+    eigen_val = np.abs(eigen_val)
     return eigen_val/np.sum(eigen_val)
 
 if __name__ == "__main__":
