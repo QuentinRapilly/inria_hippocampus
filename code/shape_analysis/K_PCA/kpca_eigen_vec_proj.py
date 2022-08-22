@@ -80,6 +80,8 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
 
     alpha, dimensions = manage_momenta(momenta_files)
 
+    points = manage_control_points(control_points)
+
     K = compute_kernel(points, std)
 
     K_expanded = expand_kernel(K, dimensions)
@@ -87,8 +89,6 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
     c_alpha = center_momenta(alpha, K_expanded)
 
     n, m, d = dimensions
-
-    points = manage_control_points(control_points)
 
     M = c_alpha @ K_expanded @ c_alpha.T
 
