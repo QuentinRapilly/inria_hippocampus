@@ -80,17 +80,19 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
 
     alpha, dimensions = manage_momenta(momenta_files)
 
-    c_alpha = center_momenta(alpha)
+    K = compute_kernel(points, std)
+
+    K_expanded = expand_kernel(K, dimensions)
+
+    c_alpha = center_momenta(alpha, K_expanded)
 
     n, m, d = dimensions
 
     points = manage_control_points(control_points)
 
-    K = compute_kernel(points, std)
-
-    K_expanded = expand_kernel(K, dimensions)
-
     M = c_alpha @ K_expanded @ c_alpha.T
+
+    print("Shape de M : {}\nShape de eigen_vectors : {}".format(M.shape, eigen_vectors.shape))
 
     proj = M @ eigen_vectors.T
 
