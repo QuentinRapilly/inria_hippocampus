@@ -10,15 +10,15 @@ from time import time
 
 class IterativBarycentre():
 
-    def __init__(self, input_path, output_path, config_file=None, verbose = False,  logdir = './logdir', rm_at_each_step = False, starting_point = None) -> None:
+    def __init__(self, input_path, output_path, config_file=None, verbose = False,  logdir = './logdir', rm_at_each_step = True, starting_point = None) -> None:
         self.registration_dir = join(output_path, "registration")
         if not isdir(self.registration_dir) :
             mkdir(self.registration_dir)
         self.shooting_dir = join(output_path, "shooting")
         if not isdir(self.shooting_dir):
             mkdir(self.shooting_dir)
-        self.register = Deformetrica(output_dir=self.registration_dir, verbosity='INFO')
-        self.shooter = Deformetrica(output_dir=self.shooting_dir, verbosity='INFO')
+        self.register = Deformetrica(output_dir=self.registration_dir, verbosity='ERROR')
+        self.shooter = Deformetrica(output_dir=self.shooting_dir, verbosity='ERROR')
 
         self.input_path = input_path
         self.shapes = [join(self.input_path, filename) for filename in listdir(input_path)]
