@@ -17,7 +17,7 @@ from kpca_tools import manage_momenta, manage_control_points, compute_kernel, ex
 # M : (n*n) matrix containing scalar products between shapes
 
 
-def compute_PCA(alpha, K, dimensions, exp_var=0.95, verbose=True):
+def compute_PCA(alpha, K_expanded, dimensions, exp_var=0.95, verbose=True):
     """
         Computes the Kernel PCA algorithm
     """
@@ -27,7 +27,7 @@ def compute_PCA(alpha, K, dimensions, exp_var=0.95, verbose=True):
 
     # Expands the kernel matrix according to the dim of our data space (here 3) : 
     # block K_expanded(i,j) = K(i,j)Id_d
-    K_expanded = expand_kernel(K, dimensions)
+    
        
 
     if verbose : print("K_expanded shape : {}".format(K_expanded.shape))
@@ -62,14 +62,16 @@ def compute_PCA(alpha, K, dimensions, exp_var=0.95, verbose=True):
 def kernel_PCA(data_files, control_points, std):
     alpha, dims = manage_momenta(data_files)
 
-    centered_alpha = center_momenta(alpha)
-
     points = manage_control_points(control_points)
 
     K = compute_kernel(points, std)
 
-    #res = compute_PCA(centered_alpha, K, dims)   # using the centered eigen vectors
-    res = compute_PCA(alpha, K, dims)            # using the original eigen vectors
+    K_expanded = expand_kernel(K, dims)
+
+    centered_alpha = center_momenta(alpha, K_expanded)
+
+    res = compute_PCA(centered_alpha, K_expanded, dims)   # using the centered eigen vectors
+    #res = compute_PCA(alpha, K_expanded, dims)            # using the original eigen vectors
 
     return res
 

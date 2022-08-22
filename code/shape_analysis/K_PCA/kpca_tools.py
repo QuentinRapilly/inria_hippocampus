@@ -33,10 +33,13 @@ def manage_momenta(data_files):
 
     return alpha, (n, m, d)
 
-def center_momenta(alpha):
+def center_momenta(alpha, K_expanded):
     m = np.mean(alpha, axis = 0)
-    print("Shape de alpha : {}, shape de la moyenne : {}".format(alpha.shape, m.shape))
-    print("abs(moyenne(alpha))/moyenne(abs(alpha)) : {}".format(np.abs(m)/np.mean(np.abs(alpha),axis=0)))
+
+    M = alpha @ K_expanded @ alpha.T
+    den = np.mean(np.diagonal(M))
+    num = m @ K_expanded @ m.T
+    print("||moyenne(alpha_i))||/moyenne(||alpha_i||) : {}".format(num/den))
     return alpha - m
 
 ## Reading the control points file
