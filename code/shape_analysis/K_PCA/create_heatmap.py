@@ -7,7 +7,7 @@ def compute_heatmap(mean_mesh, shooted_mesh, output):
     mean_points = mean_mesh.points
     shooted_points = shooted_mesh.points
 
-    field = np.linalg.norm(shooted_points-mean_points, ord=2, axis=0)
+    field = np.linalg.norm(shooted_points-mean_points, ord=2, axis=1)
 
     print("Shape de field : {}".format(field.shape))
 
