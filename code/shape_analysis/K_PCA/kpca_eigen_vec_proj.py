@@ -28,7 +28,7 @@ def compute_color_dictionnary(aging_file):
     with open(aging_file, "r") as f:
         df = csv.DictReader(f)
         for data in df: 
-            if data["Group"] == "CN":
+            if data.get("Group") == "CN":
                 crt_age = int(data["Age"])
                 age_dict[data["Subject"]] = crt_age
 
