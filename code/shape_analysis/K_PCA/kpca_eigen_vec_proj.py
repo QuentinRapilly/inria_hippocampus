@@ -31,7 +31,9 @@ def compute_color_dictionnary(aging_file):
             print(data)
             if data.get("Group") == "CN":
                 crt_age = int(data["Age"])
-                age_dict[data["Subject"]] = crt_age
+                crt_sub = data["Subject"]
+                print("L'age de {} est : {}".format(crt_sub, crt_age))
+                age_dict[crt_sub] = crt_age
 
                 if crt_age<mini : mini = crt_age
                 if crt_age>maxi : maxi = crt_age
