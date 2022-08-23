@@ -57,6 +57,7 @@ def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, output, ag
     if verbose : print("Dim0 : {}".format(dim0))
 
     _, color_dict = compute_color_dictionnary(aging_file)
+    print(color_dict)
     colors_list = [color_dict[get_subject_id(filename)] for filename in filenames]
 
 
