@@ -72,7 +72,7 @@ def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, output, ag
         print("x : {}\ny : {}\ncolors:{}".format(x[ashs_idx], y[ashs_idx], colors[ashs_idx]))
     plt.scatter(x=proj[ashs_idx,dim0], y=proj[ashs_idx,dim1], c=colors[ashs_idx], marker='o', label = "ASHS")
     # Scatter pour FSL
-    plt.scatter(x=proj[fsl_idx,dim0], y=proj[fsl_idx,dim1], c=colors[fsl_idx], marker='v', label = "FSL")
+    #REMETTRE SI ON UTILISE DE NOUVEAU FSL# plt.scatter(x=proj[fsl_idx,dim0], y=proj[fsl_idx,dim1], c=colors[fsl_idx], marker='v', label = "FSL")
     # Scatter pour G_TRUTH
     plt.scatter(x=proj[g_truth_idx,dim0], y=proj[g_truth_idx,dim1], c=colors[g_truth_idx], marker='s', label = "G_truth")        
 
@@ -89,12 +89,12 @@ def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, output, ag
 def analyze_variance(proj, idx_method, subject_dic, output):
     ashs_std = np.std(proj[idx_method["ashs"]], axis=0)
     print("ASHS variance on each main direction :\n {}".format(ashs_std))
-    fsl_std = np.std(proj[idx_method["fsl"]], axis=0)
-    print("FSL variance on each main direction :\n {}".format(fsl_std))
+    #fsl_std = np.std(proj[idx_method["fsl"]], axis=0)
+    #print("FSL variance on each main direction :\n {}".format(fsl_std))
     g_truth_std = np.std(proj[idx_method["g_truth"]], axis=0)
     print("G_truth variance on each main direction :\n {}".format(g_truth_std))
 
-    std_method = {"ashs":ashs_std, "fsl":fsl_std, "g_truth":g_truth_std}
+    std_method = {"ashs":ashs_std, "g_truth":g_truth_std}#, "fsl":fsl_std}
 
     by_subject_std = [np.std(np.vstack(subject_dic[subject]),axis=0) for subject in subject_dic]
     sub_std = np.vstack(by_subject_std)

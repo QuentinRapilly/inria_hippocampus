@@ -167,6 +167,16 @@ You can then use the pip command in the dedicated env.
 
 A wiki dedicated to deformetrica is available at the following adress : [Deformetrica wiki](https://gitlab.com/icm-institute/aramislab/deformetrica/-/wikis/home).
 
+
+> A mistake in the Deformetrica code can lead to error using the registration tool if one installs it following the exlpaination above. To avoid this, one can clone [Deformetrica's repository](https://gitlab.com/icm-institute/aramislab/deformetrica/-/tree/master).
+Then modify the problematic file 
+`deformetrica/deformetrica/core/estimators/scipy_optimize.py` : replace the line 111 
+`msg = result.message.decode("utf-8")`
+by 
+`msg = result.message`
+You can now create your conda env and install Deformetrica with the command :
+`pip install -e <Path to Deformetrica repository>`
+
 ### Using the Python API
 
 Deformetrica was written in Python but was not written in order to be functions called in other scripts. It was written to be called in command line following the use cases depicted in the wiki introduced before.
@@ -300,9 +310,14 @@ A script allows to process the kernel PCA :
 Download it here :
 https://med.inria.fr/
 
-For MedInria to work on Fedora distribution, replace this line in `bin/medInria_launcher.sh` :
+For MedInria to work on Fedora distribution, in the file `bin/medInria_launcher.sh`, replace the line :
 * `export LD_LIBRARY_PATH=${MEDINRIA_DIR}/lib:${MEDINRIA_DIR}/plugins_legacy:$LD_LIBRARY_PATH`
 
 by this one :
 * `export LD_LIBRARY_PATH=${MEDINRIA_DIR}/lib:${MEDINRIA_DIR}/lib64:${MEDINRIA_DIR}/plugins_legacy:$LD_LIBRARY_PATH`
+
+
+### Paraview
+
+To visualize 3D meshes, I recommand to use Paraview.
 
