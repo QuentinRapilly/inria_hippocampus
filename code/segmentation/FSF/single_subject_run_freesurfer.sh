@@ -1,4 +1,4 @@
-adni_dir = '/nfs/nas4/empenn/empenn/qrapilly/ADNI/'
+adni_dir='/nfs/nas4/empenn/empenn/qrapilly/ADNI'
 
 # For being able to load modules
 . /etc/profile.d/modules.sh
@@ -12,7 +12,7 @@ source $FREESURFER_HOME/SetUpFreeSurfer.sh
 su_id=$1
 
 #Before INPUT_DIR=${adni_dir}/bids/sub-${su_id}
-INPUT_DIR=${adni_dir}/imgs/
+INPUT_DIR=${adni_dir}/imgs
 
 # Convert directory
 #Before FREESURFER_DIR=${aneravimm_dir}/freesurfer

@@ -13,6 +13,8 @@ import csv
 
 from kpca_tools import manage_momenta, manage_control_points, compute_kernel, expand_kernel
 
+MARKER_LIST = ["o", "v", "s", "*", "+"]
+
 
 def get_subject_id(filename):
     splitted = filename.split("_")
@@ -21,17 +23,17 @@ def get_subject_id(filename):
     return id
 
 
-def compute_color_dictionnary(aging_file):
+def compute_color_dictionnary(aging_file, group_id = "CN", verbose = False):
 
     age_dict = {}
     mini, maxi = 100, 0
     with open(aging_file, "r") as f:
         df = csv.DictReader(f, delimiter=";")
         for data in df: 
-            if data.get("Group") == "CN" and data.get("Subject") != "":
+            if data.get("Group") == group_id and data.get("Subject") != "":
                 crt_age = int(data["Age"])
                 crt_sub = data["Subject"]
-                print("L'age de {} est : {}".format(crt_sub, crt_age))
+                if verbose : print("L'age de {} est : {}".format(crt_sub, crt_age))
                 age_dict[crt_sub] = crt_age
 
                 if crt_age<mini : mini = crt_age
@@ -47,13 +49,15 @@ def compute_color_dictionnary(aging_file):
 
     return age_dict, color_dict
 
-def get_used_method(filename):
-    if filename.find("ashs")>=0: return "ashs"
-    if filename.find("fsl")>=0: return "fsl"
-    if filename.find("g_truth")>=0: return "g_truth"
+def get_used_method(filename, methods):
+    if methods == None:
+        return "current"
+    else :
+        for method in methods:
+            if filename.find(method) >= 0 : return method
 
 
-def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, output, aging_file, verbose = True):
+def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, aging_file, methods, output, verbose = True):
 
     dim0, dim1 = dims_to_keep[0], dims_to_keep[1]
     if verbose : print("Dim0 : {}".format(dim0))
@@ -61,40 +65,40 @@ def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, output, ag
     _, color_dict = compute_color_dictionnary(aging_file)
     print(color_dict)
     colors_list = [color_dict[get_subject_id(filename)] for filename in filenames]
-
-
     colors = np.array(colors_list)
 
-    ashs_idx, fsl_idx, g_truth_idx = idx_method["ashs"], idx_method["fsl"], idx_method["g_truth"]
+    # Scatter 
+    if methods == None :
+        crt_method_idx = idx_method["current"]
+        plt.scatter(x=proj[crt_method_idx,dim0], y=proj[crt_method_idx,dim1], c=colors[crt_method_idx], marker='o', label = "current")
 
-    # Scatter pour ASHS
-    if verbose :
-        print("x : {}\ny : {}\ncolors:{}".format(x[ashs_idx], y[ashs_idx], colors[ashs_idx]))
-    plt.scatter(x=proj[ashs_idx,dim0], y=proj[ashs_idx,dim1], c=colors[ashs_idx], marker='o', label = "ASHS")
-    # Scatter pour FSL
-    #REMETTRE SI ON UTILISE DE NOUVEAU FSL# plt.scatter(x=proj[fsl_idx,dim0], y=proj[fsl_idx,dim1], c=colors[fsl_idx], marker='v', label = "FSL")
-    # Scatter pour G_TRUTH
-    plt.scatter(x=proj[g_truth_idx,dim0], y=proj[g_truth_idx,dim1], c=colors[g_truth_idx], marker='s', label = "G_truth")        
+    else :
+        for i,method in enumerate(methods) :
+            crt_method_idx = idx_method[method]
+            marker = MARKER_LIST[i]
+            plt.scatter(x=proj[crt_method_idx,dim0], y=proj[crt_method_idx,dim1], c=colors[crt_method_idx], marker=marker, label = method)
+     
 
-    for subject in subject_dic:
-        res = subject_dic[subject]
-        tab = np.vstack(res)
-        x, y = tab[:,dim0], tab[:,dim1]
-        plt.plot(x, y, c=color_dict[subject], linestyle="--", linewidth=0.3)
+        for subject in subject_dic:
+            res = subject_dic[subject]
+            tab = np.vstack(res)
+            x, y = tab[:,dim0], tab[:,dim1]
+            plt.plot(x, y, c=color_dict[subject], linestyle="--", linewidth=0.3)
 
     plt.legend()
 
     plt.savefig(output)
 
-def analyze_variance(proj, idx_method, subject_dic, output):
-    ashs_std = np.std(proj[idx_method["ashs"]], axis=0)
-    print("ASHS variance on each main direction :\n {}".format(ashs_std))
-    #fsl_std = np.std(proj[idx_method["fsl"]], axis=0)
-    #print("FSL variance on each main direction :\n {}".format(fsl_std))
-    g_truth_std = np.std(proj[idx_method["g_truth"]], axis=0)
-    print("G_truth variance on each main direction :\n {}".format(g_truth_std))
-
-    std_method = {"ashs":ashs_std, "g_truth":g_truth_std}#, "fsl":fsl_std}
+def analyze_variance(proj, idx_method, subject_dic, methods, output, verbose = True):
+    std_method = {}
+    if methods == None :
+        crt_std = np.std(proj[idx_method["current"]], axis=0)
+        std_method["current"] = crt_std
+    else :
+        for method in methods :
+            crt_std = np.std(proj[idx_method[method]], axis=0)
+            std_method[method] = crt_std
+            if verbose : print("{} variance on each direction :\n{}".format(crt_std))
 
     by_subject_std = [np.std(np.vstack(subject_dic[subject]),axis=0) for subject in subject_dic]
     sub_std = np.vstack(by_subject_std)
@@ -104,7 +108,7 @@ def analyze_variance(proj, idx_method, subject_dic, output):
 
     np.savez(output, var_method=std_method, var_subject=std_subject)
 
-def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output = "./output", aging_file = None, verbose = False):
+def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output = "./output", aging_file = None, methods=None, verbose = False):
     eigen_dic = np.load(eigen)
     eigen_vectors = eigen_dic["eigen_vectors"]
 
@@ -128,8 +132,12 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
 
 
     # Tools for the following steps :
-
-    idx_method = {"ashs":[], "fsl":[], "g_truth":[]}
+    if methods == None :
+        idx_method = {"current" : []}
+    else :
+        idx_method = {}
+        for method in methods :
+           idx_method[method] = []
 
     subject_dic = {}
 
@@ -138,7 +146,7 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
         real_name = basename(filename)
         if verbose : print(real_name)
         
-        method = get_used_method(real_name)
+        method = get_used_method(real_name, methods)
         idx_method[method].append(i)
 
         id = get_subject_id(real_name)
@@ -152,15 +160,11 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
     
     # To plot
     plot_output = join(output, "plot.png")
-    plot_proj(proj, dims_to_keep, idx_method, subject_dic, momenta_files, plot_output, aging_file, verbose=verbose)
+    plot_proj(proj, dims_to_keep, idx_method, subject_dic, momenta_files, aging_file, methods, plot_output, verbose=verbose)
 
     # To analyze variance
     var_output = join(output, "var.npz")
-    analyze_variance(proj, idx_method, subject_dic, var_output)
-
-
-
-
+    analyze_variance(proj, idx_method, subject_dic, methods, var_output)
 
 
 if __name__=="__main__":
@@ -173,6 +177,7 @@ if __name__=="__main__":
     parser.add_argument("-o", "--output")
     parser.add_argument("-d", "--dims")
     parser.add_argument("-a", "--age", help="Csv containing subjects' age")
+    parser.add_argument("-M", "--methods", help="Methods' names used for this analysis (to process filenames)", default=None)
 
 
     args = parser.parse_args()
@@ -184,4 +189,10 @@ if __name__=="__main__":
 
     std = float(args.std)
 
-    compute_proj(momenta_files, args.control_points, args.eigen, std, dims_to_keep, output = args.output, aging_file=args.age)
+    if args.methods == None:
+        methods = None
+        print("No method provided")
+    else : 
+        methods = [m for m in args.methods.split(",")]
+
+    compute_proj(momenta_files, args.control_points, args.eigen, std, dims_to_keep, output = args.output, aging_file=args.age, methods=methods)
