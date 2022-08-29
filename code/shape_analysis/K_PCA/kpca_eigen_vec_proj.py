@@ -17,7 +17,7 @@ MARKER_LIST = ["o", "v", "s", "*", "+"]
 
 
 def get_subject_id(filename):
-    splitted = filename.split("_")
+    splitted = basename(filename).split("_")
     id = "{}_S_{}".format(splitted[-4],splitted[-2])
 
     return id
@@ -186,6 +186,7 @@ if __name__=="__main__":
     dims_to_keep = [int(d) for d in args.dims.split(",")]
 
     momenta_files = [join(momenta_dir, filename) for filename in listdir(momenta_dir)]
+    print("momenta_files")
 
     std = float(args.std)
 
