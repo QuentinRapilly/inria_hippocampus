@@ -104,8 +104,8 @@ if __name__ == "__main__":
 
     kpca_v = np.load(args.kpca)["eigen_vectors"]
     
-    momenta_dir = args.momenta
-    momenta_files = [join(momenta_dir, filename) for filename in listdir(momenta_dir)]
+    input_momenta = args.momenta
+    momenta_files = [join(input_momenta, filename) for filename in listdir(input_momenta)]
     momenta, dims = manage_momenta(momenta_files)
 
     d = int(args.dimension)
