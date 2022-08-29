@@ -112,7 +112,7 @@ if __name__ == "__main__":
     coef = float(args.gamma)
     momenta_file = create_and_save_momenta(momenta=momenta, kpca_v=kpca_v, keep_dim=d, coef=coef, momenta_dir=momenta_dir)
 
-    shooter = Shooter(args.output, config_file=args.config)
+    shooter = Shooter(shooting_dir, config_file=args.config)
     shooter.shooting(tmin=0, tmax=1, start=args.vtk, momenta=momenta_file, control_points=args.control_points)
 
     # The file to consider is always the one with the highest time in the shooting dir as we
