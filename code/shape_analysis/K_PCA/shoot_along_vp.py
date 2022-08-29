@@ -110,7 +110,7 @@ if __name__ == "__main__":
 
     d = int(args.dimension)
     coef = float(args.gamma)
-    momenta_file = create_and_save_momenta(momenta=momenta, kpca_v=kpca_v, keep_dim=d, coef=coef, output=momenta_dir)
+    momenta_file = create_and_save_momenta(momenta=momenta, kpca_v=kpca_v, keep_dim=d, coef=coef, momenta_dir=momenta_dir)
 
     shooter = Shooter(args.output, config_file=args.config)
     shooter.shooting(tmin=0, tmax=1, start=args.vtk, momenta=momenta_file, control_points=args.control_points)
