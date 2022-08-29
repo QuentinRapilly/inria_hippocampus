@@ -2,7 +2,10 @@ import pyvista as pv
 import numpy as np
 import argparse 
 
-def compute_heatmap(mean_mesh, shooted_mesh, output):
+def compute_heatmap(mean, shooted, output):
+
+    mean_mesh = pv.read(mean)
+    shooted_mesh = pv.read(shooted)
 
     mean_points = mean_mesh.points
     shooted_points = shooted_mesh.points
@@ -25,8 +28,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-
-    mean_mesh = pv.read(args.input1)
-    shooted_mesh = pv.read(args.input2)
-
-    compute_heatmap(mean_mesh, shooted_mesh, args.output)
+    compute_heatmap(args.input1, args.input2, args.output)

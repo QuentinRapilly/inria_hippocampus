@@ -15,7 +15,7 @@ import numpy as np
 ### READING ###
 
 ## Reading of the momenta files
-def manage_momenta(data_files, verbose = True):
+def manage_momenta(data_files, verbose = False):
     vect_list = list()
     n = len(data_files)
     for filename in data_files :
@@ -80,7 +80,6 @@ def expand_kernel(K, dimensions):
 
 
 def compute_eigen_vec(kpca_vec, momenta, keep_dim=0):
-    print("shape de momenta : {}\nshape de kpca_vec : {}".format(momenta.T.shape, kpca_vec.T.shape))
     V = momenta.T @ kpca_vec.T
     v_dim = V[:,keep_dim]
     v = np.vstack(np.array_split(v_dim, len(v_dim)/3))
