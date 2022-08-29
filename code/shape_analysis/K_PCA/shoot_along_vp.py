@@ -130,4 +130,4 @@ if __name__ == "__main__":
 
     heatmap_path = join(heatmaps_dir, "dim_{}_std_{}.vtk".format(d,coef))
 
-    compute_heatmap(mean_mesh=args.vtk, shooted_mesh=shape_path, output=heatmap_path)
+    compute_heatmap(mean=args.vtk, shooted=shape_path, output=heatmap_path)
