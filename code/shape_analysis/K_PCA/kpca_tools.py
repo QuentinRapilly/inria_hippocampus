@@ -15,7 +15,7 @@ import numpy as np
 ### READING ###
 
 ## Reading of the momenta files
-def manage_momenta(data_files):
+def manage_momenta(data_files, verbose = True):
     vect_list = list()
     n = len(data_files)
     for filename in data_files :
@@ -25,7 +25,7 @@ def manage_momenta(data_files):
 
         data_tab = np.zeros((m*d))
         for i in range(m):
-            #print(data[i+2].split(" "))
+            if verbose : print(data[i+2].split(" "))
             data_tab[i*d:(i+1)*d] = [float(x) for x in data[i+2].split(" ")[:-1]]
         vect_list.append(data_tab)
     
