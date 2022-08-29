@@ -26,7 +26,7 @@ def manage_momenta(data_files, verbose = True):
         data_tab = np.zeros((m*d))
         for i in range(m):
             if verbose : print(data[i+2].split(" "))
-            data_tab[i*d:(i+1)*d] = [float(x) for x in data[i+2].split(" ")[:-1]]
+            data_tab[i*d:(i+1)*d] = [float(x) for x in data[i+2][:-2].split(" ")]
         vect_list.append(data_tab)
     
     alpha = np.vstack(vect_list)
