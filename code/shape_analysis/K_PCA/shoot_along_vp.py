@@ -1,10 +1,14 @@
+from tkinter import OUTSIDE
 from matplotlib.cbook import ls_mapper
 from deformetrica import Deformetrica
 import numpy as np
 import argparse
-from os.path import join, isdir
-from os import mkdir, listdir
+from os.path import join, isdir, splitext
+from os import mkdir, listdir, remove
 import json
+from shutil import copy2
+
+from create_heatmap import compute_heatmap
 
 from kpca_tools import manage_momenta, manage_control_points, compute_eigen_vec
 
@@ -12,9 +16,7 @@ class Shooter:
 
     def __init__(self, output_path, config_file=None) -> None:
 
-        self.shooting_dir = join(output_path, "shooting")
-        if not isdir(self.shooting_dir):
-            mkdir(self.shooting_dir)
+        self.shooting_dir = output_path
 
         self.shooter = Deformetrica(output_dir=self.shooting_dir, verbosity='ERROR')
 
@@ -53,15 +55,11 @@ class Shooter:
 
 
 
-def create_and_save_momenta(momenta, kpca_v, keep_dim, coef, output):       
+def create_and_save_momenta(momenta, kpca_v, keep_dim, coef, momenta_dir):       
     v = compute_eigen_vec(kpca_vec=kpca_v, momenta=momenta, keep_dim=keep_dim)
     p, q = v.shape
 
-    momenta_dir = join(output, "vp_momenta")
-    if not isdir(momenta_dir):
-        mkdir(momenta_dir)
-    
-    momenta_file = join(momenta_dir, "eigen_vec_dim{}_momenta.txt".format(keep_dim))
+    momenta_file = join(momenta_dir, "dim_{}_std_{}.txt".format(keep_dim,coef))
 
     with open(momenta_file, "w") as f :
         f.write("1 {} {}\n".format(p,q))
@@ -86,6 +84,24 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    output = args.output
+
+    momenta_dir = join(output, "vp_momenta")
+    if not isdir(momenta_dir):
+        mkdir(momenta_dir)
+
+    shooting_dir = join(output, "shooting")
+    if not isdir(shooting_dir):
+        mkdir(shooting_dir)
+
+    shapes_dir = join(output, "shapes")
+    if not isdir(shapes_dir):
+        mkdir(shapes_dir)
+
+    heatmaps_dir = join(output, "heatmaps")
+    if not isdir(heatmaps_dir):
+        mkdir(heatmaps_dir)
+
     kpca_v = np.load(args.kpca)["eigen_vectors"]
     
     momenta_dir = args.momenta
@@ -94,10 +110,24 @@ if __name__ == "__main__":
 
     d = int(args.dimension)
     coef = float(args.gamma)
-    momenta_file = create_and_save_momenta(momenta=momenta, kpca_v=kpca_v, keep_dim=d, coef=coef, output=args.output)
+    momenta_file = create_and_save_momenta(momenta=momenta, kpca_v=kpca_v, keep_dim=d, coef=coef, output=momenta_dir)
 
     shooter = Shooter(args.output, config_file=args.config)
     shooter.shooting(tmin=0, tmax=1, start=args.vtk, momenta=momenta_file, control_points=args.control_points)
 
+    # The file to consider is always the one with the highest time in the shooting dir as we
+    # precise the max time. 
+    shape_list = [filename for filename in listdir(shooting_dir) if filename.find(".vtk")>=0]
+    idx = [float(splitext(filename)[0].split("_")[-1]) for filename in shape_list]
+    indexes = np.argmax(idx)
+    shape = join(shooting_dir, shape_list[indexes])
 
+    shape_path = join(shapes_dir, "dim_{}_std_{}.vtk".format(d,coef))
+    copy2(shape, shape_path)
 
+    for filename in listdir(shooting_dir):
+        remove(join(shooting_dir, filename))
+
+    heatmap_path = join(heatmaps_dir, "dim_{}_std_{}.vtk".format(d,coef))
+
+    compute_heatmap(mean_mesh=args.vtk, shooted_mesh=shape_path, output=heatmap_path)

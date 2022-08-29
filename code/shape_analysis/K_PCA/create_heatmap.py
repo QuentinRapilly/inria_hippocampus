@@ -11,8 +11,6 @@ def compute_heatmap(mean_mesh, shooted_mesh, output):
 
     field = np.linalg.norm(diff, ord=2, axis=1)
 
-    #print("Shape de field : {}".format(field.shape))
-
     shooted_mesh.point_data["deformation"] = field
 
     shooted_mesh.save(output)
