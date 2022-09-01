@@ -121,7 +121,7 @@ def compute_proj(momenta_files, space_files, control_points, eigen, std, dims_to
 
     c_beta = beta - m 
 
-    M = c_alpha @ K_expanded @ c_beta.T
+    M = c_beta @ K_expanded @ c_alpha.T
 
     print("Shape de M : {}\nShape de eigen_vectors : {}".format(M.shape, eigen_vectors.shape))
 
