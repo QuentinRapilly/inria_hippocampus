@@ -59,7 +59,7 @@ def plot_proj(proj, dims_to_keep, idx_method, filenames, methods, output, verbos
     if verbose : print("Dim0 : {}".format(dim0))
 
     color_dict = {"dim_{}".format(dim0) : "b", "dim_{}".format(dim1) : "g", "mean" : "r"}
-    colors_list = [color_dict[get_used_method(filename)] for filename in filenames]
+    colors_list = [color_dict[get_used_method(filename, methods)] for filename in filenames]
     colors = np.array(colors_list)
 
     # Scatter 
