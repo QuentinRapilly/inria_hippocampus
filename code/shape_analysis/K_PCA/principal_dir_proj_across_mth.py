@@ -1,6 +1,4 @@
 import argparse
-from re import sub
-from typing import Dict
 import numpy as np
 from os import listdir
 from os.path import join
@@ -8,8 +6,6 @@ import matplotlib.pyplot as plt
 from ntpath import basename
 from kpca_tools import center_momenta
 
-from cmcrameri import cm
-import csv
 
 from kpca_tools import manage_momenta, manage_control_points, compute_kernel, expand_kernel
 
