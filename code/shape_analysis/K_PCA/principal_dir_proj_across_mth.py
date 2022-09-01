@@ -15,7 +15,7 @@ from kpca_tools import manage_momenta, manage_control_points, compute_kernel, ex
 
 MARKER_LIST = ["o", "v", "s", "*", "+"]
 
-
+"""
 def get_subject_id(filename):
     splitted = basename(filename).split("_")
     id = "{}_S_{}".format(splitted[-4],splitted[-2])
@@ -47,7 +47,7 @@ def compute_color_dictionnary(aging_file, group_id = "CN", verbose = False):
         crt_float = (age_dict[subject]-mini)/(maxi-mini)
         color_dict[subject] = colormap(crt_float)
 
-    return age_dict, color_dict
+    return age_dict, color_dict """
 
 def get_used_method(filename, methods):
     if methods == None:
@@ -57,14 +57,13 @@ def get_used_method(filename, methods):
             if filename.find(method) >= 0 : return method
 
 
-def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, aging_file, methods, output, verbose = True):
+def plot_proj(proj, dims_to_keep, idx_method, filenames, methods, output, verbose = True):
 
     dim0, dim1 = dims_to_keep[0], dims_to_keep[1]
     if verbose : print("Dim0 : {}".format(dim0))
 
-    _, color_dict = compute_color_dictionnary(aging_file)
-    print(color_dict)
-    colors_list = [color_dict[get_subject_id(filename)] for filename in filenames]
+    color_dict = {"dim_{}".format(dim0) : "b", "dim_{}".format(dim1) : "g", "mean" : "r"}
+    colors_list = [color_dict[get_used_method(filename)] for filename in filenames]
     colors = np.array(colors_list)
 
     # Scatter 
@@ -79,17 +78,17 @@ def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, aging_file
             plt.scatter(x=proj[crt_method_idx,dim0], y=proj[crt_method_idx,dim1], c=colors[crt_method_idx], marker=marker, label = method)
      
 
-        for subject in subject_dic:
+        """for subject in subject_dic:
             res = subject_dic[subject]
             tab = np.vstack(res)
             x, y = tab[:,dim0], tab[:,dim1]
-            plt.plot(x, y, c=color_dict[subject], linestyle="--", linewidth=0.3)
+            plt.plot(x, y, c=color_dict[subject], linestyle="--", linewidth=0.3)"""
 
     plt.legend()
 
     plt.savefig(output)
 
-def analyze_variance(proj, idx_method, subject_dic, methods, output, verbose = True):
+"""def analyze_variance(proj, idx_method, subject_dic, methods, output, verbose = True):
     std_method = {}
     if methods == None :
         crt_std = np.std(proj[idx_method["current"]], axis=0)
@@ -106,9 +105,9 @@ def analyze_variance(proj, idx_method, subject_dic, methods, output, verbose = T
     std_subject = np.mean(sub_std, axis=0)
     print("Subject variance :\n {}".format(std_subject))
 
-    np.savez(output, var_method=std_method, var_subject=std_subject)
+    np.savez(output, var_method=std_method, var_subject=std_subject)"""
 
-def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output = "./output", aging_file = None, methods=None, verbose = False):
+def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output = "./output", methods=None, verbose = False):
     eigen_dic = np.load(eigen)
     eigen_vectors = eigen_dic["eigen_vectors"]
 
@@ -139,7 +138,7 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
         for method in methods :
            idx_method[method] = []
 
-    subject_dic = {}
+    #subject_dic = {}
 
     for i, filename in enumerate(momenta_files):
         
@@ -149,22 +148,23 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
         method = get_used_method(real_name, methods)
         idx_method[method].append(i)
 
-        id = get_subject_id(real_name)
+        #id = get_subject_id(real_name)
 
+        """
         res = subject_dic.get(id)
         if res == None:
             subject_dic[id] = [proj[i]]
         else:
-            res.append(proj[i])
+            res.append(proj[i])"""
 
     
     # To plot
     plot_output = join(output, "plot.png")
-    plot_proj(proj, dims_to_keep, idx_method, subject_dic, momenta_files, aging_file, methods, plot_output, verbose=verbose)
+    plot_proj(proj, dims_to_keep, idx_method, momenta_files, methods, plot_output, verbose=verbose)
 
     # To analyze variance
-    var_output = join(output, "var.npz")
-    analyze_variance(proj, idx_method, subject_dic, methods, var_output)
+    #var_output = join(output, "var.npz")
+    #analyze_variance(proj, idx_method, subject_dic, methods, var_output)
 
 
 if __name__=="__main__":
@@ -176,7 +176,6 @@ if __name__=="__main__":
     parser.add_argument("-s", "--std")
     parser.add_argument("-o", "--output")
     parser.add_argument("-d", "--dims")
-    parser.add_argument("-a", "--age", help="Csv containing subjects' age")
     parser.add_argument("-M", "--methods", help="Methods' names used for this analysis (to process filenames)", default=None)
 
 
@@ -196,4 +195,4 @@ if __name__=="__main__":
     else : 
         methods = [m for m in args.methods.split(",")]
 
-    compute_proj(momenta_files, args.control_points, args.eigen, std, dims_to_keep, output = args.output, aging_file=args.age, methods=methods)
+    compute_proj(momenta_files, args.control_points, args.eigen, std, dims_to_keep, output = args.output, methods=methods)
