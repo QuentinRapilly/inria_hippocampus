@@ -35,7 +35,7 @@ def manage_momenta(data_files, verbose = False):
 
 def center_momenta(alpha):
     m = np.mean(alpha, axis = 0)
-    return alpha - m 
+    return alpha - m, m 
 
 def evaluate_centering(alpha, K_expanded):
     m = np.mean(alpha, axis = 0)

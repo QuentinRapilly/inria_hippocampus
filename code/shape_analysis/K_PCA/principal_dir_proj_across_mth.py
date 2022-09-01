@@ -117,8 +117,7 @@ def compute_proj(momenta_files, space_files, control_points, eigen, std, dims_to
 
     K_expanded = expand_kernel(K, dimensions)
 
-    c_alpha = center_momenta(alpha)
-    m = alpha - c_alpha
+    c_alpha, m = center_momenta(alpha)
 
     c_beta = beta - m 
 
