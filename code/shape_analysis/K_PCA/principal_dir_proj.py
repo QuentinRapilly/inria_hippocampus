@@ -185,7 +185,6 @@ if __name__=="__main__":
     dims_to_keep = [int(d) for d in args.dims.split(",")]
 
     momenta_files = [join(momenta_dir, filename) for filename in listdir(momenta_dir)]
-    print("momenta_files")
 
     std = float(args.std)
 

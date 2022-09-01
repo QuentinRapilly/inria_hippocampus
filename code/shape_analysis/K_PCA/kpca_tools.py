@@ -33,16 +33,19 @@ def manage_momenta(data_files, verbose = False):
 
     return alpha, (n, m, d)
 
-def center_momenta(alpha, K_expanded):
+def center_momenta(alpha):
+    m = np.mean(alpha, axis = 0)
+    return alpha - m 
+
+def evaluate_centering(alpha, K_expanded):
     m = np.mean(alpha, axis = 0)
 
     M = alpha @ K_expanded @ alpha.T
     diag = np.diagonal(M)
     den = np.mean(diag)
     num = m @ K_expanded @ m.T
-    print("Shape de diag : {}".format(diag.shape))
+
     print("||moyenne(alpha_i))||/moyenne(||alpha_i||) : {}".format(num/den))
-    return alpha - m
 
 ## Reading the control points file
 def manage_control_points(control_points_file):

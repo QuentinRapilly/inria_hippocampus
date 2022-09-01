@@ -103,11 +103,13 @@ def plot_proj(proj, dims_to_keep, idx_method, filenames, methods, output, verbos
 
     np.savez(output, var_method=std_method, var_subject=std_subject)"""
 
-def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output = "./output", methods=None, verbose = False):
+def compute_proj(momenta_files, space_files, control_points, eigen, std, dims_to_keep, output = "./output", methods=None, verbose = False):
     eigen_dic = np.load(eigen)
     eigen_vectors = eigen_dic["eigen_vectors"]
 
-    alpha, dimensions = manage_momenta(momenta_files)
+    alpha, dimensions = manage_momenta(space_files)
+
+    beta, _ = manage_momenta(momenta_files)
 
     points = manage_control_points(control_points)
 
@@ -115,11 +117,12 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
 
     K_expanded = expand_kernel(K, dimensions)
 
-    c_alpha = center_momenta(alpha, K_expanded)
+    c_alpha = center_momenta(alpha)
+    m = alpha - c_alpha
 
-    n, m, d = dimensions
+    c_beta = beta - m 
 
-    M = c_alpha @ K_expanded @ c_alpha.T
+    M = c_alpha @ K_expanded @ c_beta.T
 
     print("Shape de M : {}\nShape de eigen_vectors : {}".format(M.shape, eigen_vectors.shape))
 
@@ -167,6 +170,7 @@ if __name__=="__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-m", "--momenta")
+    parser.add_argument("-S", "--space_momenta")
     parser.add_argument("-c","--control_points")
     parser.add_argument("-e", "--eigen")
     parser.add_argument("-s", "--std")
@@ -177,11 +181,12 @@ if __name__=="__main__":
 
     args = parser.parse_args()
     momenta_dir = args.momenta
+    space_momenta_dir = args.space_momenta
 
     dims_to_keep = [int(d) for d in args.dims.split(",")]
 
     momenta_files = [join(momenta_dir, filename) for filename in listdir(momenta_dir)]
-    print("momenta_files")
+    space_files = [join(space_momenta_dir, filename) for filename in listdir(space_momenta_dir)]
 
     std = float(args.std)
 
@@ -191,4 +196,4 @@ if __name__=="__main__":
     else : 
         methods = [m for m in args.methods.split(",")]
 
-    compute_proj(momenta_files, args.control_points, args.eigen, std, dims_to_keep, output = args.output, methods=methods)
+    compute_proj(momenta_files, space_files, args.control_points, args.eigen, std, dims_to_keep, output = args.output, methods=methods)
