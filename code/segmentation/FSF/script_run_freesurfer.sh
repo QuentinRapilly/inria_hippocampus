@@ -8,7 +8,7 @@ adni_logs_dir = "/nfs/nas4/empenn/empenn/qrapilly/ADNI/logs/"
 
 for filename in `ls /nfs/nas4/empenn/empenn/qrapilly/ADNI/imgs/`; do 
 
-  su_id ="${filename%.*}";
+  su_id="${filename%.*}";
 
   oarsub \
         -O "${adni_logs_dir}"/freesurfer/"${su_id}".%jobid%.output \
