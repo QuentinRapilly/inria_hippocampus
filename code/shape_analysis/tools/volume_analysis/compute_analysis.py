@@ -44,7 +44,7 @@ def plot_volume(ax_dict, output_file):
 
     for i,ax_key in enumerate(ax_dict):
         ax = ax_dict.get(ax_key)
-        plt.scatter(x=ax.get("x"), y=ax.get("v"), c=COLORS_LIST[i], marker=MARKERS_LIST[i], label="ax_key")
+        plt.scatter(x=ax.get("x"), y=ax.get("v"), c=COLORS_LIST[i], marker=MARKERS_LIST[i], label=ax_key)
         
     plt.title("Volume evolution along main directions axis")
     plt.xlabel("Nb of std along axis")
