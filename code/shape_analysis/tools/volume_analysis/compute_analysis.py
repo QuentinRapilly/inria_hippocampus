@@ -25,9 +25,9 @@ def compute_volume(input_dir, output_f):
         for filename in listdir(input_dir):
             mesh = pv.read(join(input_dir,filename))
             mesh.compute_cell_sizes()
-            v = mesh.volume
+            v = round(mesh.volume/1000,ndigits=2)
 
-            f.write("{} : {} mm3".format(filename, v))
+            f.write("{} : {} cm3".format(filename, v))
 
             ax, std = process_name(filename)
             get = ax_dict.get(ax)
@@ -48,7 +48,7 @@ def plot_volume(ax_dict, output_file):
         
     plt.title("Volume evolution along main directions axis")
     plt.xlabel("Nb of std along axis")
-    plt.ylabel("Volume (in mm3)")
+    plt.ylabel("Volume (cm3)")
     plt.legend()
     plt.savefig(output_file)
 
