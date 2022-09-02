@@ -9,7 +9,7 @@ def compute_volume(input_dir, output_file):
             mesh = pv.read(join(input_dir,filename))
             mesh.compute_cell_sizes()
 
-            f.write("{},{}mm3".format(filename, round(mesh.volume,ndigits=4)))
+            f.write("{},{}mm3\n".format(filename, round(mesh.volume,ndigits=4)))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
