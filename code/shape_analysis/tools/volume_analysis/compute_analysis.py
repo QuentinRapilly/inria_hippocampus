@@ -5,8 +5,8 @@ from os import listdir, mkdir
 from os.path import join, isdir
 from matplotlib import pyplot as plt
 
-COLORS_LIST = ["b", "g", "r", "c", "m"]
-MARKERS_LIST = ["v", "o", "s", "*"]
+COLORS_DICT = {"dim_0" : "b", "dim_1" : "g", "mean" : "r"}
+MARKERS_DICT = {"dim_0" : "v", "dim_1" : "s", "mean" : "o"}
  
 def process_name(name):
     if name.find("mean")>=0:
@@ -44,7 +44,7 @@ def plot_volume(ax_dict, output_file):
 
     for i,ax_key in enumerate(ax_dict):
         ax = ax_dict.get(ax_key)
-        plt.scatter(x=ax.get("x"), y=ax.get("v"), c=COLORS_LIST[i], marker=MARKERS_LIST[i], label=ax_key)
+        plt.scatter(x=ax.get("x"), y=ax.get("v"), c=COLORS_DICT[ax_key], marker=MARKERS_DICT[ax_key], label=ax_key)
         
     plt.title("Volume evolution along main directions axis")
     plt.xlabel("Nb of std along axis")

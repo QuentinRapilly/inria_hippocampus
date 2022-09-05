@@ -84,6 +84,10 @@ def plot_proj(proj, dims_to_keep, idx_method, subject_dic, filenames, aging_file
             x, y = tab[:,dim0], tab[:,dim1]
             plt.plot(x, y, c=color_dict[subject], linestyle="--", linewidth=0.3)
 
+    plt.title("Projection of shapes in K-PCA principal directions")
+    plt.xlabel("Principal direction {}".format(dim0+1))
+    plt.ylabel("Principal direction {}".format(dim1+1))
+
     plt.legend()
 
     plt.savefig(output)
