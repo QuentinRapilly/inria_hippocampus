@@ -123,7 +123,8 @@ def compute_proj(momenta_files, control_points, eigen, std, dims_to_keep, output
 
     K_expanded = expand_kernel(K, dimensions)
 
-    c_alpha = center_momenta(alpha, K_expanded)
+    c_alpha, _ = center_momenta(alpha)
+
 
     n, m, d = dimensions
 
