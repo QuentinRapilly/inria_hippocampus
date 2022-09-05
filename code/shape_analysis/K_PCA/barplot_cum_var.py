@@ -19,7 +19,7 @@ if __name__=="__main__":
     y = np.cumsum(y)
     
     plt.bar(x=[i for i in range(1, len(y)+1)], height=y)
-    plt.title("Cumulative explained variance (%) according to the number of dim taken into account")
+    plt.title("Cumulative explained variance (%) according to\nthe number of dim taken into account")
     plt.xlabel("Number of dimension")
     plt.ylabel("Cumulative explained variance(%)")
     plt.legend()
