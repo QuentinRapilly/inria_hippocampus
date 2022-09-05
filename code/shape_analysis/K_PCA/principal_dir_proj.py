@@ -101,7 +101,7 @@ def analyze_variance(proj, idx_method, subject_dic, methods, output, verbose = T
         for method in methods :
             crt_std = np.std(proj[idx_method[method]], axis=0)
             std_method[method] = crt_std
-            if verbose : print("{} variance on each direction :\n{}".format(crt_std))
+            if verbose : print("{} variance on each direction :\n{}".format(method, crt_std))
 
     by_subject_std = [np.std(np.vstack(subject_dic[subject]),axis=0) for subject in subject_dic]
     sub_std = np.vstack(by_subject_std)
