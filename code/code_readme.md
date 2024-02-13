@@ -45,7 +45,7 @@ To use it :
 
 The output corresponding to labels is generally in file `/choosen_dir/sub-*/layer-002*.nii.gz`
 
-To group every segmentation files in the same dir, one can use the script `code/segmentation/ASHS/group_seg_labels.py` that do this job :
+To group every segmentation files in the same dir, one can use the script `code/segmentation/ASHS/group_seg_labels.py` that does this job :
 `python3 code/segmentation/ASHS/group_seg_labels.py -i <path to ASHS results> -o <path to where to store segs>`
 
 #### Downsampling
