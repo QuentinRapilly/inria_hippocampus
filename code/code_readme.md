@@ -24,7 +24,7 @@ Two methods exists :
 
 #### Developped method : ITK-SNAP Cloud in command line (to process severall segmentations)
 
-When ITK-SNAP is downloaded, in ITK-SNAP directory you will find to files :
+When ITK-SNAP is downloaded, in ITK-SNAP directory you will find two files :
 * itksnap : to launch itk-snap GUI and used the previous method.
 * itksnap-wt : that allows to use ITK-SNAP services in command line.
 
